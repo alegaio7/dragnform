@@ -1,0 +1,149 @@
+{
+    "name": "Demo form",
+    "version": "1.0.0",
+    "description": "A simple form to demonstrate the use of the forms library.",
+    "globalClasses": {
+        "button": "btn",
+        "input": "form-control",
+        "widget": "form-group"
+    },
+    "requiredAttributeSettings": {
+        "requiredMarkText": "*",
+        "requiredMarkPosition": "beforeLabel"
+    },
+    "widgets": [
+        {
+            "type": "text",
+            "columns": 4,
+            "id": "firstname",
+            "label": "First name",
+            "validations": [
+                {
+                    "type": "required",
+                    "message": "First name is required."
+                },
+                {
+                    "type": "minLength",
+                    "message": "First name must be at least 2 characters long.",
+                    "value": 2
+                },
+                {
+                    "type": "maxLength",
+                    "message": "First name must be at most 20 characters long.",
+                    "value": 20
+                },
+                {
+                    "type": "pattern",
+                    "message": "First name must contain only valid characters.",
+                    "value": "alpha_accents"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "columns": 4,
+            "id": "lastname",
+            "label": "Last name",
+            "validations": [
+                {
+                    "type": "required",
+                    "message": "Last name is required."
+                },
+                {
+                    "type": "minLength",
+                    "message": "Last name must be at least 2 characters long.",
+                    "value": 2
+                },
+                {
+                    "type": "maxLength",
+                    "message": "Last name must be at most 20 characters long.",
+                    "value": 20
+                },
+                {
+                    "type": "pattern",
+                    "message": "First name must contain only valid characters.",
+                    "value": "alpha_accents"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "columns": 4,
+            "id": "email",
+            "label": "Email",
+            "validations": [
+                {
+                    "type": "required",
+                    "message": "Email name is required."
+                },
+                {
+                    "type": "pattern",
+                    "message": "The email has an invalid format.",
+                    "value": "email"
+                }
+            ]
+        },        
+        {
+            "type": "spacer",
+            "columns": 2,
+            "id": "spc1"
+        },
+        {
+            "type": "text",
+            "columns": 4,
+            "id": "address",
+            "label": "Address",
+            "validations": [
+                {
+                    "type": "minLength",
+                    "message": "Address name must be at least 5 characters long.",
+                    "value": 5
+                },
+                {
+                    "type": "maxLength",
+                    "message": "Address name must be at most 50 characters long.",
+                    "value": 50
+                },
+                {
+                    "type": "pattern",
+                    "message": "First name must contain only valid characters.",
+                    "value": "address"
+                }
+            ]
+        },
+        {
+            "type": "number",
+            "columns": 4,
+            "id": "sons",
+            "label": "Sons",
+            "validations": [
+                {
+                    "type": "min",
+                    "message": "Sons must be a positive number.",
+                    "value": 0
+                },
+                {
+                    "type": "max",
+                    "message": "Sons cannot be greater than 20.",
+                    "value": 20
+                },
+                {
+                    "type": "required",
+                    "message": "Sons are required."
+                }
+            ]
+        },
+        {
+            "type": "spacer",
+            "columns": 2,
+            "id": "spc2"
+        },
+        {
+            "type": "submit",
+            "columns": 4,
+            "id": "submit",
+            "label": "Submit",
+            "submitClass": "btn-success mt-2"
+        }
+    ]
+}
