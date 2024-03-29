@@ -26,38 +26,42 @@ class WidgetInputBase extends Widget {
         this._el = null;
     }
 
-    _getLabelHTML() {
+    _getLabelHTML(renderOptions) {
         if (!this.label)
             return "";
 
         // widget global class already handled in base class
-        var labelClass = "", inputClass = "";
-        if (this.options.globalClasses) {
-            if (this.options.globalClasses.label)
-                labelClass = `class="${this.options.globalClasses.label}"`;
-            if (this.options.globalClasses.input)
-                inputClass = `class="${this.options.globalClasses.input}"`;
-        }
+        var labelClass = "";
+        if (this.options.globalClasses && this.options.globalClasses.label)
+            labelClass = `class="${this.options.globalClasses.label}"`;
         
         var html = `<label ${labelClass} for="input_${this.id}">`;
-        if (this.required && this.requiredAttributeSettings.requiredMarkText && this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
-            html  += `<span class="required-mark">${this.requiredAttributeSettings.requiredMarkText}</span>`;
+        var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.requiredMarkText}</span>`;
+        if (this.required && 
+            renderOptions.renderMode === constants.WIDGET_MODE_DESIGN &&
+            this.requiredAttributeSettings.requiredMarkText && 
+            this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
+            html  += reqMarkHtml;
 
         html  += `${this.label}`
 
-        if (this.required && this.requiredAttributeSettings.requiredMarkText && this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
-            html += `<span class="required-mark">${this.requiredAttributeSettings.requiredMarkText}</span>`;
+        if (this.required && 
+            renderOptions.renderMode === constants.WIDGET_MODE_DESIGN &&
+            this.requiredAttributeSettings.requiredMarkText && 
+            this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
+            html  += reqMarkHtml;
+
         html  += `</label>`;
 
         return html;
     }
 
-    _validateInputCtl(input, options) {
+    _validateInputCtl(input, validateOptions) {
         var r;
-        if (!input)
+        if (!input) {
             r = { result: false, message: `Widget ${this.id}: input not found` };
-        
-        if (!input.value) {
+        }
+        else if (!input.value) {
             if (this.required)
                 r = { result: false, message: this.requiredMessage };
         }

@@ -1,7 +1,10 @@
 // sass variables
 $widget-error: #f00;
-$widget-grip-width: 1rem;
+$widget-border-design-color: #ccc;
+$widget-border-view-color: #ddd;
 $widget-grip-color: #888;
+$widget-tip-color: #888;
+$widget-grip-width: 1rem;
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -14,19 +17,35 @@ $widget-grip-color: #888;
     display: flex;
     flex-wrap: wrap;
 
-    width: 100%;
+    width: 1000px;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
 }
 
+@media(min-width: 1366px) {
+    .widget-container {
+        width: 1200px;
+    }
+}
+
+@media(min-width: 1800px) {
+    .widget-container {
+        width: 1600px;
+    }
+}
+
 // widgets
 .widget {
-    margin-bottom: 1rem;
+    padding-bottom: 1rem;
 
     &[data-mode="design"] {
-        border: 1px dashed #ccc;
+        border: 1px dashed $widget-border-design-color;
+    }
+
+    &[data-mode="view"] {
+        border: 1px solid $widget-border-view-color;
     }
 
     button {
@@ -79,6 +98,20 @@ $widget-grip-color: #888;
         content: '≡';
         color: $widget-grip-color;
     }
+}
+
+.widget-label {
+    font-weight: bold;
+}
+
+.widget-tip {
+    font-size: 0.8rem;
+    color: $widget-tip-color;
+}
+
+.widget-value {
+    width: 100%;
+    display: block;
 }
 
 // columns

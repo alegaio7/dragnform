@@ -3,7 +3,7 @@ import * as constants from './constants.js';
 
 class WidgetSubmit extends Widget {
     constructor(options) {
-        super(constants.WIDGET_SUBMIT, options);
+        super(constants.WIDGET_TYPE_SUBMIT, options);
         this._button = null;
     }
 

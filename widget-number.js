@@ -4,16 +4,17 @@ import WidgetInputBase from "./widget-input-base.js";
 
 class WidgetNumber extends WidgetInputBase {
     constructor(options) {
-        super(constants.WIDGET_NUMBER, options);
+        super(constants.WIDGET_TYPE_NUMBER, options);
 
         if (!options)
             options = {};
         
         var _t = this;
+
         // defaults
         this.min = 0;
         this.minValueMessage = constants.WIDGET_VALIDATION_MIN_VALUE;
-        this.max = constants.WIDGET_NUMBER_MAX;
+        this.max = constants.WIDGET_TYPE_NUMBER_MAX;
         this.maxValueMessage = constants.WIDGET_VALIDATION_MAX_VALUE;
         // required handled in parent class
 
@@ -38,8 +39,6 @@ class WidgetNumber extends WidgetInputBase {
         
         if (this.max === isNaN || this.max === undefined || this.max === null)
             throw new Error(`Number Widget ${this.id}: max must be a valid number`);
-            
-        this._el = null;
     }
 
     render(container, parser, renderOptions) {
@@ -47,23 +46,49 @@ class WidgetNumber extends WidgetInputBase {
             renderOptions = {};
         renderOptions.renderValidationSection = true;
         var template = super._getHTMLTemplate(renderOptions);
-        var labelHtml = super._getLabelHTML();
-        var inputClass = "";
-        if (this.options.globalClasses && this.options.globalClasses.input)
-            inputClass = `class="${this.options.globalClasses.input}"`;
-        var inputHtml = `<input ${inputClass} type="number" id="input_${this.id}" name="${this.name}" min="${this.min}" max="${this.max}"`;
-        if (this.required)
-            inputHtml += ` required`;
-        inputHtml += '>';
-
-        template.bodySection = labelHtml + inputHtml;
+        var labelHtml = super._getLabelHTML(renderOptions);
+        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
+            var inputClass = "";
+            if (this.options.globalClasses && this.options.globalClasses.input)
+                inputClass = `class="${this.options.globalClasses.input}"`;
+            var html = `<input ${inputClass} type="number" id="input_${this.id}" name="${this.name}" min="${this.min}" max="${this.max}"`;
+            if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && this.required)
+                html += ` required`;
+            if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW && this._value) {
+                html += ` value="${this._value}"`;
+            }
+            html += '>';
+        } else {
+            var v = this._value;
+            if (this._value === null || this._value === undefined)
+                v = renderOptions.nullValue ? renderOptions.nullValue : "";
+            var spanClass = "";
+            if (this.options.globalClasses && this.options.globalClasses.span)
+                spanClass = `class="${this.options.globalClasses.span}"`;
+            html = `<span ${spanClass} id="input_${this.id}">${v}</span>`;
+        }
+        template.bodySection = labelHtml + html;
         super._renderBase(container, template, parser, renderOptions);
     }
 
-    validate(options) {
+    setValue(v) {
+        if (v === null || v === undefined || v === "" || v === isNaN)
+            this._value = null;
+        else {
+            var n = parseInt(v, 10);
+            if (n === isNaN || n === undefined || n === null)
+                throw new Error(`Widget ${this.id}: value must be a valid number`);
+            this._value = n;
+        }
+        // _el can be null if element was not rendered yet
+        if (this._el)
+            this._el.value = this._value;
+    }
+
+    validate(validateOptions) {
         super.clearError();
         var input = this._el.querySelector(`input`);
-        var r = super._validateInputCtl(input, options);
+        var r = super._validateInputCtl(input, validateOptions);
 
         // if base validation ok, validate number-specific properties
         if (r.result) {
@@ -75,7 +100,7 @@ class WidgetNumber extends WidgetInputBase {
             else if (n < this.min)
                 r = { result: false, message: this.minValueMessage };
         }
-        if (options && options.showErrors && !r.result)
+        if (validateOptions && validateOptions.showErrors && !r.result)
             super.setError(r);
         return r;
     }

@@ -5,6 +5,8 @@
     "globalClasses": {
         "button": "btn",
         "input": "form-control",
+        "label": "widget-label",
+        "span": "widget-value",
         "widget": "form-group"
     },
     "requiredAttributeSettings": {
@@ -37,7 +39,8 @@
                     "message": "First name must contain only valid characters.",
                     "value": "alpha_accents"
                 }
-            ]
+            ],
+            "value": "juan"
         },
         {
             "type": "text",
@@ -64,7 +67,8 @@
                     "message": "First name must contain only valid characters.",
                     "value": "alpha_accents"
                 }
-            ]
+            ],
+            "value": "perez"
         },
         {
             "type": "text",
@@ -81,7 +85,8 @@
                     "message": "The email has an invalid format.",
                     "value": "email"
                 }
-            ]
+            ],
+            "value": "juan@mail.com"
         },        
         {
             "type": "spacer",
@@ -109,7 +114,9 @@
                     "message": "First name must contain only valid characters.",
                     "value": "address"
                 }
-            ]
+            ],
+            "tip": "Enter your address. Can be left empty.",
+            "value": "Gral. Manuel A. Rodriguez 2436"
         },
         {
             "type": "number",
@@ -131,7 +138,8 @@
                     "type": "required",
                     "message": "Sons are required."
                 }
-            ]
+            ],
+            "value": null
         },
         {
             "type": "spacer",

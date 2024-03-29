@@ -3,7 +3,8 @@
     "-": "^0.0.1",
     "g": "^2.0.1",
     "gulp": "^4.0.2",
-    "gulp-less": "^5.0.0"
+    "gulp-less": "^5.0.0",
+    "sortablejs": "^1.15.2"
   },
   "devDependencies": {
     "gulp-sass": "^5.1.0"

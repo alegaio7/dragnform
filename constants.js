@@ -1,14 +1,17 @@
-export const WIDGET_NUMBER = 'number';
-export const WIDGET_SPACER = 'spacer';
-export const WIDGET_SUBMIT = 'submit';
-export const WIDGET_TEXT = 'text';
+export const WIDGET_MODE_DESIGN = 'design';
+export const WIDGET_MODE_VIEW = 'view';
+
+export const WIDGET_TYPE_NUMBER = 'number';
+export const WIDGET_TYPE_SPACER = 'spacer';
+export const WIDGET_TYPE_SUBMIT = 'submit';
+export const WIDGET_TYPE_TEXT = 'text';
 
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE = "beforeLabel";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER = "afterLabel";
 
-export const WIDGET_NUMBER_MAX = 1_000_000;
+export const WIDGET_TYPE_NUMBER_MAX = 1_000_000;
 
-export const WIDGET_TEXT_MAX_LENGTH = 500;
+export const WIDGET_TYPE_TEXT_MAX_LENGTH = 500;
 
 export const WIDGET_VALIDATION_REQUIRED = 'Value is required';
 export const WIDGET_VALIDATION_MIN_LENGTH = 'Value is too short';

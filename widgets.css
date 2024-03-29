@@ -8,18 +8,31 @@
   font-weight: 300;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
+  width: 1000px;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
 
+@media (min-width: 1366px) {
+  .widget-container {
+    width: 1200px;
+  }
+}
+@media (min-width: 1800px) {
+  .widget-container {
+    width: 1600px;
+  }
+}
 .widget {
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 .widget[data-mode=design] {
   border: 1px dashed #ccc;
+}
+.widget[data-mode=view] {
+  border: 1px solid #ddd;
 }
 .widget button {
   cursor: pointer;
@@ -60,6 +73,20 @@
 .widget-grip::after {
   content: "≡";
   color: #888;
+}
+
+.widget-label {
+  font-weight: bold;
+}
+
+.widget-tip {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.widget-value {
+  width: 100%;
+  display: block;
 }
 
 [class*=widget-col-] {

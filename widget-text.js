@@ -4,16 +4,17 @@ import WidgetInputBase from "./widget-input-base.js";
 
 class WidgetText extends WidgetInputBase {
     constructor(options) {
-        super(constants.WIDGET_TEXT, options);
+        super(constants.WIDGET_TYPE_TEXT, options);
 
         if (!options)
             options = {};
         
         var _t = this;
+
         // defaults
         this.minLength = 0;
         this.minLengthMessage = constants.WIDGET_VALIDATION_MIN_LENGTH;
-        this.maxLength = constants.WIDGET_TEXT_MAX_LENGTH;
+        this.maxLength = constants.WIDGET_TYPE_TEXT_MAX_LENGTH;
         this.maxLengthMessage = constants.WIDGET_VALIDATION_MAX_LENGTH;
         this.pattern = null; // this is not a regex, but an object containing a regex and a validation message
         this.patternMessage = null;
@@ -40,7 +41,7 @@ class WidgetText extends WidgetInputBase {
                 else if (v.type === `pattern`) {
                     let p = Widget.getRegexPattern(v.value);
                     if (!p)
-                        throw new Error(`Text Widget ${this.id}: pattern not found: ${v.value}`);
+                        throw new Error(`Widget ${this.id}: pattern not found: ${v.value}`);
                     _t.pattern = p;
                     _t.patternMessage = p.validationMessage;
                     if (v.message)
@@ -50,16 +51,21 @@ class WidgetText extends WidgetInputBase {
         }
 
         if (!(this.minLength >= 0))
-            throw new Error(`Text widget ${this.id}: minLength must be greater than or equal to 0.`);
-        if (!(this.maxLength <= constants.WIDGET_TEXT_MAX_LENGTH))
-            throw new Error(`Text widget ${this.id}: minLength must be less than or equal to ${constants.WIDGET_TEXT_MAX_LENGTH}`);
+            throw new Error(`Widget ${this.id}: minLength must be greater than or equal to 0.`);
+        if (!(this.maxLength <= constants.WIDGET_TYPE_TEXT_MAX_LENGTH))
+            throw new Error(`Widget ${this.id}: minLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
         
         if (!(this.maxLength >= 0))
-            throw new Error(`Text widget ${this.id}: maxLength must be greater than or equal to 0`);
-        if (!(this.maxLength <= constants.WIDGET_TEXT_MAX_LENGTH))
-            throw new Error(`Text widget ${this.id}: maxLength must be less than or equal to ${constants.WIDGET_TEXT_MAX_LENGTH}`);
+            throw new Error(`Widget ${this.id}: maxLength must be greater than or equal to 0`);
+        if (!(this.maxLength <= constants.WIDGET_TYPE_TEXT_MAX_LENGTH))
+            throw new Error(`Widget ${this.id}: maxLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
+    }
 
-        this._el = null;
+    export(featureExtractor) {
+        if (!featureExtractor)
+            throw new Error(`Widget ${this.id}: feature extractor is required.`);
+        var f = super._export(featureExtractor);
+        return f;
     }
 
     render(container, parser, renderOptions) {
@@ -67,26 +73,48 @@ class WidgetText extends WidgetInputBase {
             renderOptions = {};
         renderOptions.renderValidationSection = true;
         var template = super._getHTMLTemplate(renderOptions);
-        var labelHtml = super._getLabelHTML();
-        var inputClass = "";
-        if (this.options.globalClasses && this.options.globalClasses.input)
-            inputClass = `class="${this.options.globalClasses.input}"`;
-        var inputHtml = `<input ${inputClass} type="text" id="input_${this.id}" name="${this.name}"`;
-        if (this.minLength)
-            inputHtml += ` minlength="${this.minLength}"`;
-        if (this.maxLength)
-            inputHtml += ` maxlength="${this.maxLength}"`;
-        if (this.required)
-            inputHtml += ` required`;
-        inputHtml += `>`;
-        template.bodySection = labelHtml + inputHtml;
+        var labelHtml = super._getLabelHTML(renderOptions);
+        var html;
+        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
+            var inputClass = "";
+            if (this.options.globalClasses && this.options.globalClasses.input)
+                inputClass = `class="${this.options.globalClasses.input}"`;
+                html = `<input ${inputClass} type="text" id="input_${this.id}" name="${this.name}"`;
+            if (this.minLength)
+                html += ` minlength="${this.minLength}"`;
+            if (this.maxLength)
+                html += ` maxlength="${this.maxLength}"`;
+            if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && this.required)
+                html += ` required`;
+            if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW && this._value) {
+                html += ` value="${this._value}"`;
+            }
+            html += `>`;
+        } else {
+            var v = this._value;
+            if (this._value === null || this._value === undefined)
+                v = renderOptions.nullValue ? renderOptions.nullValue : "";
+            var spanClass = "";
+            if (this.options.globalClasses && this.options.globalClasses.span)
+                spanClass = `class="${this.options.globalClasses.span}"`;
+            html = `<span ${spanClass} id="input_${this.id}">${v}</span>`;
+        }
+        
+        template.bodySection = labelHtml + html;
         super._renderBase(container, template, parser, renderOptions);
     }
 
-    validate(options) {
+    setValue(v) {
+        this._value = v;
+        // _el can be null if element was not rendered yet
+        if (this._el)
+            this._el.value = this._value;
+    }
+
+    validate(validateOptions) {
         super.clearError();
         var input = this._el.querySelector(`input`);
-        var r = super._validateInputCtl(input, options);
+        var r = super._validateInputCtl(input, validateOptions);
 
         // if base validation ok, validate text-specific properties
         if (r.result) {
@@ -99,7 +127,7 @@ class WidgetText extends WidgetInputBase {
                     r = { result: false, message: this.patternMessage };
             }
         }
-        if (options && options.showErrors && !r.result)
+        if (validateOptions && validateOptions.showErrors && !r.result)
             super.setError(r);
         return r;
     }

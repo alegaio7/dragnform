@@ -19,13 +19,13 @@ export default class Renderer {
             throw new Error("widget found with no type property.");
 
         switch(o.type) {
-            case constants.WIDGET_NUMBER:
+            case constants.WIDGET_TYPE_NUMBER:
                 return new WidgetNumber(o);
-            case constants.WIDGET_TEXT:
+            case constants.WIDGET_TYPE_TEXT:
                 return new WidgetText(o);
-            case constants.WIDGET_SUBMIT:
+            case constants.WIDGET_TYPE_SUBMIT:
                 return new WidgetSubmit(o);
-            case constants.WIDGET_SPACER:
+            case constants.WIDGET_TYPE_SPACER:
                 return new WidgetSpacer(o);
             default:
                 throw new Error(`widget type ${o.type} not found.`);
@@ -35,7 +35,7 @@ export default class Renderer {
     /// <summary>
     /// Renders a form from a JSON object
     /// </summary>
-    renderForm(container, json, options) {
+    renderForm(container, json, renderOptions) {
         if (!container)
             throw new Error('container is required');
         if (typeof container === 'string') {
@@ -44,9 +44,18 @@ export default class Renderer {
                 throw new Error('container not found');
             container = c;
         }
-        this._parseJson(json);
+        if (!renderOptions)
+            renderOptions = {};
+        if (renderOptions.renderMode !== constants.WIDGET_MODE_DESIGN && renderOptions.renderMode !== constants.WIDGET_MODE_VIEW)
+            throw new Error(`Invalid render mode. Must be ${constants.WIDGET_MODE_DESIGN} or ${constants.WIDGET_MODE_VIEW}`);
         this._container = container;
-        this._renderWidgets(options);
+
+        if (renderOptions.clear !== false)
+            this._clearContainer();
+        this._parseJson(json, renderOptions);
+        this._renderWidgets(renderOptions);
+
+        this._sortable = Sortable.create(container, {animation: 150, handle: '.widget-grip'});
     }
 
     get widgets() { 
@@ -80,10 +89,15 @@ export default class Renderer {
     /// Private methods
     /// ********************************************************************************************************************
     _clearContainer() {
-        this._container.innerHtml = '';
+        if (this._sortable) {
+            this._sortable.destroy();
+            this._sortable = null;
+        }
+        this._container.innerHTML = '';
+        this._widgets = [];
     }
 
-    _parseJson(json) {
+    _parseJson(json, options) {
         if (!json)
             throw new Error('json is required');
 
@@ -114,6 +128,8 @@ export default class Renderer {
             var e = _t.createWidget(w);
             if (_t.findWidget(e.id))
                 throw new Error(`widgets collection contains duplicate ids in json object: ${e.id}`);
+            if (options.renderMode === constants.WIDGET_MODE_VIEW)
+                e.setValue(w.value);
             _t._widgets.push(e);
         });
     }
@@ -121,8 +137,6 @@ export default class Renderer {
     _renderWidgets(options) {
         if (!options)
             options = {};
-        if (options.clear !== false)
-            this._clearContainer();
         var _t = this;
         var p = new DOMParser()
         this._widgets.forEach(w => {
