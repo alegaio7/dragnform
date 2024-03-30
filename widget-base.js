@@ -46,13 +46,6 @@ export default class Widget {
         this._el.classList.remove(`has-error`);
     }
 
-    export(featureExtractor) {
-        if (!featureExtractor)
-            throw new Error(`Widget ${this.id}: feature extractor is required.`);
-        var f = featureExtractor.extract(this._el);
-        return f;
-    }
-
     getValue() {
         return this._value;
     }

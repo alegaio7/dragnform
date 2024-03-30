@@ -13,6 +13,7 @@
     </head>
     <body>
         <div class="widget-container border"></div>
+        <div id="json-arena"></div>
         <script type="module">
             import Renderer from './renderer.js';
             import * as constants from './constants.js';
@@ -55,9 +56,14 @@
 
                             var r = renderer.validate({showErrors: true});
                             if (r.result) {
-                                alert('Form is valid!'); 
+                                console.log('Form is valid!'); 
                                 options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
                                 renderer.renderForm(c, json, options);
+
+                                var j = renderer.exportJson();
+                                if (j) {
+                                    document.getElementById('json-arena').innerText = JSON.stringify(j, null, 2);
+                                }
                             }
                         });
                 });

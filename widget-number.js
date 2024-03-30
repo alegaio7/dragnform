@@ -54,9 +54,8 @@ class WidgetNumber extends WidgetInputBase {
             var html = `<input ${inputClass} type="number" id="input_${this.id}" name="${this.name}" min="${this.min}" max="${this.max}"`;
             if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && this.required)
                 html += ` required`;
-            if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW && this._value) {
+            if (!isNaN(this._value))
                 html += ` value="${this._value}"`;
-            }
             html += '>';
         } else {
             var v = this._value;

@@ -139,7 +139,7 @@
                     "message": "Sons are required."
                 }
             ],
-            "value": null
+            "value": 0
         },
         {
             "type": "spacer",

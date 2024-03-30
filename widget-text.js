@@ -61,13 +61,6 @@ class WidgetText extends WidgetInputBase {
             throw new Error(`Widget ${this.id}: maxLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
     }
 
-    export(featureExtractor) {
-        if (!featureExtractor)
-            throw new Error(`Widget ${this.id}: feature extractor is required.`);
-        var f = super._export(featureExtractor);
-        return f;
-    }
-
     render(container, parser, renderOptions) {
         if (!renderOptions)
             renderOptions = {};
@@ -84,9 +77,9 @@ class WidgetText extends WidgetInputBase {
                 html += ` minlength="${this.minLength}"`;
             if (this.maxLength)
                 html += ` maxlength="${this.maxLength}"`;
-            if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && this.required)
+            if (this.required)
                 html += ` required`;
-            if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW && this._value) {
+            if (this._value) {
                 html += ` value="${this._value}"`;
             }
             html += `>`;

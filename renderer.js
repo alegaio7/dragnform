@@ -4,11 +4,13 @@ import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
 import WidgetSubmit from './widget-submit.js';
 import WidgetText from './widget-text.js';
+import FeatureExtractor from './feature-extractor.js';
 
 export default class Renderer {
     constructor() {
         this._container = null;
         this._widgets = [];
+        this._featureExtractor = null;
     }
 
     /// <summary>
@@ -30,6 +32,26 @@ export default class Renderer {
             default:
                 throw new Error(`widget type ${o.type} not found.`);
         }
+    }
+
+    get widgets() { 
+        return this._widgets;
+    }
+
+    exportJson() {
+        if (!this._container)
+            throw new Error('container not set');
+
+        if (!this._featureExtractor)
+            this._featureExtractor = new FeatureExtractor();
+        
+        return this._featureExtractor.extract(this._container);
+    }
+
+    findWidget(id) {
+        if (!this._widgets || !this._widgets.length)
+            return null;
+        return this._widgets.find(w => w.id === id);
     }
 
     /// <summary>
@@ -56,16 +78,6 @@ export default class Renderer {
         this._renderWidgets(renderOptions);
 
         this._sortable = Sortable.create(container, {animation: 150, handle: '.widget-grip'});
-    }
-
-    get widgets() { 
-        return this._widgets;
-    }
-
-    findWidget(id) {
-        if (!this._widgets || !this._widgets.length)
-            return null;
-        return this._widgets.find(w => w.id === id);
     }
 
     validate(options) {
@@ -128,8 +140,7 @@ export default class Renderer {
             var e = _t.createWidget(w);
             if (_t.findWidget(e.id))
                 throw new Error(`widgets collection contains duplicate ids in json object: ${e.id}`);
-            if (options.renderMode === constants.WIDGET_MODE_VIEW)
-                e.setValue(w.value);
+            e.setValue(w.value);
             _t._widgets.push(e);
         });
     }
