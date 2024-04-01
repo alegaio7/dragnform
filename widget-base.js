@@ -46,6 +46,15 @@ export default class Widget {
         this._el.classList.remove(`has-error`);
     }
 
+    exportJson(featureExtractor, recursive) {
+        if (!featureExtractor)
+            throw new Error('featureExtractor is required');
+        if (!this._el)
+            throw new Error('widget not rendered');
+        recursive = recursive ?? true;
+        return featureExtractor.exportJson(this._el, recursive);
+    }
+
     getValue() {
         return this._value;
     }

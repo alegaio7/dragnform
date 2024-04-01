@@ -2,7 +2,7 @@
     <head>
         <title>Demo</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> -->
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,13 +12,19 @@
         <script src="Sortable.min.js"></script>
     </head>
     <body>
-        <div class="widget-container border"></div>
+        <div id="widgets" class="widget-container border"></div>
         <div id="json-arena"></div>
+        <!-- <script src="poppins-normal.js" type="module"></script> -->
+        <!-- <script src="poppins-bold.js" type="module"></script> -->
+        <!-- <script src="poppins-italic.js" type="module"></script> -->
+        <!-- <script src="poppins-bold-italic.js" type="module"></script> -->
         <script type="module">
             import Renderer from './renderer.js';
             import * as constants from './constants.js';
+            import jsPDFExporter from './jspdf-exporter.js';
+
             var renderer = new Renderer();
-            var c = document.querySelector(".widget-container");
+            var c = document.getElementById("widgets");
             fetch('./demo.json')
                 .then((response) => response.json())
                 .then((json) => {
@@ -40,20 +46,6 @@
                             pdfMake.createPdf(dd).download();
                             */
 
-                            /*
-                            const { jsPDF } = window.jspdf;
-                            const doc = new jsPDF({ unit: 'pt' }) // create jsPDF object
-                            const pdfElement = document.querySelector('.widget-container') // HTML element to be converted to PDF
-
-                            doc.html(pdfElement, {
-                                callback: (pdf) => {
-                                pdf.save('file.pdf')
-                                },
-                                margin: 32, // optional: page margin
-                                // optional: other HTMLOptions
-                            })
-                            */
-
                             var r = renderer.validate({showErrors: true});
                             if (r.result) {
                                 console.log('Form is valid!'); 
@@ -63,6 +55,10 @@
                                 var j = renderer.exportJson();
                                 if (j) {
                                     document.getElementById('json-arena').innerText = JSON.stringify(j, null, 2);
+
+                                    // Create PDF here
+                                    var e = new jsPDFExporter();
+                                    e.exportPDF(j);
                                 }
                             }
                         });

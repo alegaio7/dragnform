@@ -1,3 +1,5 @@
+import * as constants from './constants.js';
+
 export const NODE_TYPE_ELEMENT = 1;
 export const NODE_TYPE_ATTRIBUTE = 2;
 export const NODE_TYPE_TEXT = 3;
@@ -13,31 +15,30 @@ export const NODE_TYPE_NOTATION = 12;
 
 export default class FeatureExtractor {
     constructor() {
-        
+        this._colorRegex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
     }
 
-    extract(el) {
+    exportJson(el, recursive) {
         if (!el)
             throw new Error('Feature extractor: element is required');
         
         if (typeof el !== 'object')
             throw new Error('Feature extractor: element must be an object');
 
-        /*if (!(el instanceof HTMLElement))
-                throw new Error('Feature extractor: element must be a HTMLElement');*/
-
+        recursive = !!recursive;
         var json = this._parseTag(el);
         if (!json)
             return null;
 
-        el.childNodes.forEach((node) => {
-            var nodeJson = this.extract(node);
-            if (nodeJson) {
-                if (!json.children)
-                    json.children = [];
-                    json.children.push(nodeJson);
-            }
-        });
+        if (recursive)
+            el.childNodes.forEach((node) => {
+                var nodeJson = this.exportJson(node, recursive);
+                if (nodeJson) {
+                    if (!json.children)
+                        json.children = [];
+                        json.children.push(nodeJson);
+                }
+            });
 
         return json;
     }
@@ -54,24 +55,23 @@ export default class FeatureExtractor {
         if (cs.display === 'none')
             return null; // do not render non-visible elements
         var json = {};
-        Object.assign(json, node.getBoundingClientRect());
+        json.id = node.id;
+        Object.assign(json, this._getBoundingClientRect(node));
         if (node.tagName === 'DIV') {
-            json.type = 'container';
-            json.display = cs.display;
+            json.type = constants.WIDGET_PDF_OBJECT_BOX;
             Object.assign(json, this._getBorderProperties(cs));
         } else if (node.tagName === 'LABEL') {
-            json.type = 'textContainer';
-            json.display = cs.display;
+            json.type = constants.WIDGET_PDF_OBJECT_TYPEFACE;
             // has no innerText or textContent
             Object.assign(json, this._getBorderProperties(cs));
             Object.assign(json, this._getFontProperties(cs));
         } else if (node.tagName === 'SPAN') {
-            json.type = 'textSpan';
-            json.text = node.innerText;
+            json.type = constants.WIDGET_PDF_OBJECT_TYPEFACE;;
+            // json.text = node.innerText; // text in spans is obtained from child node text
             Object.assign(json, this._getBorderProperties(cs));
             Object.assign(json, this._getFontProperties(cs));
         } else if (node.tagName === 'TEXT') {
-            json.type = 'text';
+            json.type = constants.WIDGET_PDF_OBJECT_TEXT;
             json.text = node.textContent;
         } else
             json = null; // unsupported node type
@@ -82,27 +82,33 @@ export default class FeatureExtractor {
     _getBorderProperties(cs, addRadius) {
         addRadius = !!addRadius;
         var json = {};
+        var hasBorderInfo = false;
         if (this._convertToPixels(cs.borderLeftWidth)) {
             json.borderLeftWidth = cs.borderLeftWidth;
             json.borderLeftStyle = cs.borderLeftStyle;
-            json.borderLeftColor = cs.borderLeftColor;
+            json.borderLeftColor = this._rgbToHex(cs.borderLeftColor);
+            hasBorderInfo = true;
         }
         if (this._convertToPixels(cs.borderLeftWidth)) {
             json.borderRightWidth = cs.borderRightWidth;
             json.borderRightStyle = cs.borderRightStyle;
-            json.borderRightColor = cs.borderRightColor;
+            json.borderRightColor = this._rgbToHex(cs.borderRightColor);
+            hasBorderInfo = true;
         }
         if (this._convertToPixels(cs.borderLeftWidth)) {
             json.borderTopWidth = cs.borderTopWidth;
             json.borderTopStyle = cs.borderTopStyle;
-            json.borderTopColor = cs.borderTopColor;
+            json.borderTopColor = this._rgbToHex(cs.borderTopColor);
+            hasBorderInfo = true;
         }
         if (this._convertToPixels(cs.borderLeftWidth)) {
             json.borderBottomWidth = cs.borderBottomWidth;
             json.borderBottomStyle = cs.borderBottomStyle;
-            json.borderBottomColor = cs.borderBottomColor;
+            json.borderBottomColor = this._rgbToHex(cs.borderBottomColor);
+            hasBorderInfo = true;
         }
-        if (addRadius) {
+
+        if (addRadius && hasBorderInfo) {
             if (json.borderLeftWidth && json.borderTopWidth)
                 json.borderTopLeftRadius = cs.borderTopLeftRadius;
             if (json.borderRightWidth && json.borderTopWidth)
@@ -112,6 +118,8 @@ export default class FeatureExtractor {
             if (json.borderBottomWidth && json.borderRightWidth)
                 json.borderBottomRightRadius = cs.borderBottomRightRadius;
         }
+
+        json.hasBorderInfo = hasBorderInfo;
         return json;
     }
 
@@ -121,10 +129,15 @@ export default class FeatureExtractor {
         json.fontSize = cs.fontSize;
         json.fontWeight = cs.fontWeight;
         json.fontStyle = cs.fontStyle;
-        json.color = cs.color;
+        json.color = this._rgbToHex(cs.color);
         json.textAlign = cs.textAlign;
-        json.textDecoration = cs.textDecoration;
-        json.textTransform = cs.textTransform;
+        if (cs.textDecoration.style && cs.textDecoration.style !== 'none') {
+            json.textDecorationColor = this._rgbToHex(cs.textDecoration.color);
+            json.textDecorationLine = cs.textDecoration.line;
+            json.textDecorationStyle = cs.textDecoration.style;
+        }
+        if (cs.textTransform && cs.textTransform !== 'none')
+            json.textTransform = cs.textTransform;
         return json;
     }
 
@@ -132,7 +145,13 @@ export default class FeatureExtractor {
         return parseFloat(value.replace('px', ''));
     }
 
-    getOffset( el ) {
+    _getBoundingClientRect = element => { 
+        const {top, right, bottom, left, width, height, x, y} = element.getBoundingClientRect()
+        //return {top, right, bottom, left, width, height, x, y};
+        return {x, y, width, height};
+    }
+
+    _getOffset( el ) {
         var _x = 0;
         var _y = 0;
         while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
@@ -141,5 +160,16 @@ export default class FeatureExtractor {
             el = el.offsetParent;
         }
         return { top: _y, left: _x };
+    }
+
+    // function that transforms a color text like rgb(0, 0, 0) to a hex color value
+    _rgbToHex = (rgb) => {
+        var matches = this._colorRegex.exec(rgb);
+        return "#" + this._componentToHex(parseInt(matches[1])) + this._componentToHex(parseInt(matches[2])) + this._componentToHex(parseInt(matches[3]));
+    }
+
+    _componentToHex = (c) => {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
     }
 }

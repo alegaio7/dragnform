@@ -42,10 +42,24 @@ export default class Renderer {
         if (!this._container)
             throw new Error('container not set');
 
+        if (!this._widgets)
+            throw new Error('Must render the form first');
+
         if (!this._featureExtractor)
             this._featureExtractor = new FeatureExtractor();
-        
-        return this._featureExtractor.extract(this._container);
+
+        var json = this._featureExtractor.exportJson(this._container, false); // not recursive for container, each widget will handle its children
+        json.container = true;
+        json.widgets = [];
+        var _t = this;
+        this._widgets.forEach(w => {
+            var j = w.exportJson(_t._featureExtractor, true);
+            if (j) {
+                json.widgets.push(j);
+            }
+        });
+
+        return json;
     }
 
     findWidget(id) {

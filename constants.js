@@ -9,8 +9,12 @@ export const WIDGET_TYPE_TEXT = 'text';
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE = "beforeLabel";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER = "afterLabel";
 
-export const WIDGET_TYPE_NUMBER_MAX = 1_000_000;
+export const WIDGET_PDF_OBJECT_BOX = 'box';
+// export const WIDGET_PDF_OBJECT_LABEL = 'label';
+export const WIDGET_PDF_OBJECT_TEXT = 'text';
+export const WIDGET_PDF_OBJECT_TYPEFACE = 'typeface';
 
+export const WIDGET_TYPE_NUMBER_MAX = 1_000_000;
 export const WIDGET_TYPE_TEXT_MAX_LENGTH = 500;
 
 export const WIDGET_VALIDATION_REQUIRED = 'Value is required';
