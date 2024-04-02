@@ -34,48 +34,45 @@ class WidgetNumber extends WidgetInputBase {
             });
         }
 
-        if (this.min === isNaN || this.min === undefined || this.min === null)
+        if (isNaN(this.min) || this.min === undefined || this.min === null)
             throw new Error(`Number Widget ${this.id}: min must be a valid number`);
         
-        if (this.max === isNaN || this.max === undefined || this.max === null)
+        if (isNaN(this.max) || this.max === undefined || this.max === null)
             throw new Error(`Number Widget ${this.id}: max must be a valid number`);
     }
 
     render(container, parser, renderOptions) {
         if (!renderOptions)
             renderOptions = {};
-        renderOptions.renderValidationSection = true;
-        var template = super._getHTMLTemplate(renderOptions);
-        var labelHtml = super._getLabelHTML(renderOptions);
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
-            var inputClass = "";
-            if (this.options.globalClasses && this.options.globalClasses.input)
-                inputClass = `class="${this.options.globalClasses.input}"`;
-            var html = `<input ${inputClass} type="number" id="input_${this.id}" name="${this.name}" min="${this.min}" max="${this.max}"`;
-            if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && this.required)
-                html += ` required`;
-            if (!isNaN(this._value))
-                html += ` value="${this._value}"`;
-            html += '>';
+        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
+            renderOptions.renderMode === constants.WIDGET_MODE_RUN) {
+            renderOptions.renderValidationSection = true;
+            var template = super._getHTMLTemplate(renderOptions);
+            var labelHtml = super._getLabelHTML(renderOptions);
+            var html;
+            html = `${labelHtml ? labelHtml : ""}
+                <input type="number" 
+                id="input_${this.id}" 
+                ${(this.options.globalClasses && this.options.globalClasses.input) ? 'class="' + this.options.globalClasses.input + '"' : ""}
+                min="${this.min}"
+                max="${this.max}"
+                ${this.required ? 'required' : ""}
+                ${!isNaN(this._value) ? 'value="' + this._value + '"' : ""}
+                ${this.name ? 'name="' + this.name + '"' : ""}
+                >`
+                template.bodySection = html;
+                super._renderBase(container, template, parser, renderOptions);
         } else {
-            var v = this._value;
-            if (this._value === null || this._value === undefined)
-                v = renderOptions.nullValue ? renderOptions.nullValue : "";
-            var spanClass = "";
-            if (this.options.globalClasses && this.options.globalClasses.span)
-                spanClass = `class="${this.options.globalClasses.span}"`;
-            html = `<span ${spanClass} id="input_${this.id}">${v}</span>`;
+            super.render(container, parser, renderOptions);
         }
-        template.bodySection = labelHtml + html;
-        super._renderBase(container, template, parser, renderOptions);
     }
 
     setValue(v) {
-        if (v === null || v === undefined || v === "" || v === isNaN)
+        if (v === null || v === undefined || v === "" || isNaN(v))
             this._value = null;
         else {
             var n = parseInt(v, 10);
-            if (n === isNaN || n === undefined || n === null)
+            if (isNaN(n) || n === undefined || n === null)
                 throw new Error(`Widget ${this.id}: value must be a valid number`);
             this._value = n;
         }
@@ -92,7 +89,7 @@ class WidgetNumber extends WidgetInputBase {
         // if base validation ok, validate number-specific properties
         if (r.result) {
             var n = parseInt(input.value, 10);
-            if (n === isNaN || n === undefined || n === null)
+            if (isNaN(n) || n === undefined || n === null)
                 r = { result: false, message: this.requiredMessage };
             else if (n > this.max)
                 r = { result: false, message: this.maxValueMessage };

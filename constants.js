@@ -1,5 +1,9 @@
-export const WIDGET_MODE_DESIGN = 'design';
-export const WIDGET_MODE_VIEW = 'view';
+export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
+export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
+
+export const WIDGET_MODE_DESIGN = 'design';     // mode for designing forms
+export const WIDGET_MODE_RUN = 'run';           // mode for rendering widgets and allow user input
+export const WIDGET_MODE_VIEW = 'view';         // mode for rendering widget inputs and show readonly controls (previous to a PDF export)
 
 export const WIDGET_TYPE_NUMBER = 'number';
 export const WIDGET_TYPE_SPACER = 'spacer';

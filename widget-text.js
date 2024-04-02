@@ -11,7 +11,7 @@ class WidgetText extends WidgetInputBase {
         
         var _t = this;
 
-        // defaults
+        // text widget defaults
         this.minLength = 0;
         this.minLengthMessage = constants.WIDGET_VALIDATION_MIN_LENGTH;
         this.maxLength = constants.WIDGET_TYPE_TEXT_MAX_LENGTH;
@@ -64,37 +64,27 @@ class WidgetText extends WidgetInputBase {
     render(container, parser, renderOptions) {
         if (!renderOptions)
             renderOptions = {};
-        renderOptions.renderValidationSection = true;
-        var template = super._getHTMLTemplate(renderOptions);
-        var labelHtml = super._getLabelHTML(renderOptions);
-        var html;
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
-            var inputClass = "";
-            if (this.options.globalClasses && this.options.globalClasses.input)
-                inputClass = `class="${this.options.globalClasses.input}"`;
-                html = `<input ${inputClass} type="text" id="input_${this.id}" name="${this.name}"`;
-            if (this.minLength)
-                html += ` minlength="${this.minLength}"`;
-            if (this.maxLength)
-                html += ` maxlength="${this.maxLength}"`;
-            if (this.required)
-                html += ` required`;
-            if (this._value) {
-                html += ` value="${this._value}"`;
-            }
-            html += `>`;
-        } else {
-            var v = this._value;
-            if (this._value === null || this._value === undefined)
-                v = renderOptions.nullValue ? renderOptions.nullValue : "";
-            var spanClass = "";
-            if (this.options.globalClasses && this.options.globalClasses.span)
-                spanClass = `class="${this.options.globalClasses.span}"`;
-            html = `<span ${spanClass} id="input_${this.id}">${v}</span>`;
+        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
+            renderOptions.renderMode === constants.WIDGET_MODE_RUN) {
+                var html;
+                var template = super._getHTMLTemplate(renderOptions);
+                var labelHtml = super._getLabelHTML(renderOptions);
+                renderOptions.renderValidationSection = true;
+                html = `${labelHtml ? labelHtml : ""}
+                <input type="text" 
+                id="input_${this.id}" 
+                ${(this.options.globalClasses && this.options.globalClasses.input) ? 'class="' + this.options.globalClasses.input + '"' : ""}
+                ${this.minLength ? 'minlength="' + this.minLength + '"' : ""}
+                ${this.maxLength ? 'maxlength="' + this.maxLength + '"' : ""}
+                ${this.required ? 'required' : ""}
+                ${this._value ? 'value="' + this._value + '"' : ""}
+                ${this.name ? 'name="' + this.name + '"' : ""}
+                >`
+                template.bodySection = html;
+                super._renderBase(container, template, parser, renderOptions);
+        } else if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
+            super.render(container, parser, renderOptions);
         }
-        
-        template.bodySection = labelHtml + html;
-        super._renderBase(container, template, parser, renderOptions);
     }
 
     setValue(v) {

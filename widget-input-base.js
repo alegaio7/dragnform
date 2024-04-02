@@ -26,6 +26,24 @@ class WidgetInputBase extends Widget {
         this._el = null;
     }
 
+    render(container, parser, renderOptions) {
+        if (!renderOptions)
+            renderOptions = {};
+        if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
+            var html;
+            var template = super._getHTMLTemplate(renderOptions);
+            var labelHtml = this._getLabelHTML(renderOptions);
+            var v = this._value;
+            if (this._value === null || this._value === undefined)
+                v = renderOptions.nullValue ? renderOptions.nullValue : "";
+            html = `${labelHtml ? labelHtml : ""}
+                <span ${(this.options.globalClasses && this.options.globalClasses.span) ? 'class="' + this.options.globalClasses.span + '"' : ""}
+                id="input_${this.id}">${v}</span>`;
+            template.bodySection = html;
+            super._renderBase(container, template, parser, renderOptions);
+        }
+    }
+    
     _getLabelHTML(renderOptions) {
         if (!this.label)
             return "";
@@ -38,7 +56,7 @@ class WidgetInputBase extends Widget {
         var html = `<label ${labelClass} for="input_${this.id}">`;
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.requiredMarkText}</span>`;
         if (this.required && 
-            renderOptions.renderMode === constants.WIDGET_MODE_DESIGN &&
+            (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN) &&
             this.requiredAttributeSettings.requiredMarkText && 
             this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
             html  += reqMarkHtml;
@@ -46,7 +64,7 @@ class WidgetInputBase extends Widget {
         html  += `${this.label}`
 
         if (this.required && 
-            renderOptions.renderMode === constants.WIDGET_MODE_DESIGN &&
+            (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN) && 
             this.requiredAttributeSettings.requiredMarkText && 
             this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
             html  += reqMarkHtml;

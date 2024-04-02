@@ -15,14 +15,14 @@ export default class Widget {
             constants.WIDGET_TYPE_TEXT];
 
         if (validTypes.indexOf(type) === -1)
-            throw new Error('type is invalid');
+            throw new Error('Widget type is invalid');
 
         this._el = null;
         this._value = null;
 
         this.columns = o.columns ?? 12;
         if (!(this.columns >= 1 && this.columns <= 12))
-            throw new Error('columns must be between 1 and 12');
+            throw new Error('Widget columns must be between 1 and 12');
         this.columnsClass = "widget-col-" + this.columns;
         this.id = o.id ?? "Widget" + Math.floor(Math.random() * 1000);
         this.name = o.name ?? this.id;
@@ -101,7 +101,7 @@ export default class Widget {
             openingSection: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${renderOptions.renderMode}">`,
             bodySection: null,
             gripSection: (renderOptions.renderGrip && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-grip"></div>` : null,
-            tipSection:  (renderOptions.renderTips && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-tip"></div>` : null,
+            tipSection:  (renderOptions.renderTips && (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN)) ? `<div class="widget-tip"></div>` : null,
             validationSection: renderOptions.renderValidationSection ? `<div class="widget-error" id="error_${this.id}"></div>` : null,
             closingSection: `</div>`
         };
@@ -136,7 +136,8 @@ export default class Widget {
             html += template.bodySection ?? "";
             html += renderOptions.renderGrip ? (template.gripSection ?? "") : "";
             html += renderOptions.renderTips ? (template.tipSection ?? "") : "";
-            html += template.validationSection ?? "";
+            if (renderOptions.renderMode !== constants.WIDGET_MODE_VIEW)
+                html += template.validationSection ?? "";
             html += template.closingSection ?? "";
             var node = parser.parseFromString(html, `text/html`).body.firstElementChild;
             container.appendChild(node);

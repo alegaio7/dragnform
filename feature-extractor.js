@@ -126,7 +126,7 @@ export default class FeatureExtractor {
     _getFontProperties(cs) {
         var json = {};
         json.fontFamily = cs.fontFamily;
-        json.fontSize = cs.fontSize;
+        json.fontSize = this._convertToPixels(cs.fontSize);
         json.fontWeight = cs.fontWeight;
         json.fontStyle = cs.fontStyle;
         json.color = this._rgbToHex(cs.color);
