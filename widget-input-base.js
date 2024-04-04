@@ -33,11 +33,11 @@ class WidgetInputBase extends Widget {
             var html;
             var template = super._getHTMLTemplate(renderOptions);
             var labelHtml = this._getLabelHTML(renderOptions);
-            var v = this._value;
-            if (this._value === null || this._value === undefined)
+            var v = this.value;
+            if (this.value === null || this.value === undefined)
                 v = renderOptions.nullValue ? renderOptions.nullValue : "";
             html = `${labelHtml ? labelHtml : ""}
-                <span ${(this.options.globalClasses && this.options.globalClasses.span) ? 'class="' + this.options.globalClasses.span + '"' : ""}
+                <span ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}
                 id="input_${this.id}">${v}</span>`;
             template.bodySection = html;
             super._renderBase(container, template, parser, renderOptions);
@@ -50,8 +50,8 @@ class WidgetInputBase extends Widget {
 
         // widget global class already handled in base class
         var labelClass = "";
-        if (this.options.globalClasses && this.options.globalClasses.label)
-            labelClass = `class="${this.options.globalClasses.label}"`;
+        if (this.globalClasses.label)
+            labelClass = `class="${this.globalClasses.label}"`;
         
         var html = `<label ${labelClass} for="input_${this.id}">`;
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.requiredMarkText}</span>`;
@@ -74,13 +74,15 @@ class WidgetInputBase extends Widget {
         return html;
     }
 
-    _validateInputCtl(input, validateOptions) {
+    _validateInputCtl(input) {
         var r;
+        var validations = this.validations;
         if (!input) {
             r = { result: false, message: `Widget ${this.id}: input not found` };
         }
         else if (!input.value) {
-            if (this.required)
+            var rv = validations.find(x => x.type === "required");
+            if (rv)
                 r = { result: false, message: this.requiredMessage };
         }
 

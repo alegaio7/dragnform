@@ -2,8 +2,9 @@ import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 
 class WidgetSubmit extends Widget {
-    constructor(options) {
-        super(constants.WIDGET_TYPE_SUBMIT, options);
+    constructor(fragment) {
+        super(constants.WIDGET_TYPE_SUBMIT, fragment);
+        this.submitClass = fragment.submitClass;
         this._button = null;
     }
 
@@ -25,25 +26,26 @@ class WidgetSubmit extends Widget {
     render(container, parser, renderOptions) {
         if (!renderOptions)
             renderOptions = {};
-        renderOptions.renderValidationSection = false;
-        var template = super._getHTMLTemplate(renderOptions);
-        var buttonClass = ""
-        if (this.options.globalClasses) {
-            if (this.options.globalClasses.button)
-                buttonClass = `class="${this.options.globalClasses.button}`;
+        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
+            renderOptions.renderMode === constants.WIDGET_MODE_RUN) {
+            renderOptions.renderValidationSection = false;
+            var template = super._getHTMLTemplate(renderOptions);
+            var buttonClass = `${this.globalClasses.button ? 'class="' + this.globalClasses.button : ""}`; // class missing closing quote...closing below
+            if (this.submitClass) 
+                buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.submitClass}`;
+            if (buttonClass !== "")
+                buttonClass += '"';
+            var html = `<button type="button" 
+                ${buttonClass}
+                id="button_${this.id}" 
+                name="${this.name}">`;
+            if (this.label)
+                html += `<span>${this.label}</span>`;
+            html += `</button>`;
+            template.bodySection = html;
+            super._renderBase(container, template, parser, renderOptions);
         }
-        if (this.options.submitClass) {
-            buttonClass += (buttonClass === "" ? `class="` : " ") + `${this.options.submitClass}`;
-            buttonClass += `"`;
-        }
-        
-        var inputHtml = `<button type="button" ${buttonClass} id="button_${this.id}" name="${this.name}">`;
-        if (this.label)
-            inputHtml += `<span>${this.label}</span>`;
-        inputHtml += `</button>`;
-        template.bodySection = inputHtml;
-
-        super._renderBase(container, template, parser, renderOptions);
+        // buttons don't render in view mode
     }
 }
 

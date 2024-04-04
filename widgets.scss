@@ -45,9 +45,9 @@ $widget-grip-width: 1rem;
         border: 1px dashed $widget-border-design-color;
     }
 
-    &[data-mode="view"] {
+    /*&[data-mode="view"] {
         border: 1px solid $widget-border-view-color;
-    }
+    }*/
 
     button {
         cursor: pointer;

@@ -28,12 +28,12 @@
 }
 .widget {
   padding-bottom: 1rem;
+  /*&[data-mode="view"] {
+      border: 1px solid $widget-border-view-color;
+  }*/
 }
 .widget[data-mode=design] {
   border: 1px dashed #ccc;
-}
-.widget[data-mode=view] {
-  border: 1px solid #ddd;
 }
 .widget button {
   cursor: pointer;

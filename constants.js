@@ -1,6 +1,10 @@
 export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
 export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
 
+export const DEFAULT_PDF_DPI = 72;              // default PDF DPI
+export const DEFAULT_PDF_FONT_SIZE = 16;              // default PDF DPI
+export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
+
 export const WIDGET_MODE_DESIGN = 'design';     // mode for designing forms
 export const WIDGET_MODE_RUN = 'run';           // mode for rendering widgets and allow user input
 export const WIDGET_MODE_VIEW = 'view';         // mode for rendering widget inputs and show readonly controls (previous to a PDF export)
@@ -15,8 +19,8 @@ export const WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER = "afterLabel";
 
 export const WIDGET_PDF_OBJECT_BOX = 'box';
 // export const WIDGET_PDF_OBJECT_LABEL = 'label';
-export const WIDGET_PDF_OBJECT_TEXT = 'text';
-export const WIDGET_PDF_OBJECT_TYPEFACE = 'typeface';
+export const WIDGET_PDF_OBJECT_SIMPLE_TEXT = 'simpletext';
+export const WIDGET_PDF_OBJECT_STYLED_TEXT = 'styledtext';
 
 export const WIDGET_TYPE_NUMBER_MAX = 1_000_000;
 export const WIDGET_TYPE_TEXT_MAX_LENGTH = 500;
@@ -38,11 +42,11 @@ export const WIDGET_VALIDATION_EMAIL_REGEX = /^[A-Za-z0-9]+[A-Za-z0-9!#$%&\*\+\.
 
 // add more custom patterns here, but define first the pattern above
 export const WIDGET_VALIDATION_PATTERNS = [
-    {name: 'alpha', value: WIDGET_VALIDATION_ALPHA_ONLY_REGEX, validationMessage: 'Only letters and spaces are allowed'},
-    {name: 'alpha_accents', value: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_ONLY_REGEX, validationMessage: 'Only letters, spaces and accents are allowed'},
-    {name: 'alpha_numbers', value: WIDGET_VALIDATION_ALPHA_AND_NUMBERS_REGEX, validationMessage: 'Only letters and numbers are allowed'},
-    {name: 'alpha_accents_numbers', value: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_AND_NUMBERS_REGEX, validationMessage: 'Only letters, spaces, accents and numbers are allowed'},
-    {name: 'numbers', value: WIDGET_VALIDATION_NUMBERS_ONLY_REGEX, validationMessage: 'Only numbers are allowed'},
-    {name: 'address', value: WIDGET_VALIDATION_ADDRESS_REGEX, validationMessage: 'Invalid address. Only letters, numbers, spaces, accents, commas, periods and hyphens are allowed'},
-    {name: 'email', value: WIDGET_VALIDATION_EMAIL_REGEX, validationMessage: 'Invalid email format'}
+    {name: 'alpha', regex: WIDGET_VALIDATION_ALPHA_ONLY_REGEX, validationMessage: 'Only letters and spaces are allowed'},
+    {name: 'alpha_accents', regex: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_ONLY_REGEX, validationMessage: 'Only letters, spaces and accents are allowed'},
+    {name: 'alpha_numbers', regex: WIDGET_VALIDATION_ALPHA_AND_NUMBERS_REGEX, validationMessage: 'Only letters and numbers are allowed'},
+    {name: 'alpha_accents_numbers', regex: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_AND_NUMBERS_REGEX, validationMessage: 'Only letters, spaces, accents and numbers are allowed'},
+    {name: 'numbers', regex: WIDGET_VALIDATION_NUMBERS_ONLY_REGEX, validationMessage: 'Only numbers are allowed'},
+    {name: 'address', regex: WIDGET_VALIDATION_ADDRESS_REGEX, validationMessage: 'Invalid address. Only letters, numbers, spaces, accents, commas, periods and hyphens are allowed'},
+    {name: 'email', regex: WIDGET_VALIDATION_EMAIL_REGEX, validationMessage: 'Invalid email format'}
 ];

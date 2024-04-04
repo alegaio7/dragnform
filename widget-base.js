@@ -1,12 +1,12 @@
 import * as constants from './constants.js';
 
 export default class Widget {
-    constructor(type, o) {
+    constructor(type, fragment) {
         if (!type)
             throw new Error('type is required');
 
-        if (!o)
-            o = {};
+        if (!fragment)
+            fragment = {};
 
         var validTypes = [
             constants.WIDGET_TYPE_NUMBER, 
@@ -20,57 +20,65 @@ export default class Widget {
         this._el = null;
         this._value = null;
 
-        this.columns = o.columns ?? 12;
+        this.columns = fragment.columns ?? 12;
         if (!(this.columns >= 1 && this.columns <= 12))
             throw new Error('Widget columns must be between 1 and 12');
         this.columnsClass = "widget-col-" + this.columns;
-        this.id = o.id ?? "Widget" + Math.floor(Math.random() * 1000);
-        this.name = o.name ?? this.id;
-        this.label = o.label ?? 'New widget';
-        this.required = o.required ?? false;
-        this.requiredAttributeSettings = null;
-        this.requiredMessage = constants.WIDGET_VALIDATION_REQUIRED;
-        this.requiredAttributeSettings = o.requiredAttributeSettings ?? {};
-        if (!this.requiredAttributeSettings.requiredMarkPosition === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
-            this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE;
-
+        this.id = fragment.id ?? "Widget" + Math.floor(Math.random() * 1000);
+        this.label = fragment.label;
+        this.name = fragment.name ?? this.id;
         this.type = type;
-        this.widgetClass = 'widget' + (o.widgetClass ??  '');
-        if (o.globalClasses && o.globalClasses.widget)
-            this.widgetClass += ' ' + o.globalClasses.widget;
-        this._options = o;
-        this._tip = o.tip;
+        
+        this.requiredAttributeSettings = null;
+        this.requiredAttributeSettings = fragment.requiredAttributeSettings ?? {};
+        if (!this.requiredAttributeSettings.requiredMarkPosition === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
+        this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE;
+    
+        this._globalClasses = fragment.globalClasses ?? {};
+        this._validations = fragment.validations ?? [];
+
+        this.widgetClass = 'widget';
+        if (fragment.globalClasses && fragment.globalClasses.widget)
+            this.widgetClass += ' ' + fragment.globalClasses.widget;
+        
+        this.tip = fragment.tip;
     }
+
+    // Props begin
+    get globalClasses() { return this._globalClasses; }
+    get validations() { return this._validations; }
+    get value() { return this._value; }
+    // Props end
+
+    // must be implemented by child classes. 
+    setValue(value) { 
+        this._value = value
+    } 
 
     clearError() {
         this._el.classList.remove(`has-error`);
     }
 
-    exportJson(featureExtractor, recursive) {
+    // exports widget info as json
+    exportJson() {
+        var json = {columns: this.columns, id: this.id, label: this.label, type: this.type};
+        return json;
+    }
+
+    // extract widget features using a injected extractor.
+    extractFeatures(featureExtractor, recursive) {
         if (!featureExtractor)
             throw new Error('featureExtractor is required');
         if (!this._el)
             throw new Error('widget not rendered');
         recursive = recursive ?? true;
-        return featureExtractor.exportJson(this._el, recursive);
-    }
-
-    getValue() {
-        return this._value;
+        return featureExtractor.extractFeatures(this._el, recursive);
     }
     
     setError(r) {
         var error = this._el.querySelector('.widget-error');
         error.innerHTML = r.message;
         this._el.classList.add('has-error');
-    }
-
-    setValue(v) {
-        return; // must be implemented by child classes.
-    }
-
-    get options() {
-        return this._options;
     }
 
     /// <summary>

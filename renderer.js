@@ -45,15 +45,34 @@ export default class Renderer {
         if (!this._widgets)
             throw new Error('Must render the form first');
 
+        var json = this._sourceJson;
+        json.widgets = [];
+        this._widgets.forEach(w => {
+            var j = w.exportJson();
+            if (j) {
+                json.widgets.push(j);
+            }
+        });
+
+        return json;
+    }
+
+    extractFeatures() {
+        if (!this._container)
+            throw new Error('container not set');
+
+        if (!this._widgets)
+            throw new Error('Must render the form first');
+
         if (!this._featureExtractor)
             this._featureExtractor = new FeatureExtractor();
 
-        var json = this._featureExtractor.exportJson(this._container, false); // not recursive for container, each widget will handle its children
+        var json = this._featureExtractor.extractFeatures(this._container, false); // not recursive for container, each widget will handle its children
         json.container = true;
         json.widgets = [];
         var _t = this;
         this._widgets.forEach(w => {
-            var j = w.exportJson(_t._featureExtractor, true);
+            var j = w.extractFeatures(_t._featureExtractor, true);
             if (j) {
                 json.widgets.push(j);
             }
@@ -88,7 +107,7 @@ export default class Renderer {
 
         if (renderOptions.clear !== false)
             this._clearContainer();
-        this._parseJson(json, renderOptions);
+        this._parseJson(json);
         this._renderWidgets(renderOptions);
 
         this._sortable = Sortable.create(container, {animation: 150, handle: '.widget-grip'});
@@ -123,7 +142,7 @@ export default class Renderer {
         this._widgets = [];
     }
 
-    _parseJson(json, options) {
+    _parseJson(json) {
         if (!json)
             throw new Error('json is required');
 
@@ -145,17 +164,17 @@ export default class Renderer {
         if (!o.widgets.length)
             throw new Error('widgets collection has no elements in json object');
 
-        var _t = this;
+        this._sourceJson = o;
         o.widgets.forEach(w => {
             if (o.globalClasses)
                 w.globalClasses = o.globalClasses;
             if (o.requiredAttributeSettings)
                 w.requiredAttributeSettings = o.requiredAttributeSettings;
-            var e = _t.createWidget(w);
-            if (_t.findWidget(e.id))
+            var e = this.createWidget(w);
+            if (this.findWidget(e.id))
                 throw new Error(`widgets collection contains duplicate ids in json object: ${e.id}`);
             e.setValue(w.value);
-            _t._widgets.push(e);
+            this._widgets.push(e);
         });
     }
 

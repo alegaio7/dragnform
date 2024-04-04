@@ -40,19 +40,21 @@
                     var submit = renderer.findWidget('submit');
                     if (submit)
                         submit.registerClick(e => { 
-                            /*
-                            var val = htmlToPdfmake(document.querySelector('.widget-container').innerHTML);
-                            var dd = {content:val};
-                            pdfMake.createPdf(dd).download();
-                            */
-
                             var r = renderer.validate({showErrors: true});
                             if (r.result) {
                                 console.log('Form is valid!'); 
-                                options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
-                                renderer.renderForm(c, json, options);
+                                
+                                var j = renderer.exportJson(); // get current form state
+                                if (j)
+                                    document.getElementById('json-arena').innerText = JSON.stringify(j, null, 2);
+                                return;
 
-                                var j = renderer.exportJson();
+                                // renderer.renderForm(c, j, options); // render again, to reflect widget that could have changed position via drag
+
+                                options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
+                                //renderer.renderForm(c, json, options);
+                                renderer.renderForm(c, j, options);
+
                                 if (j) {
                                     document.getElementById('json-arena').innerText = JSON.stringify(j, null, 2);
 
