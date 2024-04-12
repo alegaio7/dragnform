@@ -90,6 +90,11 @@
         },        
         {
             "type": "spacer",
+            "columns": 12,
+            "id": "spc12"
+        },        
+        {
+            "type": "spacer",
             "columns": 2,
             "id": "spc1"
         },

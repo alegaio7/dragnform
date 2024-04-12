@@ -1,4 +1,3 @@
-import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import WidgetInputBase from "./widget-input-base.js";
 
@@ -51,13 +50,21 @@ class WidgetNumber extends WidgetInputBase {
                     ${this.name ? 'name="' + this.name + '"' : ""}
                     >`;
                 template.bodySection = html;
-                super._renderBase(container, template, parser, renderOptions);
+                super._renderInternal(container, template, parser, renderOptions);
+
+                var _t = this;
+                this._el.querySelector("input").addEventListener("blur", function(e) {
+                    _t.setValue(e.currentTarget.value, false);
+                });
         } else {
             super.render(container, parser, renderOptions);
         }
     }
 
-    setValue(v) {
+    setValue(v, setCtlValue) {
+        if (setCtlValue !== false)
+            setCtlValue = true;
+
         if (v === null || v === undefined || v === "" || isNaN(v))
             this._value = null;
         else {
@@ -67,8 +74,8 @@ class WidgetNumber extends WidgetInputBase {
             this._value = n;
         }
         // _el can be null if element was not rendered yet
-        if (this._el)
-            this._el.value = this._value;
+        if (setCtlValue && this._el)
+            this._el.querySelector("input").value = this._value;
     }
 
     validate(validateOptions) {

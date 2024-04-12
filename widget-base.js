@@ -70,7 +70,7 @@ export default class Widget {
         if (!featureExtractor)
             throw new Error('featureExtractor is required');
         if (!this._el)
-            throw new Error('widget not rendered');
+            return; // some widgets may not be rendered, like submit buttons.
         recursive = recursive ?? true;
         return featureExtractor.extractFeatures(this._el, recursive);
     }
@@ -79,6 +79,38 @@ export default class Widget {
         var error = this._el.querySelector('.widget-error');
         error.innerHTML = r.message;
         this._el.classList.add('has-error');
+    }
+
+    /// <summary>
+    /// Registers a handler for the remove button
+    /// </summary>
+    registerRemoveHandler(handler, dettach) {
+        if (!this._el)
+            throw new Error('widget not rendered');
+        dettach = !!dettach;
+        if (!handler)
+            throw new Error('handler is required');
+        if (typeof handler !== 'function')
+            throw new Error('handler must be a function');
+
+        if (!this._removeWidgetBtn) 
+            this._removeWidgetBtn = this._el.querySelector('.widget-remove');
+        if (!this._removeWidgetBtn)
+            return;
+        if (!dettach)
+            this._removeWidgetBtn.addEventListener('click', (e) => {
+                handler(this, e);
+            });
+        else {
+            this._removeWidgetBtn.removeEventListener('click', handler);
+            this._removeWidgetBtn = null;
+        }
+    }
+
+    removeFromDom() {
+        if (this._el) {
+            this._el.remove();
+        }
     }
 
     /// <summary>
@@ -107,6 +139,7 @@ export default class Widget {
 
         var template = {
             openingSection: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${renderOptions.renderMode}">`,
+            removeSection:  (renderOptions.renderGrip && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : null,
             bodySection: null,
             gripSection: (renderOptions.renderGrip && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-grip"></div>` : null,
             tipSection:  (renderOptions.renderTips && (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN)) ? `<div class="widget-tip"></div>` : null,
@@ -116,7 +149,7 @@ export default class Widget {
         return template;
     }
 
-    _renderBase(container, template, parser, renderOptions) {
+    _renderInternal(container, template, parser, renderOptions) {
         if (!this._el) {
             if (!container)
                 throw new Error('container is required');
@@ -141,6 +174,7 @@ export default class Widget {
                 parser = new DOMParser();
             var html = "";
             html += template.openingSection ?? "";
+            html += renderOptions.renderRemove ? (template.removeSection ?? "") : "";
             html += template.bodySection ?? "";
             html += renderOptions.renderGrip ? (template.gripSection ?? "") : "";
             html += renderOptions.renderTips ? (template.tipSection ?? "") : "";
@@ -152,10 +186,10 @@ export default class Widget {
             this._el = node;
         }
 
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && renderOptions.renderTips && this._tip) {
+        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && renderOptions.renderTips && this.tip) {
             var tipCtl = this._el.querySelector(`.widget-tip`);
             if (tipCtl)
-                tipCtl.innerHTML = this._tip;
+                tipCtl.innerHTML = this.tip;
         }
     }
 }

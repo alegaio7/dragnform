@@ -22,8 +22,6 @@ class WidgetInputBase extends Widget {
                 }
             });
         }
-
-        this._el = null;
     }
 
     render(container, parser, renderOptions) {
@@ -40,7 +38,7 @@ class WidgetInputBase extends Widget {
                 <span ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}
                 id="input_${this.id}">${v}</span>`;
             template.bodySection = html;
-            super._renderBase(container, template, parser, renderOptions);
+            super._renderInternal(container, template, parser, renderOptions);
         }
     }
     

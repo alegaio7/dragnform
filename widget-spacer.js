@@ -12,7 +12,7 @@ class WidgetSpacer extends Widget {
             renderOptions = {};
         renderOptions.renderValidationSection = false;
         var template = super._getHTMLTemplate(renderOptions);
-        super._renderBase(container, template, parser, renderOptions);
+        super._renderInternal(container, template, parser, renderOptions);
     }
 }
 

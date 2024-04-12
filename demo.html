@@ -18,6 +18,7 @@
         <!-- <script src="poppins-bold.js" type="module"></script> -->
         <!-- <script src="poppins-italic.js" type="module"></script> -->
         <!-- <script src="poppins-bold-italic.js" type="module"></script> -->
+        <script src="strings.en.js"></script>
         <script type="module">
             import Renderer from './renderer.js';
             import * as constants from './constants.js';
@@ -31,6 +32,7 @@
                     var options = {
                         nullValue: '(null)',
                         renderGrip: true,
+                        renderRemove: true,
                         renderTips: true,
                         renderMode: constants.WIDGET_MODE_DESIGN,
                     };
@@ -39,28 +41,27 @@
                     var widgets = renderer.widgets;
                     var submit = renderer.findWidget('submit');
                     if (submit)
-                        submit.registerClick(e => { 
+                        submit.registerClickHandler(e => { 
+                            var newSpacer = { type: constants.WIDGET_TYPE_SPACER };
+                            renderer.addWidget(newSpacer);
+
                             var r = renderer.validate({showErrors: true});
                             if (r.result) {
                                 console.log('Form is valid!'); 
                                 
-                                var j = renderer.exportJson(); // get current form state
-                                if (j)
-                                    document.getElementById('json-arena').innerText = JSON.stringify(j, null, 2);
-                                return;
-
-                                // renderer.renderForm(c, j, options); // render again, to reflect widget that could have changed position via drag
+                                json = renderer.exportJson(); // get current form state
 
                                 options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
-                                //renderer.renderForm(c, json, options);
-                                renderer.renderForm(c, j, options);
+                                // render again, to reflect widget that could have changed position via drag, or values 
+                                renderer.renderForm(c, json, options);
 
-                                if (j) {
-                                    document.getElementById('json-arena').innerText = JSON.stringify(j, null, 2);
+                                var features = renderer.extractFeatures();
+                                if (features) {
+                                    document.getElementById('json-arena').innerText = JSON.stringify(features, null, 2);
 
                                     // Create PDF here
                                     var e = new jsPDFExporter();
-                                    e.exportPDF(j);
+                                    e.exportPDF(features);
                                 }
                             }
                         });

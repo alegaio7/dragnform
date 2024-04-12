@@ -1,4 +1,3 @@
-import Widget from './widget-base.js';
 import * as constants from './constants.js';
 import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
@@ -9,14 +8,27 @@ import FeatureExtractor from './feature-extractor.js';
 export default class Renderer {
     constructor() {
         this._container = null;
-        this._widgets = [];
+        this._domParser = new DOMParser();
         this._featureExtractor = null;
+        this._lastRenderOptions = { renderMode: constants.WIDGET_MODE_DESIGN };
+        this._widgets = [];
+    }
+
+    addWidget(o) {
+        var w = this.createWidget(o);
+        if (this.findWidget(w.id))
+            throw new Error(`widget with id ${w.id} already exists.`);
+        this._widgets.push(w);
+        this._renderSingleWidget(w, this._domParser, this._lastRenderOptions);
+        return w;
     }
 
     /// <summary>
     /// Creates a widget from a JSON object
     /// </summary>
     createWidget(o) {
+        if (!o)
+            throw new Error('json object is required');
         if (!o.type)
             throw new Error("widget found with no type property.");
 
@@ -87,6 +99,12 @@ export default class Renderer {
         return this._widgets.find(w => w.id === id);
     }
 
+    removeWidget(id) {
+        var w = this.findWidget(id);
+        if (w)
+            this._removeWidgetInternal(w);
+    }
+
     /// <summary>
     /// Renders a form from a JSON object
     /// </summary>
@@ -101,18 +119,30 @@ export default class Renderer {
         }
         if (!renderOptions)
             renderOptions = {};
-        if (renderOptions.renderMode !== constants.WIDGET_MODE_DESIGN && renderOptions.renderMode !== constants.WIDGET_MODE_VIEW)
-            throw new Error(`Invalid render mode. Must be ${constants.WIDGET_MODE_DESIGN} or ${constants.WIDGET_MODE_VIEW}`);
+        let validModes = [constants.WIDGET_MODE_DESIGN, constants.WIDGET_MODE_RUN, constants.WIDGET_MODE_VIEW];
+        if (validModes.indexOf(renderOptions.renderMode) === -1)
+            throw new Error(`Invalid render mode. Must be one of ${validModes.join(', ')}`);
         this._container = container;
-
-        if (renderOptions.clear !== false)
-            this._clearContainer();
+        this._clearContainer();
         this._parseJson(json);
         this._renderWidgets(renderOptions);
 
-        this._sortable = Sortable.create(container, {animation: 150, handle: '.widget-grip'});
+        if (window.Sortable)
+            this._sortable = Sortable.create(container, {
+                animation: 150, 
+                handle: '.widget-grip',
+                onUpdate: function (evt) {
+                    var w = this._widgets[evt.oldIndex];
+                    this._widgets.splice(evt.oldIndex, 1);
+                    this._widgets.splice(evt.newIndex, 0, w);
+                }.bind(this)
+            });
     }
 
+    /// <summary>
+    /// Validates the form widgets. Each widget implements its own validation mechanisms.
+    /// Returns an object with a result property indicating if the form is valid and if not, a validations property containing an array of not-passed validations.
+    /// </summary>
     validate(options) {
         if (!this._widgets || !this._widgets.length)
             return false;
@@ -133,6 +163,10 @@ export default class Renderer {
     /// ********************************************************************************************************************
     /// Private methods
     /// ********************************************************************************************************************
+    
+    /// <summary>
+    /// Clears the container, the widgets array and the sortable object
+    /// </summary>
     _clearContainer() {
         if (this._sortable) {
             this._sortable.destroy();
@@ -142,6 +176,9 @@ export default class Renderer {
         this._widgets = [];
     }
 
+    /// <summary>
+    /// Parses a JSON object and creates widgets. Widgets are stored in the _widgets array.
+    /// </summary>
     _parseJson(json) {
         if (!json)
             throw new Error('json is required');
@@ -178,13 +215,36 @@ export default class Renderer {
         });
     }
 
-    _renderWidgets(options) {
-        if (!options)
-            options = {};
-        var _t = this;
-        var p = new DOMParser()
+    _removeWidgetInternal(sender, e) {
+        var s = sender.label ? sender.label : sender.id;
+        var n = confirm(Strings.WidgetRemoveConfirmationMessage.replace("{0}", s));
+        if (!n)
+            return;
+        var i = this._widgets.indexOf(sender);
+        if (i === -1)
+            throw new Error('widget not found in widgets array');
+        this._widgets.splice(i, 1);
+        sender.removeFromDom();
+    }
+
+    _renderSingleWidget(w, p, renderOptions) {
+        if (!renderOptions)
+            renderOptions = {};
+        w.render(this._container, p, renderOptions);
+        if (renderOptions.renderRemove && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
+            w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
+        }
+    }
+
+    /// <summary>
+    /// Renders the widgets in the configured container
+    /// </summary>
+    _renderWidgets(renderOptions) {
+        if (!renderOptions)
+            renderOptions = {};
+        Object.assign(this._lastRenderOptions, renderOptions);
         this._widgets.forEach(w => {
-            w.render(_t._container, p, options);
+            this._renderSingleWidget(w, this._domParser, renderOptions);
         });
     }
 }

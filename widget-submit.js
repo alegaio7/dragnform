@@ -8,7 +8,14 @@ class WidgetSubmit extends Widget {
         this._button = null;
     }
 
-    registerClick(handler, dettach) {
+    exportJson() {
+        var json = super.exportJson();
+        var localProps = { submitClass: this.submitClass };
+        Object.assign(json, localProps);
+        return json;
+    }
+
+    registerClickHandler(handler, dettach) {
         dettach = !!dettach;
         if (!handler)
             throw new Error('handler is required');
@@ -16,11 +23,13 @@ class WidgetSubmit extends Widget {
             throw new Error('handler must be a function');
 
         if (!this._button)
-            this._button = document.getElementById(`button_${this.id}`);    
+            this._button = this._el.querySelector(`#button_${this.id}`);    
         if (!dettach)
             this._button.addEventListener('click', handler);
-        else
+        else {
             this._button.removeEventListener('click', handler);
+            this._button = null;
+        }
     }
 
     render(container, parser, renderOptions) {
@@ -43,7 +52,7 @@ class WidgetSubmit extends Widget {
                 html += `<span>${this.label}</span>`;
             html += `</button>`;
             template.bodySection = html;
-            super._renderBase(container, template, parser, renderOptions);
+            super._renderInternal(container, template, parser, renderOptions);
         }
         // buttons don't render in view mode
     }

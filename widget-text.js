@@ -70,17 +70,24 @@ class WidgetText extends WidgetInputBase {
                     ${this.name ? 'name="' + this.name + '"' : ""}
                     >`;
                 template.bodySection = html;
-                super._renderBase(container, template, parser, renderOptions);
+                super._renderInternal(container, template, parser, renderOptions);
+
+                var _t = this;
+                this._el.querySelector("input").addEventListener("blur", function(e) {
+                    _t.setValue(e.currentTarget.value, false);
+                });
         } else if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
             super.render(container, parser, renderOptions);
         }
     }
 
-    setValue(v) {
+    setValue(v, setCtlValue) {
+        if (setCtlValue !== false)
+            setCtlValue = true;
         this._value = v;
         // _el can be null if element was not rendered yet
-        if (this._el)
-            this._el.value = this._value;
+        if (setCtlValue && this._el)
+            this._el.querySelector("input").value = this._value;
     }
 
     validate(validateOptions) {
