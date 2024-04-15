@@ -10,52 +10,59 @@
         <!-- <link href="bootstrap.css" rel="stylesheet"> -->
         <link href="widgets.css" rel="stylesheet">
         <script src="Sortable.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <div id="widgets" class="widget-container border"></div>
+        <div id="widgets"></div>
         <div id="json-arena"></div>
-        <!-- <script src="poppins-normal.js" type="module"></script> -->
-        <!-- <script src="poppins-bold.js" type="module"></script> -->
-        <!-- <script src="poppins-italic.js" type="module"></script> -->
-        <!-- <script src="poppins-bold-italic.js" type="module"></script> -->
         <script src="strings.en.js"></script>
+        <script src="icons.js"></script>
         <script type="module">
-            import Renderer from './renderer.js';
+            //import Canvas from './canvas.js';
+            import Designer from './designer.js';
             import * as constants from './constants.js';
             import jsPDFExporter from './jspdf-exporter.js';
 
-            var renderer = new Renderer();
-            var c = document.getElementById("widgets");
+            //var canvas = new Canvas();
+            var designer = new Designer({
+                containerId: "widgets",
+                nullValue: '(null)',
+                showToolbar: true,
+                renderOptions: {
+                    renderGrip: true,
+                    renderMode: constants.WIDGET_MODE_DESIGN,
+                    renderRemove: true,
+                    renderTips: true,
+                }
+            });
+
+            
             fetch('./demo.json')
                 .then((response) => response.json())
                 .then((json) => {
-                    var options = {
-                        nullValue: '(null)',
-                        renderGrip: true,
-                        renderRemove: true,
-                        renderTips: true,
-                        renderMode: constants.WIDGET_MODE_DESIGN,
-                    };
-                    renderer.renderForm(c, json, options)
+                    designer.renderForm(json);
 
-                    var widgets = renderer.widgets;
-                    var submit = renderer.findWidget('submit');
+                    var widgets = designer.widgets;
+                    var submit = designer.findWidget('submit');
                     if (submit)
                         submit.registerClickHandler(e => { 
                             var newSpacer = { type: constants.WIDGET_TYPE_SPACER };
-                            renderer.addWidget(newSpacer);
+                            //canvas.addWidget(newSpacer);
+                            designer.addWidget(newSpacer);
 
-                            var r = renderer.validate({showErrors: true});
+                            //var r = canvas.validate({showErrors: true});
+                            var r = designer.validate({showErrors: true});
                             if (r.result) {
                                 console.log('Form is valid!'); 
                                 
-                                json = renderer.exportJson(); // get current form state
+                                /*
+                                json = canvas.exportJson(); // get current form state
 
                                 options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
                                 // render again, to reflect widget that could have changed position via drag, or values 
-                                renderer.renderForm(c, json, options);
+                                canvas.renderForm(c, json, options);
 
-                                var features = renderer.extractFeatures();
+                                var features = canvas.extractFeatures();
                                 if (features) {
                                     document.getElementById('json-arena').innerText = JSON.stringify(features, null, 2);
 
@@ -63,6 +70,7 @@
                                     var e = new jsPDFExporter();
                                     e.exportPDF(features);
                                 }
+                                */
                             }
                         });
                 });

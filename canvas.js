@@ -1,25 +1,33 @@
 import * as constants from './constants.js';
 import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
-import WidgetSubmit from './widget-submit.js';
+import WidgetButton from './widget-button.js';
 import WidgetText from './widget-text.js';
 import FeatureExtractor from './feature-extractor.js';
 
-export default class Renderer {
-    constructor() {
-        this._container = null;
+export default class Canvas {
+    constructor(widgetsContainerEl, renderOptions) {
         this._domParser = new DOMParser();
         this._featureExtractor = null;
-        this._lastRenderOptions = { renderMode: constants.WIDGET_MODE_DESIGN };
+
+        if (!renderOptions)
+            renderOptions = {};
+        if (!renderOptions.renderMode)
+            renderOptions.renderMode = constants.WIDGET_MODE_DESIGN;
+
+        this._container = widgetsContainerEl; 
+        this._renderOptions = renderOptions;
         this._widgets = [];
     }
 
-    addWidget(o) {
-        var w = this.createWidget(o);
+    addWidget(jsonObj) {
+        if (!jsonObj)
+            throw new Error('json object is required');
+        var w = this.createWidget(jsonObj);
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
         this._widgets.push(w);
-        this._renderSingleWidget(w, this._domParser, this._lastRenderOptions);
+        this._renderSingleWidget(w, this._domParser);
         return w;
     }
 
@@ -32,18 +40,33 @@ export default class Renderer {
         if (!o.type)
             throw new Error("widget found with no type property.");
 
+        var w;
         switch(o.type) {
             case constants.WIDGET_TYPE_NUMBER:
-                return new WidgetNumber(o);
+                w = new WidgetNumber(o);
+                break;
             case constants.WIDGET_TYPE_TEXT:
-                return new WidgetText(o);
-            case constants.WIDGET_TYPE_SUBMIT:
-                return new WidgetSubmit(o);
+                w = new WidgetText(o);
+                break;
+            case constants.WIDGET_TYPE_BUTTON:
+                w = new WidgetButton(o);
+                break;
             case constants.WIDGET_TYPE_SPACER:
-                return new WidgetSpacer(o);
+                w = new WidgetSpacer(o);
+                break
             default:
                 throw new Error(`widget type ${o.type} not found.`);
         }
+
+        // if json does not specify any global classes, use the ones passed in the renderOptions
+        var globalClasses = o.globalClasses ? o.globalClasses : this._renderOptions.globalClasses;
+        w.globalClasses = globalClasses;
+
+        // idem with the required attribute settings
+        var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._renderOptions.requiredAttributeSettings;
+        w.requiredAttributeSettings = requiredAttributeSettings;
+
+        return w;
     }
 
     get widgets() { 
@@ -106,29 +129,15 @@ export default class Renderer {
     }
 
     /// <summary>
-    /// Renders a form from a JSON object
+    /// Renders a form from a json-serialized form object
     /// </summary>
-    renderForm(container, json, renderOptions) {
-        if (!container)
-            throw new Error('container is required');
-        if (typeof container === 'string') {
-            var c = document.getElementById(container);
-            if (!c)
-                throw new Error('container not found');
-            container = c;
-        }
-        if (!renderOptions)
-            renderOptions = {};
-        let validModes = [constants.WIDGET_MODE_DESIGN, constants.WIDGET_MODE_RUN, constants.WIDGET_MODE_VIEW];
-        if (validModes.indexOf(renderOptions.renderMode) === -1)
-            throw new Error(`Invalid render mode. Must be one of ${validModes.join(', ')}`);
-        this._container = container;
+    renderForm(json) {
         this._clearContainer();
         this._parseJson(json);
-        this._renderWidgets(renderOptions);
+        this._renderWidgets();
 
         if (window.Sortable)
-            this._sortable = Sortable.create(container, {
+            this._sortable = Sortable.create(this._container, {
                 animation: 150, 
                 handle: '.widget-grip',
                 onUpdate: function (evt) {
@@ -202,15 +211,11 @@ export default class Renderer {
             throw new Error('widgets collection has no elements in json object');
 
         this._sourceJson = o;
-        o.widgets.forEach(w => {
-            if (o.globalClasses)
-                w.globalClasses = o.globalClasses;
-            if (o.requiredAttributeSettings)
-                w.requiredAttributeSettings = o.requiredAttributeSettings;
-            var e = this.createWidget(w);
+        o.widgets.forEach(fragment => {
+            var e = this.createWidget(fragment);
             if (this.findWidget(e.id))
                 throw new Error(`widgets collection contains duplicate ids in json object: ${e.id}`);
-            e.setValue(w.value);
+            e.setValue(fragment.value);
             this._widgets.push(e);
         });
     }
@@ -227,11 +232,9 @@ export default class Renderer {
         sender.removeFromDom();
     }
 
-    _renderSingleWidget(w, p, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        w.render(this._container, p, renderOptions);
-        if (renderOptions.renderRemove && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
+    _renderSingleWidget(w, p) {
+        w.render(this._container, p, this._renderOptions);
+        if (this._renderOptions.renderRemove && this._renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
             w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
         }
     }
@@ -239,12 +242,9 @@ export default class Renderer {
     /// <summary>
     /// Renders the widgets in the configured container
     /// </summary>
-    _renderWidgets(renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        Object.assign(this._lastRenderOptions, renderOptions);
+    _renderWidgets() {
         this._widgets.forEach(w => {
-            this._renderSingleWidget(w, this._domParser, renderOptions);
+            this._renderSingleWidget(w, this._domParser);
         });
     }
 }

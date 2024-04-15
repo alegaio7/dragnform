@@ -1,9 +1,9 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 
-class WidgetSubmit extends Widget {
+class WidgetButton extends Widget {
     constructor(fragment) {
-        super(constants.WIDGET_TYPE_SUBMIT, fragment);
+        super(constants.WIDGET_TYPE_BUTTON, fragment);
         this.submitClass = fragment.submitClass;
         this._button = null;
     }
@@ -58,4 +58,4 @@ class WidgetSubmit extends Widget {
     }
 }
 
-export default WidgetSubmit;
+export default WidgetButton;

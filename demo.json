@@ -2,16 +2,18 @@
     "name": "Demo form",
     "version": "1.0.0",
     "description": "A simple form to demonstrate the use of the forms library.",
-    "globalClasses": {
-        "button": "btn",
-        "input": "form-control",
-        "label": "widget-label",
-        "span": "widget-value",
-        "widget": "form-group"
-    },
-    "requiredAttributeSettings": {
-        "requiredMarkText": "*",
-        "requiredMarkPosition": "beforeLabel"
+    "renderOptions": {
+        "globalClasses": {
+            "button": "btn",
+            "input": "form-control",
+            "label": "widget-label",
+            "span": "widget-value",
+            "widget": "form-group"
+        },
+        "requiredAttributeSettings": {
+            "mark": "*",
+            "position": "beforeLabel"
+        }
     },
     "widgets": [
         {
@@ -152,7 +154,7 @@
             "id": "spc2"
         },
         {
-            "type": "submit",
+            "type": "button",
             "columns": 4,
             "id": "submit",
             "label": "Submit",

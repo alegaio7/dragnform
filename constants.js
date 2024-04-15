@@ -1,19 +1,24 @@
-export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
-export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
-
 export const DEFAULT_PDF_DPI = 72;              // default PDF DPI
 export const DEFAULT_PDF_FONT_SIZE = 16;              // default PDF DPI
 export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
+
+export const FORMS_DESIGNER_VERSION = "1.0.0";
+
+export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
+export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
 
 export const WIDGET_MODE_DESIGN = 'design';     // mode for designing forms
 export const WIDGET_MODE_RUN = 'run';           // mode for rendering widgets and allow user input
 export const WIDGET_MODE_VIEW = 'view';         // mode for rendering widget inputs and show readonly controls (previous to a PDF export)
 
+export const validModes = [WIDGET_MODE_DESIGN, WIDGET_MODE_RUN, WIDGET_MODE_VIEW];
+
 export const WIDGET_TYPE_NUMBER = 'number';
 export const WIDGET_TYPE_SPACER = 'spacer';
-export const WIDGET_TYPE_SUBMIT = 'submit';
+export const WIDGET_TYPE_BUTTON = 'button';
 export const WIDGET_TYPE_TEXT = 'text';
 
+export const WIDGET_LABEL_DEFAULT_VALUE = "(New label)";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE = "beforeLabel";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER = "afterLabel";
 

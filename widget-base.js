@@ -11,7 +11,7 @@ export default class Widget {
         var validTypes = [
             constants.WIDGET_TYPE_NUMBER, 
             constants.WIDGET_TYPE_SPACER, 
-            constants.WIDGET_TYPE_SUBMIT, 
+            constants.WIDGET_TYPE_BUTTON, 
             constants.WIDGET_TYPE_TEXT];
 
         if (validTypes.indexOf(type) === -1)
@@ -25,15 +25,17 @@ export default class Widget {
             throw new Error('Widget columns must be between 1 and 12');
         this.columnsClass = "widget-col-" + this.columns;
         this.id = fragment.id ?? "Widget" + Math.floor(Math.random() * 1000);
-        this.label = fragment.label;
+        this.label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
         this.name = fragment.name ?? this.id;
         this.type = type;
         
         this.requiredAttributeSettings = null;
         this.requiredAttributeSettings = fragment.requiredAttributeSettings ?? {};
-        if (!this.requiredAttributeSettings.requiredMarkPosition === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
-        this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE;
-    
+        if (!this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
+            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE;
+        if (!this.requiredAttributeSettings.mark)
+            this.requiredAttributeSettings.mark = "*";
+
         this._globalClasses = fragment.globalClasses ?? {};
         this._validations = fragment.validations ?? [];
 
@@ -46,7 +48,10 @@ export default class Widget {
 
     // Props begin
     get globalClasses() { return this._globalClasses; }
+    set globalClasses(value) { this._globalClasses = value; }
     get validations() { return this._validations; }
+    set validations(value) { this._validations = value; }
+    
     get value() { return this._value; }
     // Props end
 

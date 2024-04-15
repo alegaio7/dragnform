@@ -9,8 +9,8 @@ class WidgetInputBase extends Widget {
             options = {};
         
         // defaults
-        this.required = false;
-        this.requiredMessage = constants.WIDGET_VALIDATION_REQUIRED;
+        this.required = options.required === true ? true : false;
+        this.requiredMessage = options.requiredMessage ?? constants.WIDGET_VALIDATION_REQUIRED;
 
         var _t = this;
         if (options.validations && options.validations.length) {
@@ -52,19 +52,19 @@ class WidgetInputBase extends Widget {
             labelClass = `class="${this.globalClasses.label}"`;
         
         var html = `<label ${labelClass} for="input_${this.id}">`;
-        var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.requiredMarkText}</span>`;
+        var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
         if (this.required && 
             (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN) &&
-            this.requiredAttributeSettings.requiredMarkText && 
-            this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
+            this.requiredAttributeSettings.mark && 
+            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
             html  += reqMarkHtml;
 
         html  += `${this.label}`
 
         if (this.required && 
             (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN) && 
-            this.requiredAttributeSettings.requiredMarkText && 
-            this.requiredAttributeSettings.requiredMarkPosition == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
+            this.requiredAttributeSettings.mark && 
+            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
             html  += reqMarkHtml;
 
         html  += `</label>`;

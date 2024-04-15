@@ -1,12 +1,22 @@
 // sass variables
+$widget-controls-min-height: 1.75rem;
+$widget-default-padding: 15px;
 $widget-error: #f00;
 $widget-border-design-color: #ccc;
 $widget-border-view-color: #ddd;
 $widget-grip-color: #888;
 $widget-grip-width: 1rem;
+$widget-min-height: 5rem;
 $widget-remove-color: #f00;
 $widget-remove-width: 1rem;
 $widget-tip-color: #888;
+$widget-toolbar-border-color: #ccc;
+$widget-toolbar-button-bg-color: #eee;
+$widget-toolbar-button-bg-hover-color: #ddd;
+$widget-toolbar-button-color: #222;
+$widget-toolbar-button-height: 2rem;
+$widget-toolbar-padding: 0.25rem;
+$widget-toolbar-border-radius: 0.25rem;
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -17,13 +27,15 @@ $widget-tip-color: #888;
     font-family: Poppins;
     font-weight: 300;
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
+    align-content: flex-start;
 
     width: 1000px;
+    max-height: 1400px;
+    height: calc(100vh - 100px);
     overflow-y: auto;
     min-height: 200px;
-    padding-right: 15px;
-    padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
     border: 1px solid red;
@@ -41,9 +53,32 @@ $widget-tip-color: #888;
     }
 }
 
+// designer - toolbar
+.widget-toolbar {
+    font-family: Poppins;
+    border: 1px solid $widget-toolbar-border-color;
+    border-radius: $widget-toolbar-border-radius;
+    padding: $widget-toolbar-padding;
+
+    button {
+        background-color: $widget-toolbar-button-bg-color;
+        border: 1px solid $widget-toolbar-border-color;
+        border-radius: $widget-toolbar-border-radius;
+        color: $widget-toolbar-button-color;
+        cursor: pointer;
+        font-family: inherit;
+        height: $widget-toolbar-button-height;
+
+        &:hover {
+            background-color: $widget-toolbar-button-bg-hover-color;
+        }
+    }
+}
+
 // widgets
 .widget {
     padding-bottom: 1rem;
+    min-height: $widget-min-height;
 
     &[data-mode="design"] {
         border: 1px dashed $widget-border-design-color;
@@ -59,7 +94,7 @@ $widget-tip-color: #888;
 
     input, button {
         width: 100%;
-        min-height: 1.75rem;
+        min-height: $widget-controls-min-height;
         font-family: inherit;
     }
 
@@ -74,10 +109,11 @@ $widget-tip-color: #888;
         min-height: 3rem;
     }
 
-    &[data-type="submit"] {
+    &[data-type="button"] {
         display: flex;
         flex-direction: column;
         justify-content: end;
+        padding-top: $widget-default-padding;
     }
 
     .widget-error {
@@ -95,12 +131,12 @@ $widget-tip-color: #888;
 
 .widget-grip {
     position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
+    right: 0rem;
+    top: 0rem;
     width: $widget-grip-width;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: end;
     cursor: grabbing;
 
     &::after {
@@ -149,9 +185,9 @@ $widget-tip-color: #888;
 [class*="widget-col-"] {
     position: relative;
     width: 100%;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
+    // min-height: 1px;
+    padding-right: $widget-default-padding;
+    padding-left: $widget-default-padding;
 }
 
 .widget-col-1 {
