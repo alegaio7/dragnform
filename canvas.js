@@ -17,6 +17,11 @@ export default class Canvas {
 
         this._container = widgetsContainerEl; 
         this._renderOptions = renderOptions;
+        this._sourceJson = {
+            name: Strings.Canvas_NewForm_Name,
+            version: constants.FORMS_DESIGNER_VERSION,
+            description: ""
+        };
         this._widgets = [];
     }
 
@@ -29,6 +34,23 @@ export default class Canvas {
         this._widgets.push(w);
         this._renderSingleWidget(w, this._domParser);
         return w;
+    }
+
+    /// <summary>
+    /// Clears the container, the widgets array and the sortable object
+    /// </summary>
+    clearCanvas(renderOptions) {
+        if (this._sortable) {
+            this._sortable.destroy();
+            this._sortable = null;
+        }
+        this._container.innerHTML = '';
+
+        if (renderOptions)
+            this._renderOptions = renderOptions;
+        this._renderOptions.renderMode = constants.WIDGET_MODE_DESIGN;
+
+        this._widgets = [];
     }
 
     /// <summary>
@@ -80,7 +102,8 @@ export default class Canvas {
         if (!this._widgets)
             throw new Error('Must render the form first');
 
-        var json = this._sourceJson;
+        var json = this._sourceJson ?? {};
+        json.renderOptions = this._renderOptions;
         json.widgets = [];
         this._widgets.forEach(w => {
             var j = w.exportJson();
@@ -131,9 +154,9 @@ export default class Canvas {
     /// <summary>
     /// Renders a form from a json-serialized form object
     /// </summary>
-    renderForm(json) {
-        this._clearContainer();
-        this._parseJson(json);
+    renderForm(json, renderMode) {
+        this.clearCanvas();
+        this._parseJson(json, renderMode);
         this._renderWidgets();
 
         if (window.Sortable)
@@ -146,6 +169,10 @@ export default class Canvas {
                     this._widgets.splice(evt.newIndex, 0, w);
                 }.bind(this)
             });
+    }
+
+    get renderMode() {
+        return this._renderOptions.renderMode;
     }
 
     /// <summary>
@@ -174,21 +201,9 @@ export default class Canvas {
     /// ********************************************************************************************************************
     
     /// <summary>
-    /// Clears the container, the widgets array and the sortable object
-    /// </summary>
-    _clearContainer() {
-        if (this._sortable) {
-            this._sortable.destroy();
-            this._sortable = null;
-        }
-        this._container.innerHTML = '';
-        this._widgets = [];
-    }
-
-    /// <summary>
     /// Parses a JSON object and creates widgets. Widgets are stored in the _widgets array.
     /// </summary>
-    _parseJson(json) {
+    _parseJson(json, renderMode) {
         if (!json)
             throw new Error('json is required');
 
@@ -211,6 +226,11 @@ export default class Canvas {
             throw new Error('widgets collection has no elements in json object');
 
         this._sourceJson = o;
+        this._renderOptions = o.renderOptions;          // TODO check if no renderoptions object is present
+        if (!renderMode)
+            renderMode = constants.WIDGET_MODE_DESIGN;
+        this._renderOptions.renderMode = renderMode;
+
         o.widgets.forEach(fragment => {
             var e = this.createWidget(fragment);
             if (this.findWidget(e.id))
@@ -218,6 +238,11 @@ export default class Canvas {
             e.setValue(fragment.value);
             this._widgets.push(e);
         });
+
+        if (this._sourceJson.renderOptions)
+            delete this._sourceJson.renderOptions;
+        if (this._sourceJson.widgets)
+            delete this._sourceJson.widgets;
     }
 
     _removeWidgetInternal(sender, e) {

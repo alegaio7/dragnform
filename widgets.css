@@ -3,38 +3,32 @@
   box-sizing: border-box;
 }
 
-.widget-container {
+.widget-container, .widget-toolbar {
   font-family: Poppins;
   font-weight: 300;
+  margin-right: auto;
+  margin-left: auto;
+  width: 1000px;
+}
+
+.widget-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
-  width: 1000px;
-  max-height: 1400px;
-  height: calc(100vh - 100px);
-  overflow-y: auto;
-  min-height: 200px;
-  margin-right: auto;
-  margin-left: auto;
-  border: 1px solid red;
-}
-
-@media (min-width: 1366px) {
-  .widget-container {
-    width: 1200px;
-  }
-}
-@media (min-width: 1800px) {
-  .widget-container {
-    width: 1600px;
-  }
-}
-.widget-toolbar {
-  font-family: Poppins;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
-  padding: 0.25rem;
+  height: calc(100vh - 150px);
+  max-height: 1400px;
+  min-height: 200px;
+  overflow-y: auto;
+}
+
+.widget-toolbar {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
 }
 .widget-toolbar button {
   background-color: #eee;
@@ -48,7 +42,32 @@
 .widget-toolbar button:hover {
   background-color: #ddd;
 }
+.widget-toolbar .widget-toolbar-group {
+  border: 1px solid #eee;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  border-radius: 0.25rem;
+}
+.widget-toolbar .widget-toolbar-group button:not(:last-child) {
+  margin-right: 0.5rem;
+}
+.widget-toolbar .widget-toolbar-group-title {
+  font-size: 0.8rem;
+  color: #555;
+  width: 100%;
+}
 
+@media (min-width: 1366px) {
+  .widget-container, .widget-toolbar {
+    width: 1200px;
+  }
+}
+@media (min-width: 1800px) {
+  .widget-container, .widget-toolbar {
+    width: 1600px;
+  }
+}
 .widget {
   padding-bottom: 1rem;
   min-height: 5rem;

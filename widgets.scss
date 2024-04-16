@@ -4,6 +4,13 @@ $widget-default-padding: 15px;
 $widget-error: #f00;
 $widget-border-design-color: #ccc;
 $widget-border-view-color: #ddd;
+$widget-container-width: 1000px;
+$widget-container-bp-1: 1366px;
+$widget-container-width-bp-1: 1200px;
+$widget-container-bp-2: 1800px;
+$widget-container-width-bp-2: 1600px;
+$widget-container-max-height: 1400px;
+$widget-designer-radius: 0.25rem;
 $widget-grip-color: #888;
 $widget-grip-width: 1rem;
 $widget-min-height: 5rem;
@@ -15,55 +22,49 @@ $widget-toolbar-button-bg-color: #eee;
 $widget-toolbar-button-bg-hover-color: #ddd;
 $widget-toolbar-button-color: #222;
 $widget-toolbar-button-height: 2rem;
-$widget-toolbar-padding: 0.25rem;
-$widget-toolbar-border-radius: 0.25rem;
+$widget-toolbar-estimate-height: 150px;
+$widget-toolbar-group-border-color: #eee;
+$widget-toolbar-group-title-color: #555;
+$widget-toolbar-padding: 0.5rem;
 
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 // container
-.widget-container {
+.widget-container, .widget-toolbar {
     font-family: Poppins;
     font-weight: 300;
+    margin-right: auto;
+    margin-left: auto;
+    width: $widget-container-width;
+}
+
+.widget-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
 
-    width: 1000px;
-    max-height: 1400px;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
+    border: 1px solid $widget-border-design-color;
+    border-radius: $widget-designer-radius;
+    height: calc(100vh - $widget-toolbar-estimate-height);    // take full height minus some space for the toolbar
+    max-height: $widget-container-max-height;
     min-height: 200px;
-    margin-right: auto;
-    margin-left: auto;
-    border: 1px solid red;
-}
-
-@media(min-width: 1366px) {
-    .widget-container {
-        width: 1200px;
-    }
-}
-
-@media(min-width: 1800px) {
-    .widget-container {
-        width: 1600px;
-    }
+    overflow-y: auto;
 }
 
 // designer - toolbar
 .widget-toolbar {
-    font-family: Poppins;
     border: 1px solid $widget-toolbar-border-color;
-    border-radius: $widget-toolbar-border-radius;
+    border-radius: $widget-designer-radius;
     padding: $widget-toolbar-padding;
+    margin-bottom: 1rem;
 
     button {
         background-color: $widget-toolbar-button-bg-color;
         border: 1px solid $widget-toolbar-border-color;
-        border-radius: $widget-toolbar-border-radius;
+        border-radius: $widget-designer-radius;
         color: $widget-toolbar-button-color;
         cursor: pointer;
         font-family: inherit;
@@ -72,6 +73,37 @@ $widget-toolbar-border-radius: 0.25rem;
         &:hover {
             background-color: $widget-toolbar-button-bg-hover-color;
         }
+    }
+
+    .widget-toolbar-group {
+        border: 1px solid $widget-toolbar-group-border-color;
+        padding: $widget-toolbar-padding;
+        margin-right: $widget-toolbar-padding;
+        display: inline-block;
+        border-radius: $widget-designer-radius;
+
+        button:not(:last-child) {
+            margin-right: 0.5rem;
+        }
+    }
+
+    .widget-toolbar-group-title {
+        font-size: 0.8rem;
+        color: $widget-toolbar-group-title-color;
+        width: 100%;
+    }
+}
+
+// responsive breakpoints
+@media(min-width: $widget-container-bp-1) {
+    .widget-container, .widget-toolbar {
+        width: $widget-container-width-bp-1;
+    }
+}
+
+@media(min-width: $widget-container-bp-2) {
+    .widget-container, .widget-toolbar {
+        width: $widget-container-width-bp-2;
     }
 }
 
@@ -185,7 +217,6 @@ $widget-toolbar-border-radius: 0.25rem;
 [class*="widget-col-"] {
     position: relative;
     width: 100%;
-    // min-height: 1px;
     padding-right: $widget-default-padding;
     padding-left: $widget-default-padding;
 }

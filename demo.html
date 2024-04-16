@@ -25,9 +25,40 @@
 
             //var canvas = new Canvas();
             var designer = new Designer({
+                callbacks: {
+                    onNewForm: function(e) {
+                        document.getElementById('json-arena').innerText = "";
+                    },
+                    onExportToJson: function(json) {
+                        document.getElementById('json-arena').innerText = JSON.stringify(json, null, 2);
+                    },
+                    onLoadJson: function() {
+                        // var el = document.createElement('input');
+                        // el.type = 'file';
+                        // el.accept = '.json';
+                        // el.onchange = function(e) {
+                        //     var file = e.target.files[0];
+                        //     var reader = new FileReader();
+                        //     reader.onload = function(e) {
+                        //         var json = JSON.parse(e.target.result);
+                        //         designer.renderForm(json);
+                        //     };
+                        //     reader.readAsText(file);
+                        //     el.remove();
+                        // };
+                        // el.click();
+                    }
+                },
                 containerId: "widgets",
                 nullValue: '(null)',
-                showToolbar: true,
+                toolbar: {
+                    visible: true,
+                    buttons: {
+                        new: true,
+                        load: false,
+                        export: false,
+                    }
+                },
                 renderOptions: {
                     renderGrip: true,
                     renderMode: constants.WIDGET_MODE_DESIGN,
@@ -36,7 +67,7 @@
                 }
             });
 
-            
+            /*
             fetch('./demo.json')
                 .then((response) => response.json())
                 .then((json) => {
@@ -70,10 +101,11 @@
                                     var e = new jsPDFExporter();
                                     e.exportPDF(features);
                                 }
-                                */
+                                * /
                             }
                         });
                 });
+            */
         </script>
     </body>
 </html>
