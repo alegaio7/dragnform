@@ -2,9 +2,8 @@ import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 
 class WidgetSpacer extends Widget {
-    constructor(options) {
-        super(constants.WIDGET_TYPE_SPACER, options);
-        this._button = null;
+    constructor(fragment) {
+        super(constants.WIDGET_TYPE_SPACER, fragment);
     }
 
     render(container, parser, renderOptions) {

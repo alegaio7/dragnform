@@ -90,14 +90,22 @@
   display: inline-block;
   width: calc(100% - 1rem);
 }
-.widget[data-type=spacer] {
-  min-height: 3rem;
-}
 .widget[data-type=button] {
   display: flex;
   flex-direction: column;
   justify-content: end;
   padding-top: 15px;
+}
+.widget[data-type=image] {
+  overflow: hidden;
+}
+.widget[data-type=image] img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.widget[data-type=spacer] {
+  min-height: 3rem;
 }
 .widget .widget-error {
   display: none;

@@ -9,9 +9,10 @@ export default class Widget {
             fragment = {};
 
         var validTypes = [
-            constants.WIDGET_TYPE_NUMBER, 
-            constants.WIDGET_TYPE_SPACER, 
-            constants.WIDGET_TYPE_BUTTON, 
+            constants.WIDGET_TYPE_BUTTON,
+            constants.WIDGET_TYPE_IMAGE,
+            constants.WIDGET_TYPE_NUMBER,
+            constants.WIDGET_TYPE_SPACER,
             constants.WIDGET_TYPE_TEXT];
 
         if (validTypes.indexOf(type) === -1)

@@ -3,6 +3,10 @@ class Strings {
     static get Canvas_NewForm_Name() { return "New form"; }
 
     // designer
+    static get Toolbar_AddButtonWidget_ButtonLabel() { return 'Button'; }
+    static get Toolbar_AddButtonWidget_ButtonTitle() { return 'Add button'; }
+    static get Toolbar_AddImageWidget_ButtonLabel() { return 'Image'; }
+    static get Toolbar_AddImageWidget_ButtonTitle() { return 'Add an image'; }
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }
@@ -15,8 +19,10 @@ class Strings {
     static get Toolbar_LoadJson_ButtonTitle() { return 'Load form from json file'; }
     static get Toolbar_NewForm_ButtonLabel() { return 'New'; }
     static get Toolbar_NewForm_ButtonTitle() { return 'Start a new form'; }
+    static get Toolbar_SavePdf_ButtonLabel() { return 'Save to PDF'; }
+    static get Toolbar_SavePdf_ButtonTitle() { return 'Save the form to PDF'; }
 
-    static get Toolbar_Fields_GroupTitle() { return 'Fields'; }
+    static get Toolbar_Widgets_GroupTitle() { return 'Widgets'; }
     static get Toolbar_File_GroupTitle() { return 'File'; }
     static get Toolbar_Layout_GroupTitle() { return 'Layout'; }
 

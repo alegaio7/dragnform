@@ -4,13 +4,13 @@ import * as constants from './constants.js';
 class WidgetButton extends Widget {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_BUTTON, fragment);
-        this.submitClass = fragment.submitClass;
+        this.buttonClass = fragment.buttonClass;
         this._button = null;
     }
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = { submitClass: this.submitClass };
+        var localProps = { buttonClass: this.buttonClass };
         Object.assign(json, localProps);
         return json;
     }
@@ -40,8 +40,8 @@ class WidgetButton extends Widget {
             renderOptions.renderValidationSection = false;
             var template = super._getHTMLTemplate(renderOptions);
             var buttonClass = `${this.globalClasses.button ? 'class="' + this.globalClasses.button : ""}`; // class missing closing quote...closing below
-            if (this.submitClass) 
-                buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.submitClass}`;
+            if (this.buttonClass) 
+                buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.buttonClass}`;
             if (buttonClass !== "")
                 buttonClass += '"';
             var html = `<button type="button" 

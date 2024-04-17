@@ -80,6 +80,11 @@ export default class FeatureExtractor {
             // has no innerText or textContent
             Object.assign(json, this._getBorderProperties(cs));
             Object.assign(json, this._getFontProperties(cs));
+        } else if (node.tagName === 'IMG') {
+            json.type = constants.WIDGET_PDF_OBJECT_IMAGE;
+            Object.assign(json, this._getBorderProperties(cs));
+            Object.assign(json, this._getFontProperties(cs));
+            json.data = node.src;
         } else
             json = null; // unsupported node type
 

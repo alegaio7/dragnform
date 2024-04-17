@@ -33,20 +33,7 @@
                         document.getElementById('json-arena').innerText = JSON.stringify(json, null, 2);
                     },
                     onLoadJson: function() {
-                        // var el = document.createElement('input');
-                        // el.type = 'file';
-                        // el.accept = '.json';
-                        // el.onchange = function(e) {
-                        //     var file = e.target.files[0];
-                        //     var reader = new FileReader();
-                        //     reader.onload = function(e) {
-                        //         var json = JSON.parse(e.target.result);
-                        //         designer.renderForm(json);
-                        //     };
-                        //     reader.readAsText(file);
-                        //     el.remove();
-                        // };
-                        // el.click();
+
                     }
                 },
                 containerId: "widgets",
@@ -55,8 +42,14 @@
                     visible: true,
                     buttons: {
                         new: true,
-                        load: false,
-                        export: false,
+                        load: true,
+                        export: true,
+                        textField: true,
+                        numberField: true,
+                        spacer: true,
+                        button: true,
+                        image: true,
+                        savepdf: true
                     }
                 },
                 renderOptions: {

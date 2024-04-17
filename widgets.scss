@@ -137,15 +137,24 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    &[data-type="spacer"] {
-        min-height: 3rem;
-    }
-
     &[data-type="button"] {
         display: flex;
         flex-direction: column;
         justify-content: end;
         padding-top: $widget-default-padding;
+    }
+
+    &[data-type="image"] {
+        overflow: hidden;
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+
+    &[data-type="spacer"] {
+        min-height: 3rem;
     }
 
     .widget-error {

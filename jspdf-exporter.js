@@ -38,7 +38,7 @@ export default class jsPDFExporter {
         this._renderState = [];
     }
 
-    exportPDF(json) {
+    exportPDF(json, options) {
         if (!json)
             throw new Error('json is required');
 
@@ -47,6 +47,12 @@ export default class jsPDFExporter {
 
         if (json.widgets.length === 0)
             throw new Error('widgets collection has no elements in json object');
+
+        if (!options)
+            options = {saveToFile: true, filename: "form.pdf"};
+
+        if (options.saveToFile && !options.filename)
+            options.filename = "form.pdf";
 
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ 
@@ -91,7 +97,10 @@ export default class jsPDFExporter {
             this._renderWidget(w, doc, null);
         });
 
-        doc.save("test.pdf");
+        if (options.saveToFile)
+            doc.save(options.filename);
+        else
+            return doc.output("blob");
     }
 
     _renderWidget(w, doc, parent) {
@@ -108,6 +117,8 @@ export default class jsPDFExporter {
 
         } else if (w.type === constants.WIDGET_PDF_OBJECT_SIMPLE_TEXT) {
             this._renderSimpleText(w, doc, parent);
+        } else if (w.type === constants.WIDGET_PDF_OBJECT_IMAGE) {
+            this._renderImage(w, doc, parent);
         }
 
         if (w.children && w.children.length) {
@@ -206,6 +217,25 @@ export default class jsPDFExporter {
         var x = w.x * this._wRatio;
         var y = w.y * this._hRatio + (w.height * this._hRatio);
         doc.text(w.text, x, y);
+    }
+
+    _renderImage(w, doc, parent) {
+        if (!w.data)
+            return;
+        if (typeof w.data !== "string")
+            throw new Error("Image data must be of string format");
+        var data;
+        if (w.data.startsWith("data:image")) {
+            var c = w.data.indexOf(",");
+            data = w.data.substring(c + 1);
+        } else
+            data = w.data;
+
+        var x = w.x * this._wRatio;
+        var y = w.y * this._hRatio + (w.height * this._hRatio);
+        var w = w.width * this._wRatio;
+        var h = w.height * this._hRatio;
+        doc.addImage(data, x, y, w, h);
     }
 
     _restoreState(doc) {

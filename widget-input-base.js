@@ -2,19 +2,19 @@ import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 
 class WidgetInputBase extends Widget {
-    constructor(widgetType, options) {
-        super(widgetType, options);
+    constructor(widgetType, fragment) {
+        super(widgetType, fragment);
 
-        if (!options)
-            options = {};
+        if (!fragment)
+        fragment = {};
         
         // defaults
-        this.required = options.required === true ? true : false;
-        this.requiredMessage = options.requiredMessage ?? constants.WIDGET_VALIDATION_REQUIRED;
+        this.required = fragment.required === true ? true : false;
+        this.requiredMessage = fragment.requiredMessage ?? constants.WIDGET_VALIDATION_REQUIRED;
 
         var _t = this;
-        if (options.validations && options.validations.length) {
-            options.validations.forEach(v => {
+        if (fragment.validations && fragment.validations.length) {
+            fragment.validations.forEach(v => {
                 if (v.type === `required`) {
                     _t.required = true;
                     if (v.message)

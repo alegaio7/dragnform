@@ -1,7 +1,8 @@
 import * as constants from './constants.js';
+import WidgetButton from './widget-button.js';
+import WidgetImage from './widget-image.js';
 import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
-import WidgetButton from './widget-button.js';
 import WidgetText from './widget-text.js';
 import FeatureExtractor from './feature-extractor.js';
 
@@ -39,15 +40,13 @@ export default class Canvas {
     /// <summary>
     /// Clears the container, the widgets array and the sortable object
     /// </summary>
-    clearCanvas(renderOptions) {
+    clearCanvas() {
         if (this._sortable) {
             this._sortable.destroy();
             this._sortable = null;
         }
         this._container.innerHTML = '';
 
-        if (renderOptions)
-            this._renderOptions = renderOptions;
         this._renderOptions.renderMode = constants.WIDGET_MODE_DESIGN;
 
         this._widgets = [];
@@ -64,14 +63,17 @@ export default class Canvas {
 
         var w;
         switch(o.type) {
+            case constants.WIDGET_TYPE_BUTTON:
+                w = new WidgetButton(o);
+                break;
+            case constants.WIDGET_TYPE_IMAGE:
+                w = new WidgetImage(o);
+                break;
             case constants.WIDGET_TYPE_NUMBER:
                 w = new WidgetNumber(o);
                 break;
             case constants.WIDGET_TYPE_TEXT:
                 w = new WidgetText(o);
-                break;
-            case constants.WIDGET_TYPE_BUTTON:
-                w = new WidgetButton(o);
                 break;
             case constants.WIDGET_TYPE_SPACER:
                 w = new WidgetSpacer(o);
@@ -226,7 +228,13 @@ export default class Canvas {
             throw new Error('widgets collection has no elements in json object');
 
         this._sourceJson = o;
-        this._renderOptions = o.renderOptions;          // TODO check if no renderoptions object is present
+        if (o.renderOptions) {
+            if (o.renderOptions.globalClasses)
+                this._renderOptions.globalClasses = o.renderOptions.globalClasses;
+            if (o.renderOptions.requiredAttributeSettings)
+                this._renderOptions.requiredAttributeSettings = o.renderOptions.requiredAttributeSettings;
+        }
+        
         if (!renderMode)
             renderMode = constants.WIDGET_MODE_DESIGN;
         this._renderOptions.renderMode = renderMode;
