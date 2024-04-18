@@ -51,14 +51,14 @@ class WidgetText extends WidgetInputBase {
         return json;
     }
 
-    render(container, parser, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
-            renderOptions.renderMode === constants.WIDGET_MODE_RUN) {
-                var template = super._getHTMLTemplate(renderOptions);
-                var labelHtml = super._getLabelHTML(renderOptions);
-                renderOptions.renderValidationSection = true;
+    render(container, parser, widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
+            widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) {
+                var template = super._getHTMLTemplate(widgetRenderOptions);
+                var labelHtml = super._getLabelHTML(widgetRenderOptions);
+                widgetRenderOptions.renderValidationSection = true;
                 var html = `${labelHtml ? labelHtml : ""}
                     <input type="text" 
                     id="input_${this.id}" 
@@ -70,14 +70,14 @@ class WidgetText extends WidgetInputBase {
                     ${this.name ? 'name="' + this.name + '"' : ""}
                     >`;
                 template.bodySection = html;
-                super._renderInternal(container, template, parser, renderOptions);
+                super._renderInternal(container, template, parser, widgetRenderOptions);
 
                 var _t = this;
                 this._el.querySelector("input").addEventListener("blur", function(e) {
                     _t.setValue(e.currentTarget.value, false);
                 });
-        } else if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
-            super.render(container, parser, renderOptions);
+        } else if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
+            super.render(container, parser, widgetRenderOptions);
         }
     }
 

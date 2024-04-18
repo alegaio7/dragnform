@@ -2,7 +2,7 @@
     "name": "Demo form",
     "version": "1.0.0",
     "description": "A simple form to demonstrate the use of the forms library.",
-    "renderOptions": {
+    "widgetRenderOptions": {
         "globalClasses": {
             "button": "btn",
             "input": "form-control",

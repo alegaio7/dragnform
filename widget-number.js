@@ -31,14 +31,14 @@ class WidgetNumber extends WidgetInputBase {
         return json;
     }
 
-    render(container, parser, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
-            renderOptions.renderMode === constants.WIDGET_MODE_RUN) {
-                renderOptions.renderValidationSection = true;
-                var template = super._getHTMLTemplate(renderOptions);
-                var labelHtml = super._getLabelHTML(renderOptions);
+    render(container, parser, widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
+            widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) {
+                widgetRenderOptions.renderValidationSection = true;
+                var template = super._getHTMLTemplate(widgetRenderOptions);
+                var labelHtml = super._getLabelHTML(widgetRenderOptions);
                 var html = `${labelHtml ? labelHtml : ""}
                     <input type="number" 
                     id="input_${this.id}" 
@@ -50,14 +50,14 @@ class WidgetNumber extends WidgetInputBase {
                     ${this.name ? 'name="' + this.name + '"' : ""}
                     >`;
                 template.bodySection = html;
-                super._renderInternal(container, template, parser, renderOptions);
+                super._renderInternal(container, template, parser, widgetRenderOptions);
 
                 var _t = this;
                 this._el.querySelector("input").addEventListener("blur", function(e) {
                     _t.setValue(e.currentTarget.value, false);
                 });
         } else {
-            super.render(container, parser, renderOptions);
+            super.render(container, parser, widgetRenderOptions);
         }
     }
 

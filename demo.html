@@ -32,8 +32,14 @@
                     onExportToJson: function(json) {
                         document.getElementById('json-arena').innerText = JSON.stringify(json, null, 2);
                     },
-                    onLoadJson: function() {
+                    onLoadJson: function(e) {
 
+                    },
+                    onSavePdf: function(data, e) {
+                        e.preventDefault();
+                        document.getElementById('json-arena').innerText = JSON.stringify(data.features, null, 2);
+                        var exp = new jsPDFExporter();
+                        exp.exportPDF(data.features, { saveToFile: true }); // save to file
                     }
                 },
                 containerId: "widgets",
@@ -52,12 +58,12 @@
                         savepdf: true
                     }
                 },
-                renderOptions: {
+                widgetRenderOptions: {
                     renderGrip: true,
-                    renderMode: constants.WIDGET_MODE_DESIGN,
                     renderRemove: true,
                     renderTips: true,
-                }
+                },
+                renderMode: constants.WIDGET_MODE_DESIGN
             });
 
             /*
@@ -82,7 +88,7 @@
                                 /*
                                 json = canvas.exportJson(); // get current form state
 
-                                options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
+                                // options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
                                 // render again, to reflect widget that could have changed position via drag, or values 
                                 canvas.renderForm(c, json, options);
 

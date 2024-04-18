@@ -24,25 +24,25 @@ class WidgetInputBase extends Widget {
         }
     }
 
-    render(container, parser, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        if (renderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
+    render(container, parser, widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
             var html;
-            var template = super._getHTMLTemplate(renderOptions);
-            var labelHtml = this._getLabelHTML(renderOptions);
+            var template = super._getHTMLTemplate(widgetRenderOptions);
+            var labelHtml = this._getLabelHTML(widgetRenderOptions);
             var v = this.value;
             if (this.value === null || this.value === undefined)
-                v = renderOptions.nullValue ? renderOptions.nullValue : "";
+                v = widgetRenderOptions.nullValue ? widgetRenderOptions.nullValue : "";
             html = `${labelHtml ? labelHtml : ""}
                 <span ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}
                 id="input_${this.id}">${v}</span>`;
             template.bodySection = html;
-            super._renderInternal(container, template, parser, renderOptions);
+            super._renderInternal(container, template, parser, widgetRenderOptions);
         }
     }
     
-    _getLabelHTML(renderOptions) {
+    _getLabelHTML(widgetRenderOptions) {
         if (!this.label)
             return "";
 
@@ -54,7 +54,7 @@ class WidgetInputBase extends Widget {
         var html = `<label ${labelClass} for="input_${this.id}">`;
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
         if (this.required && 
-            (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN) &&
+            (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN || widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) &&
             this.requiredAttributeSettings.mark && 
             this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
             html  += reqMarkHtml;
@@ -62,7 +62,7 @@ class WidgetInputBase extends Widget {
         html  += `${this.label}`
 
         if (this.required && 
-            (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN) && 
+            (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN || widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) && 
             this.requiredAttributeSettings.mark && 
             this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
             html  += reqMarkHtml;

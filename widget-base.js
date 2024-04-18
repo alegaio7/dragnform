@@ -122,7 +122,7 @@ export default class Widget {
     /// <summary>
     /// Base class only parses the container parameter and returns a DOM reference
     /// </summary>
-    render(container, parser, renderOptions) {
+    render(container, parser, widgetRenderOptions) {
         throw new Error("Child class must implement render method");
     }
 
@@ -136,26 +136,26 @@ export default class Widget {
 
     /// Private methods
     /// Returns a template object containing the sections to be rendered
-    _getHTMLTemplate(renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
+    _getHTMLTemplate(widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
         var cssClass = this.widgetClass + "";
-        if (renderOptions.renderGrip)
+        if (widgetRenderOptions.renderGrip)
             cssClass = "has-grip" + (cssClass ? " " : "") + cssClass;
 
         var template = {
-            openingSection: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${renderOptions.renderMode}">`,
-            removeSection:  (renderOptions.renderGrip && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : null,
+            openingSection: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${widgetRenderOptions.renderMode}">`,
+            removeSection:  (widgetRenderOptions.renderGrip && widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : null,
             bodySection: null,
-            gripSection: (renderOptions.renderGrip && renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-grip"></div>` : null,
-            tipSection:  (renderOptions.renderTips && (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN || renderOptions.renderMode === constants.WIDGET_MODE_RUN)) ? `<div class="widget-tip"></div>` : null,
-            validationSection: renderOptions.renderValidationSection ? `<div class="widget-error" id="error_${this.id}"></div>` : null,
+            gripSection: (widgetRenderOptions.renderGrip && widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN) ? `<div class="widget-grip"></div>` : null,
+            tipSection:  (widgetRenderOptions.renderTips && (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN || widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN)) ? `<div class="widget-tip"></div>` : null,
+            validationSection: widgetRenderOptions.renderValidationSection ? `<div class="widget-error" id="error_${this.id}"></div>` : null,
             closingSection: `</div>`
         };
         return template;
     }
 
-    _renderInternal(container, template, parser, renderOptions) {
+    _renderInternal(container, template, parser, widgetRenderOptions) {
         if (!this._el) {
             if (!container)
                 throw new Error('container is required');
@@ -173,18 +173,18 @@ export default class Widget {
                 if (!(container instanceof HTMLElement))
                     throw new Error('container must be a string or HTMLElement');
 
-            if (!renderOptions)
-                renderOptions = {};
+            if (!widgetRenderOptions)
+                widgetRenderOptions = {};
 
             if (!parser)
                 parser = new DOMParser();
             var html = "";
             html += template.openingSection ?? "";
-            html += renderOptions.renderRemove ? (template.removeSection ?? "") : "";
+            html += widgetRenderOptions.renderRemove ? (template.removeSection ?? "") : "";
             html += template.bodySection ?? "";
-            html += renderOptions.renderGrip ? (template.gripSection ?? "") : "";
-            html += renderOptions.renderTips ? (template.tipSection ?? "") : "";
-            if (renderOptions.renderMode !== constants.WIDGET_MODE_VIEW)
+            html += widgetRenderOptions.renderGrip ? (template.gripSection ?? "") : "";
+            html += widgetRenderOptions.renderTips ? (template.tipSection ?? "") : "";
+            if (widgetRenderOptions.renderMode !== constants.WIDGET_MODE_VIEW)
                 html += template.validationSection ?? "";
             html += template.closingSection ?? "";
             var node = parser.parseFromString(html, `text/html`).body.firstElementChild;
@@ -192,7 +192,7 @@ export default class Widget {
             this._el = node;
         }
 
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN && renderOptions.renderTips && this.tip) {
+        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN && widgetRenderOptions.renderTips && this.tip) {
             var tipCtl = this._el.querySelector(`.widget-tip`);
             if (tipCtl)
                 tipCtl.innerHTML = this.tip;

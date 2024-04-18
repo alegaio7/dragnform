@@ -17,11 +17,11 @@ class WidgetImage extends Widget {
         return json;
     }
 
-    render(container, parser, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        renderOptions.renderValidationSection = false;
-        var template = super._getHTMLTemplate(renderOptions);
+    render(container, parser, widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+        widgetRenderOptions.renderValidationSection = false;
+        var template = super._getHTMLTemplate(widgetRenderOptions);
         var imageClass = `${this.globalClasses.image ? 'class="' + this.globalClasses.image + '"' : ""}`;
         var html = `<img
             ${imageClass}
@@ -43,7 +43,7 @@ class WidgetImage extends Widget {
         }
         html += `>`;
         template.bodySection = html;
-        super._renderInternal(container, template, parser, renderOptions);
+        super._renderInternal(container, template, parser, widgetRenderOptions);
     }
 }
 

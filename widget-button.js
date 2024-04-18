@@ -32,13 +32,13 @@ class WidgetButton extends Widget {
         }
     }
 
-    render(container, parser, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        if (renderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
-            renderOptions.renderMode === constants.WIDGET_MODE_RUN) {
-            renderOptions.renderValidationSection = false;
-            var template = super._getHTMLTemplate(renderOptions);
+    render(container, parser, widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
+            widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) {
+            widgetRenderOptions.renderValidationSection = false;
+            var template = super._getHTMLTemplate(widgetRenderOptions);
             var buttonClass = `${this.globalClasses.button ? 'class="' + this.globalClasses.button : ""}`; // class missing closing quote...closing below
             if (this.buttonClass) 
                 buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.buttonClass}`;
@@ -52,7 +52,7 @@ class WidgetButton extends Widget {
                 html += `<span>${this.label}</span>`;
             html += `</button>`;
             template.bodySection = html;
-            super._renderInternal(container, template, parser, renderOptions);
+            super._renderInternal(container, template, parser, widgetRenderOptions);
         }
         // buttons don't render in view mode
     }

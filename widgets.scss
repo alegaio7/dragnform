@@ -31,30 +31,43 @@ $widget-toolbar-padding: 0.5rem;
     box-sizing: border-box;
 }
 
-// container
-.widget-container, .widget-toolbar {
-    font-family: Poppins;
-    font-weight: 300;
-    margin-right: auto;
-    margin-left: auto;
-    width: $widget-container-width;
-}
-
-.widget-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
-
-    border: 1px solid $widget-border-design-color;
-    border-radius: $widget-designer-radius;
-    height: calc(100vh - $widget-toolbar-estimate-height);    // take full height minus some space for the toolbar
-    max-height: $widget-container-max-height;
-    min-height: 200px;
-    overflow-y: auto;
-}
-
 // designer - toolbar
+.widget-designer {
+    .widget-toolbar {
+        display: none;
+    }
+
+    &[data-current-mode="design"] {
+        .widget-container[data-mode="design"] {
+            display: flex;
+        }
+        .widget-container[data-mode="view"], .widget-container[data-mode="run"] {
+            display: none;
+        }
+        .widget-toolbar {
+            display: block;
+        }
+    }
+
+    &[data-current-mode="view"] {
+        .widget-container[data-mode="view"] {
+            display: flex;
+        }
+        .widget-container[data-mode="design"], .widget-container[data-mode="run"] {
+            display: none;
+        }
+    }
+
+    &[data-current-mode="run"] {
+        .widget-container[data-mode="run"] {
+            display: flex;
+        }
+        .widget-container[data-mode="design"], .widget-container[data-mode="view"] {
+            display: none;
+        }
+    }
+}
+
 .widget-toolbar {
     border: 1px solid $widget-toolbar-border-color;
     border-radius: $widget-designer-radius;
@@ -92,6 +105,29 @@ $widget-toolbar-padding: 0.5rem;
         color: $widget-toolbar-group-title-color;
         width: 100%;
     }
+}
+
+// container
+.widget-container, .widget-toolbar {
+    font-family: Poppins;
+    font-weight: 300;
+    margin-right: auto;
+    margin-left: auto;
+    width: $widget-container-width;
+}
+
+.widget-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    border: 1px solid $widget-border-design-color;
+    border-radius: $widget-designer-radius;
+    height: calc(100vh - $widget-toolbar-estimate-height);    // take full height minus some space for the toolbar
+    max-height: $widget-container-max-height;
+    min-height: 200px;
+    overflow-y: auto;
 }
 
 // responsive breakpoints

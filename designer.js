@@ -29,66 +29,88 @@ export default class Designer {
 
         this._options = this._getDefaultOptions();
 
-        this._options.renderOptions.renderMode = options.renderOptions.renderMode ?? constants.WIDGET_MODE_DESIGN;
-        if (constants.validModes.indexOf(this._options.renderOptions.renderMode) === -1)
-            throw new Error(`Invalid render mode. Must be one of ${contants.validModes.join(', ')}`);
+        this._renderMode = options.renderMode ?? constants.WIDGET_MODE_DESIGN;
+        if (constants.validModes.indexOf(this._renderMode) === -1)
+            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
     
-        this._options.renderOptions.renderGrip = options.renderOptions.renderGrip !== true ? false : true;
-        this._options.renderOptions.renderRemove = options.renderOptions.renderRemove !== true ? false : true;
-        this._options.renderOptions.renderTips = options.renderOptions.renderTips !== true ? false : true;
-
         if (options.toolbar)
             this._options.toolbar = options.toolbar;
         this._options.toolbar.visible = options.toolbar.visible !== true ? false : true;
 
-        if (options.renderOptions) {
-            if (options.renderOptions.globalClasses)
-                this._options.renderOptions.globalClasses = options.renderOptions.globalClasses;
-            if (options.renderOptions.requiredAttributeSettings)
-                this._options.renderOptions.requiredAttributeSettings = options.renderOptions.requiredAttributeSettings;
+        if (options.widgetRenderOptions) {
+            if (options.widgetRenderOptions.globalClasses)
+                this._options.widgetRenderOptions.globalClasses = options.widgetRenderOptions.globalClasses;
+            if (options.widgetRenderOptions.requiredAttributeSettings)
+                this._options.widgetRenderOptions.requiredAttributeSettings = options.widgetRenderOptions.requiredAttributeSettings;
+
+            this._options.widgetRenderOptions.renderGrip = options.widgetRenderOptions.renderGrip !== true ? false : true;
+            this._options.widgetRenderOptions.renderRemove = options.widgetRenderOptions.renderRemove !== true ? false : true;
+            this._options.widgetRenderOptions.renderTips = options.widgetRenderOptions.renderTips !== true ? false : true;
         }
 
         this._setupDesigner(this._options);
+
+        this._designerEl = document.querySelector('.widget-designer');
+        this._updateActiveCanvas();
     }
 
     addWidget(jsonObj) {
-        return this._canvas.addWidget(jsonObj);
+        return this._designCanvas.addWidget(jsonObj);
     }
 
     get canvas() {
-        return this._canvas;
+        return this._designCanvas;
     }
 
     clearCanvas() {
-        this._canvas.clearCanvas();
+        this._designCanvas.clearCanvas();
+        this._runCanvas.clearCanvas();
+        this._viewCanvas.clearCanvas();
     }
 
     exportJson() {
-        return this._canvas.exportJson();
+        this.renderMode = constants.WIDGET_MODE_DESIGN;
+        return this._designCanvas.exportJson();
     }
 
     extractFeatures() {
-        return this._canvas.extractFeatures();
+        this.renderMode = constants.WIDGET_MODE_VIEW;
+        return this._viewCanvas.extractFeatures();
     }
 
+    /// <summary>
+    /// Finds a widget by its id. This is used to attach events to interactive widgets like buttons, that's why the current mode should be 'run'.
     findWidget(id) {
-        return this._canvas.findWidget(id);
+        if (this.renderMode !== constants.WIDGET_MODE_RUN)
+            throw new Error('findWidget can only be called in run mode');
+        return this._runCanvas.findWidget(id);
     }
 
-    renderForm(json, renderMode) {
-        this._canvas.renderForm(json, renderMode);
+    renderForm(json) {
+        this.renderMode = constants.WIDGET_MODE_DESIGN;
+        this._designCanvas.renderForm(json);
     }
 
     get renderMode() {
-        return this._canvas.renderMode;
+        return this._renderMode;
+    }
+
+    set renderMode(value) {
+        if (value === this._renderMode)
+            return;
+        if (constants.validModes.indexOf(value) === -1)
+            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
+        this._renderMode = value;
+        this._updateActiveCanvas();
+        this._designerEl.setAttribute('data-current-mode', this.renderMode);
     }
 
     validate() {
-        return this._canvas.validate();
+        return this._designCanvas.validate();
     }
 
     get widgets() { 
-        return this._canvas._widgets;
+        return this._designCanvas._widgets;
     }
 
     /// ********************************************************************************************************************
@@ -101,11 +123,10 @@ export default class Designer {
             toolbar: {
                 visible: true
             },
-            renderOptions: {
+            widgetRenderOptions: {
                 renderGrip: true,
                 renderRemove: true,
                 renderTips: true,
-                renderMode: constants.WIDGET_MODE_DESIGN,
                 globalClasses: {
                     label: 'widget-label',
                     widget: 'widget',
@@ -119,8 +140,81 @@ export default class Designer {
         };
     }
 
+    _handleToolbarActions(action, e) {
+        let am = this._actionMappings.find(m => m.action === action);
+
+        // check if action is to create a new widget
+        if (am) {
+            // if there's widgetType, there could be a widgetAdded callback
+            if (am.widgetType) {
+                if (am.callback) {
+                    am.callback({ widgetType: am.widgetType, e: e });
+                    if (e.defaultPrevented)
+                        return;
+                }
+                this.addWidget({ type: am.widgetType });
+                return;
+            }
+
+            // check for other actions
+            if (am.action === "new-form") {
+                if (am.callback && am.callback(e) && e.defaultPrevented)
+                    return;
+                this.clearCanvas();
+            } else if (am.action === "export-json") {
+                var json = this.exportJson();
+                if (am.callback)
+                    am.callback(json, e);
+            } else if (am.action === "save-pdf") {
+                this.renderMode = constants.WIDGET_MODE_VIEW;
+                var features = this.extractFeatures();
+                var exp = new jsPDFExporter();
+                if (am.callback) {
+                    var pdfdata = exp.exportPDF(features, { saveToFile: false }); // save to blob
+                    am.callback({
+                        features: features, 
+                        pdfdata: pdfdata
+                    }, e);
+                    if (e.defaultPrevented)
+                        return;
+                } 
+                exp.exportPDF(features, { saveToFile: true }); // save to file
+            } else if (am.action === "load-json") {
+                var json;
+                if (am.callback) {
+                    json = am.callback(e);
+                    if (e.defaultPrevented)
+                        return;
+                }
+
+                // if callback returns json, render it
+                if (json) {
+                    _t.renderForm(json);
+                    return;
+                }
+
+                // otherwise, trigger load file action
+                var inp = this._container.querySelector('[data-action="load-json"] + input[type="file"]');
+                var _t = this;
+                if (!inp.onchange) {
+                    inp.onchange = function(e2) {
+                        var file = e2.target.files[0];
+                        var reader = new FileReader();
+                        reader.onload = function(e3) {
+                            var j2 = JSON.parse(e3.target.result);
+                            _t.renderForm(j2);
+                        };
+                        reader.readAsText(file);
+                        inp.value = null;
+                    };
+                }
+                inp.click();
+            }
+        }
+    }
+
     _setupDesigner(options) {
-        var html = `<div class="widget-designer">`;
+        var html = `<div class="widget-designer" data-current-mode="${this.renderMode}">`;
         if (options.toolbar.visible) {          // TODO Parse buttons
             var fileGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.new || options.toolbar.buttons.load || options.toolbar.buttons.export || options.toolbar.buttons.savepdf
@@ -198,7 +292,9 @@ export default class Designer {
             // }
             html += `</div>`;
         }
-        html += `<div class="widget-container"></div>`;
+        html += `<div class="widget-container" data-mode="design"></div>`;
+        html += `<div class="widget-container" data-mode="run"></div>`;
+        html += `<div class="widget-container" data-mode="view"></div>`;
         html += "</div>";
 
         this._container.innerHTML = html;
@@ -209,75 +305,30 @@ export default class Designer {
             });
         });
 
-        var widgetsContainerEl = this._container.querySelector('.widget-container');
-        this._canvas = new Canvas(widgetsContainerEl, options.renderOptions);
+        var el = this._container.querySelector('.widget-container[data-mode="design"]');
+        this._designCanvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_DESIGN);
+
+        el = this._container.querySelector('.widget-container[data-mode="run"]');
+        this._runCanvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_RUN);
+
+        el = this._container.querySelector('.widget-container[data-mode="view"]');
+        this._viewCanvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_VIEW);
     }
 
-    _handleToolbarActions(action, e) {
-        let am = this._actionMappings.find(m => m.action === action);
+    _updateActiveCanvas() {
+        // if render mode is design, do nothing
+        if (this.renderMode === constants.WIDGET_MODE_DESIGN)
+            return;
 
-        // check if action is to create a new widget
-        if (am) {
-            // if there's widgetType, there could be a widgetAdded callback
-            if (am.widgetType) {
-                if (am.callback) {
-                    am.callback({ widgetType: am.widgetType, e: e });
-                    if (e.defaultPrevented)
-                        return;
-                }
-                this.addWidget({ type: am.widgetType });
-                return;
-            }
-
-            // check for other actions
-            if (am.action === "new-form") {
-                if (am.callback && am.callback(e) && e.defaultPrevented)
-                    return;
-                this.clearCanvas();
-            } else if (am.action === "export-json") {
-                var json = this.exportJson();
-                if (am.callback)
-                    am.callback(json);
-            } else if (am.action === "save-pdf") {
-                // TODO Save current canvas state. Then render form in VIEW mode. Then extract features. Finally, render form again in saved state.
-                var features = this.extractFeatures();
-                var exp = new jsPDFExporter();
-                if (am.callback) {
-                    var pdfdata = exp.exportPDF(features, { saveToFile: false }); // save to blob
-                    am.callback(pdfdata);
-                } else
-                    exp.exportPDF(features, { saveToFile: true }); // save to file
-            } else if (am.action === "load-json") {
-                var json;
-                if (am.callback) {
-                    json = am.callback(e);
-                    if (e.defaultPrevented)
-                        return;
-                }
-
-                // if callback returns json, render it
-                if (json) {
-                    _t.renderForm(json, this.renderMode);
-                    return;
-                }
-
-                // otherwise, trigger load file action
-                var inp = this._container.querySelector('[data-action="load-json"] + input[type="file"]');
-                var _t = this;
-                if (!inp.onchange) {
-                    inp.onchange = function(e2) {
-                        var file = e2.target.files[0];
-                        var reader = new FileReader();
-                        reader.onload = function(e3) {
-                            var j2 = JSON.parse(e3.target.result);
-                            _t.renderForm(j2, _t.renderMode);
-                        };
-                        reader.readAsText(file);
-                        inp.value = null;
-                    };
-                }
-                inp.click();
-            }
+        // if render mode is run, render the form in run mode copying info from the design mode canvas
+        if (this.renderMode === constants.WIDGET_MODE_RUN) {
+            var json = this._designCanvas.exportJson();
+            this._runCanvas.renderForm(json);
+        } else if (this.renderMode === constants.WIDGET_MODE_VIEW) {
+            var json = this._designCanvas.exportJson();
+            this._runCanvas.renderForm(json);
+            var json = this._runCanvas.exportJson();
+            this._viewCanvas.renderForm(json);
         }
     }
 }

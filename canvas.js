@@ -7,17 +7,19 @@ import WidgetText from './widget-text.js';
 import FeatureExtractor from './feature-extractor.js';
 
 export default class Canvas {
-    constructor(widgetsContainerEl, renderOptions) {
+    constructor(widgetsContainerEl, widgetRenderOptions, renderMode) {
         this._domParser = new DOMParser();
         this._featureExtractor = null;
 
-        if (!renderOptions)
-            renderOptions = {};
-        if (!renderOptions.renderMode)
-            renderOptions.renderMode = constants.WIDGET_MODE_DESIGN;
-
+        this._renderMode = renderMode ?? constants.WIDGET_MODE_DESIGN;
+        if (constants.validModes.indexOf(this._renderMode) === -1)
+        throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
+    
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+    
+        this._widgetRenderOptions = widgetRenderOptions;
         this._container = widgetsContainerEl; 
-        this._renderOptions = renderOptions;
         this._sourceJson = {
             name: Strings.Canvas_NewForm_Name,
             version: constants.FORMS_DESIGNER_VERSION,
@@ -46,9 +48,6 @@ export default class Canvas {
             this._sortable = null;
         }
         this._container.innerHTML = '';
-
-        this._renderOptions.renderMode = constants.WIDGET_MODE_DESIGN;
-
         this._widgets = [];
     }
 
@@ -82,12 +81,12 @@ export default class Canvas {
                 throw new Error(`widget type ${o.type} not found.`);
         }
 
-        // if json does not specify any global classes, use the ones passed in the renderOptions
-        var globalClasses = o.globalClasses ? o.globalClasses : this._renderOptions.globalClasses;
+        // if json does not specify any global classes, use the ones passed in the widgetRenderOptions
+        var globalClasses = o.globalClasses ? o.globalClasses : this._widgetRenderOptions.globalClasses;
         w.globalClasses = globalClasses;
 
         // idem with the required attribute settings
-        var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._renderOptions.requiredAttributeSettings;
+        var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._widgetRenderOptions.requiredAttributeSettings;
         w.requiredAttributeSettings = requiredAttributeSettings;
 
         return w;
@@ -105,7 +104,7 @@ export default class Canvas {
             throw new Error('Must render the form first');
 
         var json = this._sourceJson ?? {};
-        json.renderOptions = this._renderOptions;
+        json.widgetRenderOptions = this._widgetRenderOptions;
         json.widgets = [];
         this._widgets.forEach(w => {
             var j = w.exportJson();
@@ -156,9 +155,9 @@ export default class Canvas {
     /// <summary>
     /// Renders a form from a json-serialized form object
     /// </summary>
-    renderForm(json, renderMode) {
+    renderForm(json) {
         this.clearCanvas();
-        this._parseJson(json, renderMode);
+        this._parseJson(json);
         this._renderWidgets();
 
         if (window.Sortable)
@@ -174,7 +173,7 @@ export default class Canvas {
     }
 
     get renderMode() {
-        return this._renderOptions.renderMode;
+        return this._renderMode;
     }
 
     /// <summary>
@@ -205,7 +204,7 @@ export default class Canvas {
     /// <summary>
     /// Parses a JSON object and creates widgets. Widgets are stored in the _widgets array.
     /// </summary>
-    _parseJson(json, renderMode) {
+    _parseJson(json) {
         if (!json)
             throw new Error('json is required');
 
@@ -228,16 +227,12 @@ export default class Canvas {
             throw new Error('widgets collection has no elements in json object');
 
         this._sourceJson = o;
-        if (o.renderOptions) {
-            if (o.renderOptions.globalClasses)
-                this._renderOptions.globalClasses = o.renderOptions.globalClasses;
-            if (o.renderOptions.requiredAttributeSettings)
-                this._renderOptions.requiredAttributeSettings = o.renderOptions.requiredAttributeSettings;
+        if (o.widgetRenderOptions) {
+            if (o.widgetRenderOptions.globalClasses)
+                this._widgetRenderOptions.globalClasses = o.widgetRenderOptions.globalClasses;
+            if (o.widgetRenderOptions.requiredAttributeSettings)
+                this._widgetRenderOptions.requiredAttributeSettings = o.widgetRenderOptions.requiredAttributeSettings;
         }
-        
-        if (!renderMode)
-            renderMode = constants.WIDGET_MODE_DESIGN;
-        this._renderOptions.renderMode = renderMode;
 
         o.widgets.forEach(fragment => {
             var e = this.createWidget(fragment);
@@ -247,8 +242,8 @@ export default class Canvas {
             this._widgets.push(e);
         });
 
-        if (this._sourceJson.renderOptions)
-            delete this._sourceJson.renderOptions;
+        if (this._sourceJson.widgetRenderOptions)
+            delete this._sourceJson.widgetRenderOptions;
         if (this._sourceJson.widgets)
             delete this._sourceJson.widgets;
     }
@@ -266,8 +261,10 @@ export default class Canvas {
     }
 
     _renderSingleWidget(w, p) {
-        w.render(this._container, p, this._renderOptions);
-        if (this._renderOptions.renderRemove && this._renderOptions.renderMode === constants.WIDGET_MODE_DESIGN) {
+        var ro = Object.assign({}, this._widgetRenderOptions);
+        ro.renderMode = this._renderMode;   // widgets need renderMode into the renderOptions
+        w.render(this._container, p, ro);
+        if (ro.renderRemove && ro.renderMode === constants.WIDGET_MODE_DESIGN) {
             w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
         }
     }

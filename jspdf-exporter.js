@@ -232,10 +232,10 @@ export default class jsPDFExporter {
             data = w.data;
 
         var x = w.x * this._wRatio;
-        var y = w.y * this._hRatio + (w.height * this._hRatio);
-        var w = w.width * this._wRatio;
-        var h = w.height * this._hRatio;
-        doc.addImage(data, x, y, w, h);
+        var y = w.y * this._hRatio;
+        var width = w.width * this._wRatio;
+        var height = w.height * this._hRatio;
+        doc.addImage(data, x, y, width, height);
     }
 
     _restoreState(doc) {

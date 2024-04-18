@@ -6,12 +6,12 @@ class WidgetSpacer extends Widget {
         super(constants.WIDGET_TYPE_SPACER, fragment);
     }
 
-    render(container, parser, renderOptions) {
-        if (!renderOptions)
-            renderOptions = {};
-        renderOptions.renderValidationSection = false;
-        var template = super._getHTMLTemplate(renderOptions);
-        super._renderInternal(container, template, parser, renderOptions);
+    render(container, parser, widgetRenderOptions) {
+        if (!widgetRenderOptions)
+            widgetRenderOptions = {};
+        widgetRenderOptions.renderValidationSection = false;
+        var template = super._getHTMLTemplate(widgetRenderOptions);
+        super._renderInternal(container, template, parser, widgetRenderOptions);
     }
 }
 
