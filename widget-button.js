@@ -32,29 +32,28 @@ class WidgetButton extends Widget {
         }
     }
 
-    render(container, parser, widgetRenderOptions) {
-        if (!widgetRenderOptions)
-            widgetRenderOptions = {};
-        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
-            widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) {
-            widgetRenderOptions.renderValidationSection = false;
-            var template = super._getHTMLTemplate(widgetRenderOptions);
-            var buttonClass = `${this.globalClasses.button ? 'class="' + this.globalClasses.button : ""}`; // class missing closing quote...closing below
-            if (this.buttonClass) 
-                buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.buttonClass}`;
-            if (buttonClass !== "")
-                buttonClass += '"';
-            var html = `<button type="button" 
-                ${buttonClass}
-                id="button_${this.id}" 
-                name="${this.name}">`;
-            if (this.label)
-                html += `<span>${this.label}</span>`;
-            html += `</button>`;
-            template.bodySection = html;
-            super._renderInternal(container, template, parser, widgetRenderOptions);
-        }
-        // buttons don't render in view mode
+    render(container, parser) {
+        var template = super._getHTMLTemplate();
+
+        var buttonClass = `${this.globalClasses.button ? 'class="' + this.globalClasses.button : ""}`; // class missing closing quote...closing below
+        if (this.buttonClass) 
+            buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.buttonClass}`;
+        if (buttonClass !== "")
+            buttonClass += '"';
+
+        var bodyhtml = `<button type="button" 
+            ${buttonClass}
+            id="button_${this.id}" 
+            name="${this.name}">`;
+        if (this.label)
+            bodyhtml += `<span>${this.label}</span>`;
+        bodyhtml += `</button>`;
+
+        template.designMode.bodySection = bodyhtml;
+        template.runMode.bodySection = bodyhtml;
+        template.viewMode.bodySection = "";     // buttons don't render in view mode
+
+        super._renderInternal(container, template, parser);
     }
 }
 

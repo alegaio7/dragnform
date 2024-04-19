@@ -6,7 +6,7 @@ class WidgetInputBase extends Widget {
         super(widgetType, fragment);
 
         if (!fragment)
-        fragment = {};
+            fragment = {};
         
         // defaults
         this.required = fragment.required === true ? true : false;
@@ -24,25 +24,37 @@ class WidgetInputBase extends Widget {
         }
     }
 
-    render(container, parser, widgetRenderOptions) {
-        if (!widgetRenderOptions)
-            widgetRenderOptions = {};
-        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_VIEW) {
-            var html;
-            var template = super._getHTMLTemplate(widgetRenderOptions);
-            var labelHtml = this._getLabelHTML(widgetRenderOptions);
-            var v = this.value;
-            if (this.value === null || this.value === undefined)
-                v = widgetRenderOptions.nullValue ? widgetRenderOptions.nullValue : "";
-            html = `${labelHtml ? labelHtml : ""}
-                <span ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}
-                id="input_${this.id}">${v}</span>`;
-            template.bodySection = html;
-            super._renderInternal(container, template, parser, widgetRenderOptions);
-        }
-    }
+    /// <summary>
+    /// Base rendering logic for input widgets (text, number, etc).
+    /// </summary>
+    _renderInternal(container, parser, bodyhtml) {
+        var template = super._getHTMLTemplate();
+        var v = this.value;
+        if (this.value === null || this.value === undefined)
+            v = this.widgetRenderOptions.nullValue ? this.widgetRenderOptions.nullValue : "";
     
-    _getLabelHTML(widgetRenderOptions) {
+        template.designMode.bodySection = bodyhtml;
+        template.runMode.bodySection = bodyhtml;
+    
+        // view mode body
+        var labelHtml = this._getLabelHTML();
+        bodyhtml = `${labelHtml ? labelHtml : ""}
+            <span ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}
+            id="input_${this.id}">${v}</span>`;
+        template.viewMode.bodySection = bodyhtml;
+
+        super._renderInternal(container, template, parser);
+        this._updateUI();
+
+        var _t = this;
+        var inputs = this._el.querySelectorAll("input");
+        if (inputs && inputs.length)
+            inputs.forEach(i => i.addEventListener("blur", function(e) {
+                _t.setValue(e.currentTarget.value, false);
+            }));
+    }
+
+    _getLabelHTML() {
         if (!this.label)
             return "";
 
@@ -54,7 +66,6 @@ class WidgetInputBase extends Widget {
         var html = `<label ${labelClass} for="input_${this.id}">`;
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
         if (this.required && 
-            (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN || widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) &&
             this.requiredAttributeSettings.mark && 
             this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
             html  += reqMarkHtml;
@@ -62,7 +73,6 @@ class WidgetInputBase extends Widget {
         html  += `${this.label}`
 
         if (this.required && 
-            (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN || widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) && 
             this.requiredAttributeSettings.mark && 
             this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
             html  += reqMarkHtml;

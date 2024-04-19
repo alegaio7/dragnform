@@ -6,7 +6,7 @@ class WidgetImage extends Widget {
         super(constants.WIDGET_TYPE_IMAGE, fragment);
         this._imageData = fragment.data ?? constants.WIDGET_IMAGE_BLANK;
 
-        this.height = fragment.height ?? "";
+        this.height = fragment.height ?? "100px";
         this.imageAlign = fragment.imageAlign ?? constants.WIDGET_IMAGE_ALIGN_CENTER;
     }
 
@@ -17,33 +17,36 @@ class WidgetImage extends Widget {
         return json;
     }
 
-    render(container, parser, widgetRenderOptions) {
-        if (!widgetRenderOptions)
-            widgetRenderOptions = {};
-        widgetRenderOptions.renderValidationSection = false;
-        var template = super._getHTMLTemplate(widgetRenderOptions);
+    render(container, parser) {
+        var template = super._getHTMLTemplate();
+
         var imageClass = `${this.globalClasses.image ? 'class="' + this.globalClasses.image + '"' : ""}`;
-        var html = `<img
+        var bodyhtml = `<img
             ${imageClass}
             id="image_${this.id}"
             alt="${this.label ? this.label : this.id}"
             name="${this.name}"
             src="${this._imageData}"`;
         if (this.height || this.imageAlign) {
-            html += ` style="`;
+            bodyhtml += ` style="`;
             if (this.height)
-                html += `height: ${this.height}; width: auto;`;
+                bodyhtml += `height: ${this.height}; width: auto;`;
             if (this.imageAlign === constants.WIDGET_IMAGE_ALIGN_LEFT)
-                html += "margin-left: 0; margin-right: auto;";
+                bodyhtml += "margin-left: 0; margin-right: auto;";
             else if (this.imageAlign === constants.WIDGET_IMAGE_ALIGN_RIGHT)
-                html += "margin-left: auto; margin-right: 0;";
+                bodyhtml += "margin-left: auto; margin-right: 0;";
             else
-                html += "margin-left: auto; margin-right: auto;";
-            html += `"`;
+                bodyhtml += "margin-left: auto; margin-right: auto;";
+            bodyhtml += `"`;
         }
-        html += `>`;
-        template.bodySection = html;
-        super._renderInternal(container, template, parser, widgetRenderOptions);
+        bodyhtml += `>`;
+
+        // images render the same in every mode
+        template.designMode.bodySection = bodyhtml;
+        template.runMode.bodySection = bodyhtml;
+        template.viewMode.bodySection = bodyhtml;
+
+        super._renderInternal(container, template, parser);
     }
 }
 

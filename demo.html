@@ -55,13 +55,21 @@
                         spacer: true,
                         button: true,
                         image: true,
-                        savepdf: true
+                        savepdf: true,
+                        renderRunMode: true
                     }
                 },
                 widgetRenderOptions: {
                     renderGrip: true,
                     renderRemove: true,
                     renderTips: true,
+                    globalClasses: {
+                        button: "btn",
+                        input: "form-control",
+                        label: "widget-label",
+                        span: "widget-value",
+                        widget: "form-group"
+                    },
                 },
                 renderMode: constants.WIDGET_MODE_DESIGN
             });

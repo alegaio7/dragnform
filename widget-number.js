@@ -31,34 +31,20 @@ class WidgetNumber extends WidgetInputBase {
         return json;
     }
 
-    render(container, parser, widgetRenderOptions) {
-        if (!widgetRenderOptions)
-            widgetRenderOptions = {};
-        if (widgetRenderOptions.renderMode === constants.WIDGET_MODE_DESIGN ||
-            widgetRenderOptions.renderMode === constants.WIDGET_MODE_RUN) {
-                widgetRenderOptions.renderValidationSection = true;
-                var template = super._getHTMLTemplate(widgetRenderOptions);
-                var labelHtml = super._getLabelHTML(widgetRenderOptions);
-                var html = `${labelHtml ? labelHtml : ""}
-                    <input type="number" 
-                    id="input_${this.id}" 
-                    ${this.globalClasses.input ? 'class="' + this.globalClasses.input + '"' : ""}
-                    min="${this.validations.min}"
-                    max="${this.validations.max}"
-                    ${this.validations.required ? 'required' : ""}
-                    ${!isNaN(this.value) ? 'value="' + this.value + '"' : ""}
-                    ${this.name ? 'name="' + this.name + '"' : ""}
-                    >`;
-                template.bodySection = html;
-                super._renderInternal(container, template, parser, widgetRenderOptions);
+    render(container, parser) {
+        var labelHtml = super._getLabelHTML();
+        var bodyhtml = `${labelHtml ? labelHtml : ""}
+            <input type="text" 
+            id="input_${this.id}" 
+            ${this.globalClasses.input ? 'class="' + this.globalClasses.input + '"' : ""}
+            ${this.validations.minLength ? 'minlength="' + this.validations.minLength + '"' : ""}
+            ${this.validations.maxLength ? 'maxlength="' + this.validations.maxLength + '"' : ""}
+            ${this.validations.required ? 'required' : ""}
+            ${this.value ? 'value="' + this.value + '"' : ""}
+            ${this.name ? 'name="' + this.name + '"' : ""}
+            >`;
 
-                var _t = this;
-                this._el.querySelector("input").addEventListener("blur", function(e) {
-                    _t.setValue(e.currentTarget.value, false);
-                });
-        } else {
-            super.render(container, parser, widgetRenderOptions);
-        }
+        super._renderInternal(container, parser, bodyhtml);
     }
 
     setValue(v, setCtlValue) {

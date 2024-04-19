@@ -33,37 +33,21 @@ $widget-toolbar-padding: 0.5rem;
 
 // designer - toolbar
 .widget-designer {
-    .widget-toolbar {
-        display: none;
-    }
-
     &[data-current-mode="design"] {
-        .widget-container[data-mode="design"] {
-            display: flex;
+        .widget-toolbar [data-render-mode="design"] {
+            display: inline;
         }
-        .widget-container[data-mode="view"], .widget-container[data-mode="run"] {
-            display: none;
-        }
-        .widget-toolbar {
-            display: block;
-        }
-    }
-
-    &[data-current-mode="view"] {
-        .widget-container[data-mode="view"] {
-            display: flex;
-        }
-        .widget-container[data-mode="design"], .widget-container[data-mode="run"] {
+        .widget-toolbar [data-render-mode="run"] {
             display: none;
         }
     }
 
     &[data-current-mode="run"] {
-        .widget-container[data-mode="run"] {
-            display: flex;
-        }
-        .widget-container[data-mode="design"], .widget-container[data-mode="view"] {
+        .widget-toolbar [data-render-mode="design"] {
             display: none;
+        }
+        .widget-toolbar [data-render-mode="run"] {
+            display: inline;
         }
     }
 }
@@ -152,9 +136,32 @@ $widget-toolbar-padding: 0.5rem;
         border: 1px dashed $widget-border-design-color;
     }
 
-    /*&[data-mode="view"] {
-        border: 1px solid $widget-border-view-color;
-    }*/
+    &[data-mode="design"] {
+        [data-show-when="design"] {
+            display: block;
+        }
+        [data-show-when="view"], [data-show-when="run"] {
+            display: none;
+        }
+    }
+
+    &[data-mode="view"] {
+        [data-show-when="view"] {
+            display: block;
+        }
+        [data-show-when="design"], [data-show-when="run"] {
+            display: none;
+        }
+    }
+
+    &[data-mode="run"] {
+        [data-show-when="run"] {
+            display: block;
+        }
+        [data-show-when="design"], [data-show-when="view"] {
+            display: none;
+        }
+    }
 
     button {
         cursor: pointer;

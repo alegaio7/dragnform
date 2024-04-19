@@ -3,29 +3,17 @@
   box-sizing: border-box;
 }
 
-.widget-designer .widget-toolbar {
+.widget-designer[data-current-mode=design] .widget-toolbar [data-render-mode=design] {
+  display: inline;
+}
+.widget-designer[data-current-mode=design] .widget-toolbar [data-render-mode=run] {
   display: none;
 }
-.widget-designer[data-current-mode=design] .widget-container[data-mode=design] {
-  display: flex;
-}
-.widget-designer[data-current-mode=design] .widget-container[data-mode=view], .widget-designer[data-current-mode=design] .widget-container[data-mode=run] {
+.widget-designer[data-current-mode=run] .widget-toolbar [data-render-mode=design] {
   display: none;
 }
-.widget-designer[data-current-mode=design] .widget-toolbar {
-  display: block;
-}
-.widget-designer[data-current-mode=view] .widget-container[data-mode=view] {
-  display: flex;
-}
-.widget-designer[data-current-mode=view] .widget-container[data-mode=design], .widget-designer[data-current-mode=view] .widget-container[data-mode=run] {
-  display: none;
-}
-.widget-designer[data-current-mode=run] .widget-container[data-mode=run] {
-  display: flex;
-}
-.widget-designer[data-current-mode=run] .widget-container[data-mode=design], .widget-designer[data-current-mode=run] .widget-container[data-mode=view] {
-  display: none;
+.widget-designer[data-current-mode=run] .widget-toolbar [data-render-mode=run] {
+  display: inline;
 }
 
 .widget-toolbar {
@@ -96,12 +84,27 @@
 .widget {
   padding-bottom: 1rem;
   min-height: 5rem;
-  /*&[data-mode="view"] {
-      border: 1px solid $widget-border-view-color;
-  }*/
 }
 .widget[data-mode=design] {
   border: 1px dashed #ccc;
+}
+.widget[data-mode=design] [data-show-when=design] {
+  display: block;
+}
+.widget[data-mode=design] [data-show-when=view], .widget[data-mode=design] [data-show-when=run] {
+  display: none;
+}
+.widget[data-mode=view] [data-show-when=view] {
+  display: block;
+}
+.widget[data-mode=view] [data-show-when=design], .widget[data-mode=view] [data-show-when=run] {
+  display: none;
+}
+.widget[data-mode=run] [data-show-when=run] {
+  display: block;
+}
+.widget[data-mode=run] [data-show-when=design], .widget[data-mode=run] [data-show-when=view] {
+  display: none;
 }
 .widget button {
   cursor: pointer;

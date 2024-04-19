@@ -19,7 +19,8 @@ export default class Designer {
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER, callback: this._callbacks.onWidgetAdded },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON, callback: this._callbacks.onWidgetAdded },
             { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE, callback: this._callbacks.onWidgetAdded },
-            { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER, callback: this._callbacks.onWidgetAdded }
+            { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER, callback: this._callbacks.onWidgetAdded },
+            { action: 'render-mode-run', widgetType: null, callback: this._callbacks.onRunModeSelected },
         ];
 
         var c = document.getElementById(options.containerId);
@@ -29,10 +30,6 @@ export default class Designer {
 
         this._options = this._getDefaultOptions();
 
-        this._renderMode = options.renderMode ?? constants.WIDGET_MODE_DESIGN;
-        if (constants.validModes.indexOf(this._renderMode) === -1)
-            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
-    
         if (options.toolbar)
             this._options.toolbar = options.toolbar;
         this._options.toolbar.visible = options.toolbar.visible !== true ? false : true;
@@ -49,33 +46,33 @@ export default class Designer {
         }
 
         this._setupDesigner(this._options);
-
         this._designerEl = document.querySelector('.widget-designer');
-        this._updateActiveCanvas();
+
+        this.renderMode = options.renderMode ?? constants.WIDGET_MODE_DESIGN;
     }
 
     addWidget(jsonObj) {
-        return this._designCanvas.addWidget(jsonObj);
+        return this._canvas.addWidget(jsonObj);
     }
 
     get canvas() {
-        return this._designCanvas;
+        return this._canvas;
     }
 
     clearCanvas() {
-        this._designCanvas.clearCanvas();
-        this._runCanvas.clearCanvas();
-        this._viewCanvas.clearCanvas();
+        this._canvas.clearCanvas();
+        this._canvas.clearCanvas();
+        this._canvas.clearCanvas();
     }
 
     exportJson() {
         this.renderMode = constants.WIDGET_MODE_DESIGN;
-        return this._designCanvas.exportJson();
+        return this._canvas.exportJson();
     }
 
     extractFeatures() {
         this.renderMode = constants.WIDGET_MODE_VIEW;
-        return this._viewCanvas.extractFeatures();
+        return this._canvas.extractFeatures();
     }
 
     /// <summary>
@@ -83,34 +80,31 @@ export default class Designer {
     findWidget(id) {
         if (this.renderMode !== constants.WIDGET_MODE_RUN)
             throw new Error('findWidget can only be called in run mode');
-        return this._runCanvas.findWidget(id);
+        return this._canvas.findWidget(id);
     }
 
     renderForm(json) {
         this.renderMode = constants.WIDGET_MODE_DESIGN;
-        this._designCanvas.renderForm(json);
+        this._canvas.renderForm(json);
     }
 
     get renderMode() {
-        return this._renderMode;
+        if (!this._canvas)
+            return constants.WIDGET_MODE_DESIGN;
+        return this._canvas.renderMode;
     }
 
     set renderMode(value) {
-        if (value === this._renderMode)
-            return;
-        if (constants.validModes.indexOf(value) === -1)
-            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
-        this._renderMode = value;
-        this._updateActiveCanvas();
-        this._designerEl.setAttribute('data-current-mode', this.renderMode);
+        this._canvas.renderMode = value;
+        this._updateUI();
     }
 
     validate() {
-        return this._designCanvas.validate();
+        return this._canvas.validate();
     }
 
     get widgets() { 
-        return this._designCanvas._widgets;
+        return this._canvas._widgets;
     }
 
     /// ********************************************************************************************************************
@@ -147,11 +141,36 @@ export default class Designer {
         if (am) {
             // if there's widgetType, there could be a widgetAdded callback
             if (am.widgetType) {
-                if (am.callback) {
+                // TODO check usability of callbacks
+                /* if (am.callback) {
                     am.callback({ widgetType: am.widgetType, e: e });
                     if (e.defaultPrevented)
                         return;
+                }*/
+
+                if (am.widgetType === constants.WIDGET_TYPE_IMAGE) {
+                    var _t = this;
+                    if (!this._loadImageInputEl) {
+                        this._loadImageInputEl = this._container.querySelector('[data-action="add-image"] + input[type="file"]');
+                        if (!this._loadImageInputEl.onchange) {
+                            this._loadImageInputEl.onchange = function(e2) {
+                                var file = e2.target.files[0];
+                                var reader = new FileReader();
+                                reader.onload = function(e3) {
+                                    _t.addWidget({ 
+                                        type: am.widgetType, 
+                                        data: e3.target.result
+                                     });
+                                };
+                                reader.readAsDataURL(file);
+                                _t._loadImageInputEl.value = null;
+                            };
+                        }
+                    }
+                    this._loadImageInputEl.click();
+                    return;
                 }
+
                 this.addWidget({ type: am.widgetType });
                 return;
             }
@@ -194,21 +213,28 @@ export default class Designer {
                 }
 
                 // otherwise, trigger load file action
-                var inp = this._container.querySelector('[data-action="load-json"] + input[type="file"]');
                 var _t = this;
-                if (!inp.onchange) {
-                    inp.onchange = function(e2) {
-                        var file = e2.target.files[0];
-                        var reader = new FileReader();
-                        reader.onload = function(e3) {
-                            var j2 = JSON.parse(e3.target.result);
-                            _t.renderForm(j2);
+                if (!this._loadJsonInputEl) {
+                    this._loadJsonInputEl = this._container.querySelector('[data-action="load-json"] + input[type="file"]');
+                    if (!this._loadJsonInputEl.onchange) {
+                        this._loadJsonInputEl.onchange = function(e2) {
+                            var file = e2.target.files[0];
+                            var reader = new FileReader();
+                            reader.onload = function(e3) {
+                                var j2 = JSON.parse(e3.target.result);
+                                _t.renderForm(j2);
+                            };
+                            reader.readAsText(file);
+                            _t._loadJsonInputEl.value = null;
                         };
-                        reader.readAsText(file);
-                        inp.value = null;
-                    };
+                    }
                 }
-                inp.click();
+                this._loadJsonInputEl.click();
+            } else if (am.action === "render-mode-run") {
+                var newMode = this.renderMode === constants.WIDGET_MODE_RUN ? constants.WIDGET_MODE_DESIGN : constants.WIDGET_MODE_RUN;
+                if (am.callback && am.callback({switchingToMode: newMode}, e) && e.defaultPrevented)
+                    return;
+                this.renderMode = newMode;
             }
         }
     }
@@ -221,6 +247,9 @@ export default class Designer {
             );
             var widgetsGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer
+            );
+            var renderModeGroup = options.toolbar.buttons && (
+                options.toolbar.buttons.renderRunMode
             );
             // var layoutGroup = options.toolbar.buttons && (
             //     options.toolbar.buttons.spacer
@@ -280,21 +309,30 @@ export default class Designer {
                     html += `<button type="button" data-action="add-image" title="${Strings.Toolbar_AddImageWidget_ButtonTitle}">
                             <i class="${Icons.Toolbar_AddImageWidget_Icon}"></i>
                             <span>${Strings.Toolbar_AddImageWidget_ButtonLabel}</span>
-                        </button>`; 
+                        </button>
+                        <input type="file" style="display: none;" />`; 
                 html += `</div>`;
             }
 
-            // if (layoutGroup) {
-            //     html += `<div class="widget-toolbar-group">
-            //         <div class="widget-toolbar-group-title">${Strings.Toolbar_Layout_GroupTitle}</div>`;
-
-            //     html += `</div>`;
-            // }
+            if (renderModeGroup) {
+                html += `<div class="widget-toolbar-group">
+                    <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
+                if (options.toolbar.buttons.renderRunMode)
+                    html += `<button type="button" data-action="render-mode-run" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
+                            <span data-render-mode="design">
+                                <i class="${Icons.Toolbar_RunMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_ToRun_ButtonLabel}</span>
+                            </span>
+                            <span data-render-mode="run">
+                                <i class="${Icons.Toolbar_DesignMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_ToDesign_ButtonLabel}</span>
+                            </span>
+                        </button>`;
+                html += `</div>`;
+            }
             html += `</div>`;
         }
-        html += `<div class="widget-container" data-mode="design"></div>`;
-        html += `<div class="widget-container" data-mode="run"></div>`;
-        html += `<div class="widget-container" data-mode="view"></div>`;
+        html += `<div class="widget-container"></div>`;
         html += "</div>";
 
         this._container.innerHTML = html;
@@ -305,30 +343,11 @@ export default class Designer {
             });
         });
 
-        var el = this._container.querySelector('.widget-container[data-mode="design"]');
-        this._designCanvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_DESIGN);
-
-        el = this._container.querySelector('.widget-container[data-mode="run"]');
-        this._runCanvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_RUN);
-
-        el = this._container.querySelector('.widget-container[data-mode="view"]');
-        this._viewCanvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_VIEW);
+        var el = this._container.querySelector('.widget-container');
+        this._canvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_DESIGN);
     }
 
-    _updateActiveCanvas() {
-        // if render mode is design, do nothing
-        if (this.renderMode === constants.WIDGET_MODE_DESIGN)
-            return;
-
-        // if render mode is run, render the form in run mode copying info from the design mode canvas
-        if (this.renderMode === constants.WIDGET_MODE_RUN) {
-            var json = this._designCanvas.exportJson();
-            this._runCanvas.renderForm(json);
-        } else if (this.renderMode === constants.WIDGET_MODE_VIEW) {
-            var json = this._designCanvas.exportJson();
-            this._runCanvas.renderForm(json);
-            var json = this._runCanvas.exportJson();
-            this._viewCanvas.renderForm(json);
-        }
+    _updateUI() {
+        this._designerEl.setAttribute('data-current-mode', this.renderMode);
     }
 }

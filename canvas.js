@@ -13,12 +13,9 @@ export default class Canvas {
 
         this._renderMode = renderMode ?? constants.WIDGET_MODE_DESIGN;
         if (constants.validModes.indexOf(this._renderMode) === -1)
-        throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
+            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
     
-        if (!widgetRenderOptions)
-            widgetRenderOptions = {};
-    
-        this._widgetRenderOptions = widgetRenderOptions;
+        this._widgetRenderOptions = widgetRenderOptions ?? {};
         this._container = widgetsContainerEl; 
         this._sourceJson = {
             name: Strings.Canvas_NewForm_Name,
@@ -89,6 +86,9 @@ export default class Canvas {
         var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._widgetRenderOptions.requiredAttributeSettings;
         w.requiredAttributeSettings = requiredAttributeSettings;
 
+        // idem with the widget rendering options
+        var widgetRenderOptions = o.widgetRenderOptions ? o.widgetRenderOptions : this._widgetRenderOptions;
+        w.widgetRenderOptions = widgetRenderOptions;
         return w;
     }
 
@@ -176,6 +176,19 @@ export default class Canvas {
         return this._renderMode;
     }
 
+    set renderMode(value) {
+        if (value === this._renderMode)
+            return;
+        if (constants.validModes.indexOf(value) === -1)
+            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
+        this._renderMode = value;
+
+        // update widgets to show the new render mode
+        this._widgets.forEach(w => {
+            w.renderMode = value;
+        });
+    }
+
     /// <summary>
     /// Validates the form widgets. Each widget implements its own validation mechanisms.
     /// Returns an object with a result property indicating if the form is valid and if not, a validations property containing an array of not-passed validations.
@@ -261,10 +274,8 @@ export default class Canvas {
     }
 
     _renderSingleWidget(w, p) {
-        var ro = Object.assign({}, this._widgetRenderOptions);
-        ro.renderMode = this._renderMode;   // widgets need renderMode into the renderOptions
-        w.render(this._container, p, ro);
-        if (ro.renderRemove && ro.renderMode === constants.WIDGET_MODE_DESIGN) {
+        w.render(this._container, p);
+        if (this._widgetRenderOptions.renderRemove) {
             w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
         }
     }

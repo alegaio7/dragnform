@@ -7,6 +7,11 @@ class Strings {
     static get Toolbar_AddButtonWidget_ButtonTitle() { return 'Add button'; }
     static get Toolbar_AddImageWidget_ButtonLabel() { return 'Image'; }
     static get Toolbar_AddImageWidget_ButtonTitle() { return 'Add an image'; }
+
+    static get Toolbar_RenderModes_ToRun_ButtonLabel() { return 'Run mode'; }
+    static get Toolbar_RenderModes_ToDesign_ButtonLabel() { return 'Design mode'; }
+    static get Toolbar_RenderModes_ButtonTitle() { return 'Switch between design and run mode'; }
+
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }
@@ -25,6 +30,7 @@ class Strings {
     static get Toolbar_Widgets_GroupTitle() { return 'Widgets'; }
     static get Toolbar_File_GroupTitle() { return 'File'; }
     static get Toolbar_Layout_GroupTitle() { return 'Layout'; }
+    static get Toolbar_RenderMode_GroupTitle () { return 'Rendering'; }
 
     // widgets
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
