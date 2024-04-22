@@ -29,7 +29,7 @@
                     onNewForm: function(e) {
                         document.getElementById('json-arena').innerText = "";
                     },
-                    onExportToJson: function(json) {
+                    onExportToJson: function(json, e) {
                         document.getElementById('json-arena').innerText = JSON.stringify(json, null, 2);
                     },
                     onLoadJson: function(e) {
@@ -62,7 +62,7 @@
                         button: true,
                         image: true,
                         savepdf: true,
-                        renderRunMode: true
+                        renderCurrentMode: true
                     }
                 },
                 widgetRenderOptions: {

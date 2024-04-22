@@ -55,6 +55,17 @@ export default class Canvas {
         if (!o.type)
             throw new Error("widget found with no type property.");
 
+        if (!o.id) {
+            var tmpId;
+            while (true) {
+                tmpId = "Widget" + Math.floor(Math.random() * 1000);
+                if (!this.findWidget(tmpId)) {
+                    o.id = tmpId;
+                    break;
+                }
+            }
+        }
+
         var w;
         switch(o.type) {
             case constants.WIDGET_TYPE_BUTTON:
@@ -128,12 +139,12 @@ export default class Canvas {
 
         var json = this._featureExtractor.extractFeatures(this._container, false, true); // not recursive for container, each widget will handle its children
         json.container = true;
-        json.widgets = [];
+        json.widgetFeatures = [];
         var _t = this;
         this._widgets.forEach(w => {
             var j = w.extractFeatures(_t._featureExtractor, true);
             if (j) {
-                json.widgets.push(j);
+                json.widgetFeatures.push(j);
             }
         });
 

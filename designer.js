@@ -182,8 +182,19 @@ export default class Designer {
                 this.clearCanvas();
             } else if (am.action === "export-json") {
                 var json = this.exportJson();
-                if (am.callback)
+                if (am.callback) {
                     am.callback(json, e);
+                    if (e.defaultPrevented)
+                        return;
+                }
+                const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'form.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                
             } else if (am.action === "save-pdf") {
                 this.renderMode = constants.WIDGET_MODE_VIEW;
                 var features = this.extractFeatures();
@@ -253,7 +264,7 @@ export default class Designer {
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer
             );
             var renderModeGroup = options.toolbar.buttons && (
-                options.toolbar.buttons.renderRunMode
+                options.toolbar.buttons.renderCurrentMode
             );
             // var layoutGroup = options.toolbar.buttons && (
             //     options.toolbar.buttons.spacer
@@ -321,7 +332,7 @@ export default class Designer {
             if (renderModeGroup) {
                 html += `<div class="widget-toolbar-group">
                     <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
-                if (options.toolbar.buttons.renderRunMode)
+                if (options.toolbar.buttons.renderCurrentMode)
                     html += `<button type="button" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
                             <span data-render-mode="design">
                                 <i class="${Icons.Toolbar_DesignMode_Icon}"></i>

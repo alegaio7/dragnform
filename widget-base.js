@@ -18,6 +18,9 @@ export default class Widget {
         if (validTypes.indexOf(type) === -1)
             throw new Error('Widget type is invalid');
 
+        if (!fragment.id)
+            throw new Error('Widget id is required');
+
         this._renderMode = constants.WIDGET_MODE_DESIGN;
         this._el = null;
         this._globalClasses = fragment.globalClasses ?? {};
@@ -28,7 +31,7 @@ export default class Widget {
         if (!(this.columns >= 1 && this.columns <= 12))
             throw new Error('Widget columns must be between 1 and 12');
         this.columnsClass = "widget-col-" + this.columns;
-        this.id = fragment.id ?? "Widget" + Math.floor(Math.random() * 1000);
+        this.id = fragment.id;
         this.label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
         this.name = fragment.name ?? this.id;
         this.type = type;
@@ -247,7 +250,7 @@ export default class Widget {
     _updateContols() {
         // implement in child classes
     }
-    
+
     _updateUI() {
         if (!this._el)
             return;
