@@ -33,25 +33,25 @@ class WidgetInputBase extends Widget {
         if (this.value === null || this.value === undefined)
             v = this.widgetRenderOptions.nullValue ? this.widgetRenderOptions.nullValue : "";
     
-        template.designMode.bodySection = bodyhtml;
-        template.runMode.bodySection = bodyhtml;
+        template.designMode.bodySection = bodyhtml.replace("{0}", `input_design_${this.id}`); 
+        template.runMode.bodySection = bodyhtml.replace("{0}", `input_run_${this.id}`);
     
         // view mode body
         var labelHtml = this._getLabelHTML();
         bodyhtml = `${labelHtml ? labelHtml : ""}
-            <span ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}
-            id="input_${this.id}">${v}</span>`;
+            <span data-part="value" ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}>${v}</span>`;
         template.viewMode.bodySection = bodyhtml;
 
         super._renderInternal(container, template, parser);
-        this._updateUI();
+        super._updateUI();
+        this._updateContols();
 
         var _t = this;
-        var inputs = this._el.querySelectorAll("input");
-        if (inputs && inputs.length)
-            inputs.forEach(i => i.addEventListener("blur", function(e) {
-                _t.setValue(e.currentTarget.value, false);
-            }));
+        var input = this._el.querySelector("input");
+        if (input)
+            input.addEventListener("blur", function(e) {
+                _t.value = e.currentTarget.value;
+            });
     }
 
     _getLabelHTML() {
@@ -63,7 +63,7 @@ class WidgetInputBase extends Widget {
         if (this.globalClasses.label)
             labelClass = `class="${this.globalClasses.label}"`;
         
-        var html = `<label ${labelClass} for="input_${this.id}">`;
+        var html = `<label ${labelClass} for="{0}">`;
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
         if (this.required && 
             this.requiredAttributeSettings.mark && 
@@ -80,6 +80,22 @@ class WidgetInputBase extends Widget {
         html  += `</label>`;
 
         return html;
+    }
+
+    _updateContols() {
+        // _el can be null if element was not rendered yet
+        if (this._el) {
+            var inputs = this._el.querySelectorAll("input");
+            if (inputs && inputs.length) {
+                inputs.forEach(input => {
+                    input.value = this.value;
+                });
+            }
+
+            var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
+            if (viewModeValue)
+                viewModeValue.innerHTML = this.value;
+        }
     }
 
     _validateInputCtl(input) {

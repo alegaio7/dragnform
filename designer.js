@@ -20,7 +20,7 @@ export default class Designer {
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON, callback: this._callbacks.onWidgetAdded },
             { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE, callback: this._callbacks.onWidgetAdded },
             { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER, callback: this._callbacks.onWidgetAdded },
-            { action: 'render-mode-run', widgetType: null, callback: this._callbacks.onRunModeSelected },
+            { action: 'change-render-mode', widgetType: null, callback: this._callbacks.onRenderModeChanged },
         ];
 
         var c = document.getElementById(options.containerId);
@@ -230,9 +230,13 @@ export default class Designer {
                     }
                 }
                 this._loadJsonInputEl.click();
-            } else if (am.action === "render-mode-run") {
-                var newMode = this.renderMode === constants.WIDGET_MODE_RUN ? constants.WIDGET_MODE_DESIGN : constants.WIDGET_MODE_RUN;
-                if (am.callback && am.callback({switchingToMode: newMode}, e) && e.defaultPrevented)
+            } else if (am.action === "change-render-mode") {
+                var current = constants.validModes.indexOf(this.renderMode);
+                current++;
+                if (current >= constants.validModes.length)
+                    current = 0;
+                var newMode = constants.validModes[current];
+                if (am.callback && am.callback({intendedMode: newMode}, e) && e.defaultPrevented)
                     return;
                 this.renderMode = newMode;
             }
@@ -264,9 +268,9 @@ export default class Designer {
                             <span>${Strings.Toolbar_NewForm_ButtonLabel}</span>
                         </button>`;
                 if (options.toolbar.buttons.load)
-                    html +=`<button type="button" data-action="load-json" title="${Strings.Toolbar_LoadJson_ButtonTitle}">
+                    html +=`<button type="button" data-action="load-json" title="${Strings.Toolbar_ImportJson_ButtonTitle}">
                             <i class="${Icons.Toolbar_LoadJson_Icon}"></i>
-                            <span>${Strings.Toolbar_LoadJson_ButtonLabel}</span>
+                            <span>${Strings.Toolbar_ImportJson_ButtonLabel}</span>
                         </button>
                         <input type="file" style="display: none;" />`;
                 if (options.toolbar.buttons.export)
@@ -318,15 +322,19 @@ export default class Designer {
                 html += `<div class="widget-toolbar-group">
                     <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
                 if (options.toolbar.buttons.renderRunMode)
-                    html += `<button type="button" data-action="render-mode-run" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
+                    html += `<button type="button" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
                             <span data-render-mode="design">
-                                <i class="${Icons.Toolbar_RunMode_Icon}"></i>
-                                <span>${Strings.Toolbar_RenderModes_ToRun_ButtonLabel}</span>
+                                <i class="${Icons.Toolbar_DesignMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_Design_ButtonLabel}</span>                            
                             </span>
                             <span data-render-mode="run">
-                                <i class="${Icons.Toolbar_DesignMode_Icon}"></i>
-                                <span>${Strings.Toolbar_RenderModes_ToDesign_ButtonLabel}</span>
+                                <i class="${Icons.Toolbar_RunMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_Run_ButtonLabel}</span>
                             </span>
+                            <span data-render-mode="view">
+                                <i class="${Icons.Toolbar_ViewMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_View_ButtonLabel}</span>
+                            </span>                            
                         </button>`;
                 html += `</div>`;
             }

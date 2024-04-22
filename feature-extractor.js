@@ -17,17 +17,19 @@ export default class FeatureExtractor {
     constructor() {
         this._colorRegex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
         this._range = document.createRange();
+        this._scrollOffset = 0;
     }
 
-    extractFeatures(el, recursive) {
+    extractFeatures(el, recursive, skipScrollOffset) {
         if (!el)
             throw new Error('Feature extractor: element is required');
         
         if (typeof el !== 'object')
             throw new Error('Feature extractor: element must be an object');
 
+        skipScrollOffset = !!skipScrollOffset;
         recursive = !!recursive;
-        var json = this._parseTag(el);
+        var json = this._parseTag(el, skipScrollOffset);
         if (!json)
             return null;
 
@@ -53,7 +55,11 @@ export default class FeatureExtractor {
         return json;
     }
 
-    _parseTag(node) {
+    setScrollOffset(value) {
+        this._scrollOffset = value;
+    }
+
+    _parseTag(node, skipScrollOffset) {
         var json = {};
 
          if (node.nodeType === NODE_TYPE_TEXT) {
@@ -61,7 +67,7 @@ export default class FeatureExtractor {
                 return null;
             this._range.selectNode(node);
             json = {type: constants.WIDGET_PDF_OBJECT_SIMPLE_TEXT, text: node.textContent };
-            Object.assign(json, this._getBoundingClientRect(this._range));    
+            Object.assign(json, this._getBoundingClientRect(this._range, skipScrollOffset));    
             return json;
         }
 
@@ -71,7 +77,7 @@ export default class FeatureExtractor {
         if (cs.display === 'none')
             return null; // do not render non-visible elements
         json.id = node.id;
-        Object.assign(json, this._getBoundingClientRect(node));
+        Object.assign(json, this._getBoundingClientRect(node, skipScrollOffset));
         if (node.tagName === 'DIV') {
             json.type = constants.WIDGET_PDF_OBJECT_BOX;
             Object.assign(json, this._getBorderProperties(cs));
@@ -156,10 +162,11 @@ export default class FeatureExtractor {
         return parseFloat(value.replace('px', ''));
     }
 
-    _getBoundingClientRect = element => { 
+    _getBoundingClientRect = (element, skipScrollOffset) => { 
         const {top, right, bottom, left, width, height, x, y} = element.getBoundingClientRect()
         //return {top, right, bottom, left, width, height, x, y};
-        return {x, y, width, height};
+        var so = skipScrollOffset ? 0 : this._scrollOffset;
+        return {x, y: y + so, width, height};
     }
 
     _getOffset( el ) {

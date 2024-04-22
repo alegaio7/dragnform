@@ -66,8 +66,9 @@ export default class Widget {
     // Props end
 
     // must be implemented by child classes. 
-    setValue(value) { 
+    set value(value) { 
         this._value = value
+        this._updateContols();
     } 
 
     clearError() {
@@ -243,6 +244,10 @@ export default class Widget {
         }
     }
 
+    _updateContols() {
+        // implement in child classes
+    }
+    
     _updateUI() {
         if (!this._el)
             return;

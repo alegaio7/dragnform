@@ -35,7 +35,7 @@ class WidgetNumber extends WidgetInputBase {
         var labelHtml = super._getLabelHTML();
         var bodyhtml = `${labelHtml ? labelHtml : ""}
             <input type="text" 
-            id="input_${this.id}" 
+            id="{0}" 
             ${this.globalClasses.input ? 'class="' + this.globalClasses.input + '"' : ""}
             ${this.validations.minLength ? 'minlength="' + this.validations.minLength + '"' : ""}
             ${this.validations.maxLength ? 'maxlength="' + this.validations.maxLength + '"' : ""}
@@ -47,21 +47,16 @@ class WidgetNumber extends WidgetInputBase {
         super._renderInternal(container, parser, bodyhtml);
     }
 
-    setValue(v, setCtlValue) {
-        if (setCtlValue !== false)
-            setCtlValue = true;
-
-        if (v === null || v === undefined || v === "" || isNaN(v))
-            this._value = null;
+    get value() { return super.value; }
+    set value(value) {
+        if (value === null || value === undefined || value === "" || isNaN(value))
+            super.value = null;
         else {
-            var n = parseInt(v, 10);
+            var n = parseInt(value, 10);
             if (isNaN(n) || n === undefined || n === null)
                 throw new Error(`Widget ${this.id}: value must be a valid number`);
-            this._value = n;
+            super.value = n;
         }
-        // _el can be null if element was not rendered yet
-        if (setCtlValue && this._el)
-            this._el.querySelector("input").value = this._value;
     }
 
     validate(validateOptions) {

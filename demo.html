@@ -40,6 +40,12 @@
                         document.getElementById('json-arena').innerText = JSON.stringify(data.features, null, 2);
                         var exp = new jsPDFExporter();
                         exp.exportPDF(data.features, { saveToFile: true }); // save to file
+                    },
+                    onRenderModeChanged: function(modeInfo, e) {
+                        if (modeInfo.intendedMode === constants.WIDGET_MODE_VIEW) {
+                            var f = window.designer.extractFeatures();
+                            document.getElementById('json-arena').innerText = JSON.stringify(f, null, 2);
+                        }
                     }
                 },
                 containerId: "widgets",
@@ -68,12 +74,13 @@
                         input: "form-control",
                         label: "widget-label",
                         span: "widget-value",
-                        widget: "form-group"
+                        //widget: "form-group"
                     },
                 },
                 renderMode: constants.WIDGET_MODE_DESIGN
             });
 
+            window.designer = designer;
             /*
             fetch('./demo.json')
                 .then((response) => response.json())

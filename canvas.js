@@ -33,6 +33,7 @@ export default class Canvas {
             throw new Error(`widget with id ${w.id} already exists.`);
         this._widgets.push(w);
         this._renderSingleWidget(w, this._domParser);
+        this._setupSortable();
         return w;
     }
 
@@ -40,10 +41,7 @@ export default class Canvas {
     /// Clears the container, the widgets array and the sortable object
     /// </summary>
     clearCanvas() {
-        if (this._sortable) {
-            this._sortable.destroy();
-            this._sortable = null;
-        }
+        this._setupSortable();
         this._container.innerHTML = '';
         this._widgets = [];
     }
@@ -126,7 +124,9 @@ export default class Canvas {
         if (!this._featureExtractor)
             this._featureExtractor = new FeatureExtractor();
 
-        var json = this._featureExtractor.extractFeatures(this._container, false); // not recursive for container, each widget will handle its children
+        this._featureExtractor.setScrollOffset(this._container.scrollTop);
+
+        var json = this._featureExtractor.extractFeatures(this._container, false, true); // not recursive for container, each widget will handle its children
         json.container = true;
         json.widgets = [];
         var _t = this;
@@ -148,8 +148,10 @@ export default class Canvas {
 
     removeWidget(id) {
         var w = this.findWidget(id);
-        if (w)
+        if (w) {
             this._removeWidgetInternal(w);
+            this._setupSortable();
+        }
     }
 
     /// <summary>
@@ -251,7 +253,7 @@ export default class Canvas {
             var e = this.createWidget(fragment);
             if (this.findWidget(e.id))
                 throw new Error(`widgets collection contains duplicate ids in json object: ${e.id}`);
-            e.setValue(fragment.value);
+            e.value = fragment.value;
             this._widgets.push(e);
         });
 
@@ -287,5 +289,23 @@ export default class Canvas {
         this._widgets.forEach(w => {
             this._renderSingleWidget(w, this._domParser);
         });
+    }
+
+    _setupSortable() {
+        if (this._sortable) {
+            this._sortable.destroy();
+            this._sortable = null;
+        }
+
+        if (window.Sortable)
+            this._sortable = Sortable.create(this._container, {
+                animation: 150, 
+                handle: '.widget-grip',
+                onUpdate: function (evt) {
+                    var w = this._widgets[evt.oldIndex];
+                    this._widgets.splice(evt.oldIndex, 1);
+                    this._widgets.splice(evt.newIndex, 0, w);
+                }.bind(this)
+            });
     }
 }

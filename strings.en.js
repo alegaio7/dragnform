@@ -8,8 +8,9 @@ class Strings {
     static get Toolbar_AddImageWidget_ButtonLabel() { return 'Image'; }
     static get Toolbar_AddImageWidget_ButtonTitle() { return 'Add an image'; }
 
-    static get Toolbar_RenderModes_ToRun_ButtonLabel() { return 'Run mode'; }
-    static get Toolbar_RenderModes_ToDesign_ButtonLabel() { return 'Design mode'; }
+    static get Toolbar_RenderModes_Design_ButtonLabel() { return 'Design mode'; }
+    static get Toolbar_RenderModes_Run_ButtonLabel() { return 'Run mode'; }
+    static get Toolbar_RenderModes_View_ButtonLabel() { return 'View mode'; }
     static get Toolbar_RenderModes_ButtonTitle() { return 'Switch between design and run mode'; }
 
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
@@ -20,8 +21,8 @@ class Strings {
     static get Toolbar_AddTextInputWidget_ButtonTitle() { return 'Add text field'; }
     static get Toolbar_ExportJson_ButtonLabel() { return 'Export'; }
     static get Toolbar_ExportJson_ButtonTitle() { return 'Export form to json'; }
-    static get Toolbar_LoadJson_ButtonLabel() { return 'Load'; }
-    static get Toolbar_LoadJson_ButtonTitle() { return 'Load form from json file'; }
+    static get Toolbar_ImportJson_ButtonLabel() { return 'Import'; }
+    static get Toolbar_ImportJson_ButtonTitle() { return 'Import form from json file'; }
     static get Toolbar_NewForm_ButtonLabel() { return 'New'; }
     static get Toolbar_NewForm_ButtonTitle() { return 'Start a new form'; }
     static get Toolbar_SavePdf_ButtonLabel() { return 'Save to PDF'; }
@@ -30,7 +31,7 @@ class Strings {
     static get Toolbar_Widgets_GroupTitle() { return 'Widgets'; }
     static get Toolbar_File_GroupTitle() { return 'File'; }
     static get Toolbar_Layout_GroupTitle() { return 'Layout'; }
-    static get Toolbar_RenderMode_GroupTitle () { return 'Rendering'; }
+    static get Toolbar_RenderMode_GroupTitle () { return 'Current mode'; }
 
     // widgets
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }

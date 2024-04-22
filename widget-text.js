@@ -59,7 +59,7 @@ class WidgetText extends WidgetInputBase {
         var labelHtml = super._getLabelHTML();
         var bodyhtml = `${labelHtml ? labelHtml : ""}
             <input type="text" 
-            id="input_${this.id}" 
+            id="{0}" 
             ${this.globalClasses.input ? 'class="' + this.globalClasses.input + '"' : ""}
             ${this.validations.minLength ? 'minlength="' + this.validations.minLength + '"' : ""}
             ${this.validations.maxLength ? 'maxlength="' + this.validations.maxLength + '"' : ""}
@@ -71,9 +71,9 @@ class WidgetText extends WidgetInputBase {
         super._renderInternal(container, parser, bodyhtml);
     }
 
-    setValue(v) {
-        this._value = v;
-        this._updateUI();
+    get value() { return super.value; }
+    set value(value) {
+        super.value = value;
     }
 
     validate(validateOptions) {
@@ -101,19 +101,6 @@ class WidgetText extends WidgetInputBase {
         if (validateOptions && validateOptions.showErrors && !r.result)
             super.setError(r);
         return r;
-    }
-
-    _updateUI() {
-        super._updateUI();
-        // _el can be null if element was not rendered yet
-        if (this._el) {
-            var inputs = this._el.querySelectorAll("input[type='text']");
-            if (inputs && inputs.length) {
-                inputs.forEach(i => {
-                    i.value = this._value;
-                });
-            }
-        }
     }
 }
 
