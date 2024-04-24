@@ -5,8 +5,6 @@ class WidgetImage extends Widget {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_IMAGE, fragment);
         this._imageData = fragment.data ?? constants.WIDGET_IMAGE_BLANK;
-
-        this.height = fragment.height ?? "100px";
         this.imageAlign = fragment.imageAlign ?? constants.WIDGET_IMAGE_ALIGN_CENTER;
     }
 
@@ -46,7 +44,7 @@ class WidgetImage extends Widget {
         template.runMode.bodySection = bodyhtml;
         template.viewMode.bodySection = bodyhtml;
 
-        super._renderInternal(container, template, parser);
+        super._renderDOM(container, template, parser);
     }
 }
 

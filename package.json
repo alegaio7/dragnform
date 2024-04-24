@@ -1,12 +1,18 @@
 {
   "dependencies": {
     "-": "^0.0.1",
+    "flyter": "^0.2.1",
     "g": "^2.0.1",
-    "gulp": "^4.0.2",
-    "gulp-less": "^5.0.0",
-    "sortablejs": "^1.15.2"
+    "popper.js": "^1.16.1",
+    "sortablejs": "^1.15.2",
+    "webpack": "^5.91.0"
   },
   "devDependencies": {
-    "gulp-sass": "^5.1.0"
+    "@webpack-cli/generators": "^3.0.7",
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "build": "webpack"
   }
 }

@@ -27,7 +27,7 @@ class WidgetInputBase extends Widget {
     /// <summary>
     /// Base rendering logic for input widgets (text, number, etc).
     /// </summary>
-    _renderInternal(container, parser, bodyhtml) {
+    _renderDOM(container, parser, bodyhtml) {
         var template = super._getHTMLTemplate();
         var v = this.value;
         if (this.value === null || this.value === undefined)
@@ -37,12 +37,12 @@ class WidgetInputBase extends Widget {
         template.runMode.bodySection = bodyhtml.replace("{0}", `input_run_${this.id}`);
     
         // view mode body
-        var labelHtml = this._getLabelHTML();
+        var labelHtml = this._getLabelHTML(false).replace("{0}", `input_run_${this.id}`);
         bodyhtml = `${labelHtml ? labelHtml : ""}
             <span data-part="value" ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}>${v}</span>`;
         template.viewMode.bodySection = bodyhtml;
 
-        super._renderInternal(container, template, parser);
+        super._renderDOM(container, template, parser);
         super._updateUI();
         this._updateContols();
 
@@ -54,7 +54,7 @@ class WidgetInputBase extends Widget {
             });
     }
 
-    _getLabelHTML() {
+    _getLabelHTML(addForAttr = true) {
         if (!this.label)
             return "";
 
@@ -63,7 +63,8 @@ class WidgetInputBase extends Widget {
         if (this.globalClasses.label)
             labelClass = `class="${this.globalClasses.label}"`;
         
-        var html = `<label ${labelClass} for="{0}">`;
+        // labels in widgets should be annotated with data-part="label" to allow looking for the element in base class
+        var html = `<label ${labelClass}${addForAttr ? ' for="{0}"' : ''} data-part="label">`;  
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
         if (this.required && 
             this.requiredAttributeSettings.mark && 

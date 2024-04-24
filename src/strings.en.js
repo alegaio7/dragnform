@@ -37,5 +37,8 @@ class Strings {
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
     static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
 
+    // flyter
+    static get Flyter_CancelButtonText() { return 'Cancel'; }
+    static get Flyter_OkButtonText() { return 'Accept'; }
 
 }

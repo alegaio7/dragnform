@@ -3,6 +3,9 @@
   box-sizing: border-box;
 }
 
+.widget-designer button, .widget-designer input {
+  font-family: inherit;
+}
 .widget-designer .widget-toolbar [data-render-mode] {
   display: none;
 }
@@ -71,6 +74,7 @@
 .widget-container, .widget-toolbar {
   font-family: Poppins;
   font-weight: 300;
+  font-size: 16px;
   margin-right: auto;
   margin-left: auto;
   width: 1000px;
@@ -100,8 +104,7 @@
   }
 }
 .widget {
-  padding-bottom: 1rem;
-  min-height: 5rem;
+  min-height: 55px;
 }
 .widget[data-mode=design] {
   border: 1px dashed #ccc;
@@ -124,7 +127,7 @@
 .widget[data-mode=run] [data-show-when=design], .widget[data-mode=run] [data-show-when=view] {
   display: none;
 }
-.widget button {
+.widget button, .widget [data-part=label] {
   cursor: pointer;
 }
 .widget input, .widget button {
@@ -285,4 +288,38 @@
 }
 .required-mark::after {
   content: " ";
+}
+
+[class^=flyter] {
+  font-family: Poppins;
+  font-weight: 300;
+  font-size: 16px;
+}
+[class^=flyter] button, [class^=flyter] input {
+  font-family: inherit;
+}
+[class^=flyter] input {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+[class^=flyter] button {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  background-color: #eee;
+  color: #222;
+  height: 2rem;
+}
+[class^=flyter] button:hover {
+  background-color: #ddd;
+}
+
+.flyter-popup {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 15px;
+  background-color: #fff;
+}
+
+.flyter-buttons-container {
+  margin-top: 15px;
 }/*# sourceMappingURL=widgets.css.map */

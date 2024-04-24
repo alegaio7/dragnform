@@ -5,6 +5,16 @@ import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
 import WidgetText from './widget-text.js';
 import FeatureExtractor from './feature-extractor.js';
+import Sortable, { create } from 'sortablejs';
+import flyter, {
+    withPopupRenderer,
+    withInlineRenderer,
+    withTextType,
+    withSelectType,
+    withCheckboxType,
+    withRadioType,
+  } from 'flyter';
+  import { createPopper } from '@popperjs/core';
 
 export default class Canvas {
     constructor(widgetsContainerEl, widgetRenderOptions, renderMode) {
@@ -23,6 +33,10 @@ export default class Canvas {
             description: ""
         };
         this._widgets = [];
+
+        withPopupRenderer(); // Load the popup renderer
+        // withInlineRenderer(); // Load the inline renderer
+        withTextType();     // Load the text type
     }
 
     addWidget(jsonObj) {
@@ -172,17 +186,7 @@ export default class Canvas {
         this.clearCanvas();
         this._parseJson(json);
         this._renderWidgets();
-
-        if (window.Sortable)
-            this._sortable = Sortable.create(this._container, {
-                animation: 150, 
-                handle: '.widget-grip',
-                onUpdate: function (evt) {
-                    var w = this._widgets[evt.oldIndex];
-                    this._widgets.splice(evt.oldIndex, 1);
-                    this._widgets.splice(evt.newIndex, 0, w);
-                }.bind(this)
-            });
+        this._setupSortable();
     }
 
     get renderMode() {
@@ -291,6 +295,29 @@ export default class Canvas {
         if (this._widgetRenderOptions.renderRemove) {
             w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
         }
+
+        if (w.labelElement)
+            flyter.attach(w.labelElement, { 
+                type: {
+                    name: 'text'
+                },
+                okButton: {
+                    text: Strings.Flyter_OkButtonText,
+                },
+                cancelButton: {
+                    text: Strings.Flyter_CancelButtonText,
+                },
+                initialValue: w.label,
+                onOpen: function(instance) {
+                    
+                },
+                renderer: {
+                    name: 'popup',
+                    config: {
+                        popper: createPopper,
+                    }
+                }
+            });
     }
 
     /// <summary>
@@ -308,7 +335,7 @@ export default class Canvas {
             this._sortable = null;
         }
 
-        if (window.Sortable)
+        if (Sortable)
             this._sortable = Sortable.create(this._container, {
                 animation: 150, 
                 handle: '.widget-grip',

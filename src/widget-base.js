@@ -28,11 +28,17 @@ export default class Widget {
         this._value = null;
 
         this.columns = fragment.columns ?? 12;
+        
         if (!(this.columns >= 1 && this.columns <= 12))
             throw new Error('Widget columns must be between 1 and 12');
         this.columnsClass = "widget-col-" + this.columns;
+
+        var h = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
+        this.height = h;
+        
         this.id = fragment.id;
         this.label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
+        this._labelEl = null; // filled when rendered
         this.name = fragment.name ?? this.id;
         this.type = type;
 
@@ -52,6 +58,10 @@ export default class Widget {
     }
 
     // Props begin
+    get domElement() { return this._el; }
+
+    get labelElement() { return this._labelEl; }
+    
     get renderMode() { return this._renderMode; }
     set renderMode(value) { 
         if (value === this._renderMode)
@@ -159,8 +169,11 @@ export default class Widget {
         if (this.widgetRenderOptions.renderGrip)
             cssClass = "has-grip" + (cssClass ? " " : "") + cssClass;
 
+        var h = "";
+        if (this.height)
+            h = `style="height: ${this.height}"`;
         var template = {
-            heading: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${constants.WIDGET_MODE_DESIGN}">`,
+            heading: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${constants.WIDGET_MODE_DESIGN}" ${h}>`,
             designMode: {
                 openingSection: `<div data-show-when="${constants.WIDGET_MODE_DESIGN}">`,
                 removeSection: this.widgetRenderOptions.renderRemove ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : null,
@@ -190,9 +203,9 @@ export default class Widget {
     }
 
     /// <summary>
-    /// Renders the widget elements into the container and creates the element reference
+    /// Renders the widget elements into the container and creates the element (DOM) reference
     /// </summary>
-    _renderInternal(container, template, parser) {
+    _renderDOM(container, template, parser) {
         if (!this._el) {
             if (!container)
                 throw new Error('container is required');
@@ -243,7 +256,9 @@ export default class Widget {
             container.appendChild(node);
             this._el = node;
 
-            this._updateUI();
+            // creates a reference for the widget label
+            // be aware that not all widgets have labels, i.e. Images, spacers, etc.
+            this._labelEl = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_DESIGN}"] [data-part="label"]`);
         }
     }
 

@@ -68,7 +68,7 @@ class WidgetText extends WidgetInputBase {
             ${this.name ? 'name="' + this.name + '"' : ""}
             >`;
 
-        super._renderInternal(container, parser, bodyhtml);
+        super._renderDOM(container, parser, bodyhtml);
     }
 
     get value() { return super.value; }

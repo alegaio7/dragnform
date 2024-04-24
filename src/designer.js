@@ -1,6 +1,7 @@
 import * as constants from './constants.js';
 import Canvas from './canvas.js';
 import jsPDFExporter from './jspdf-exporter.js';
+import Icons from './icons.js';
 
 export default class Designer {
     constructor(options) {
@@ -194,7 +195,7 @@ export default class Designer {
                 a.download = 'form.json';
                 a.click();
                 URL.revokeObjectURL(url);
-                
+
             } else if (am.action === "save-pdf") {
                 this.renderMode = constants.WIDGET_MODE_VIEW;
                 var features = this.extractFeatures();
@@ -283,7 +284,7 @@ export default class Designer {
                             <i class="${Icons.Toolbar_LoadJson_Icon}"></i>
                             <span>${Strings.Toolbar_ImportJson_ButtonLabel}</span>
                         </button>
-                        <input type="file" style="display: none;" />`;
+                        <input type="file" style="display: none;" accept="application/json" />`;
                 if (options.toolbar.buttons.export)
                     html +=`<button type="button" data-action="export-json" title="${Strings.Toolbar_ExportJson_ButtonTitle}">
                             <i class="${Icons.Toolbar_ExportJson_Icon}"></i>
@@ -325,7 +326,7 @@ export default class Designer {
                             <i class="${Icons.Toolbar_AddImageWidget_Icon}"></i>
                             <span>${Strings.Toolbar_AddImageWidget_ButtonLabel}</span>
                         </button>
-                        <input type="file" style="display: none;" />`; 
+                        <input type="file" style="display: none;" accept="image/png,image/jpeg" />`; 
                 html += `</div>`;
             }
 

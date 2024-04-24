@@ -8,7 +8,7 @@ class WidgetSpacer extends Widget {
 
     render(container, parser) {
         var template = super._getHTMLTemplate();
-        super._renderInternal(container, template, parser);
+        super._renderDOM(container, template, parser);
     }
 }
 

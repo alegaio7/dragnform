@@ -1,5 +1,5 @@
 // Font awesome icons for the toolbar buttons
-class Icons {
+export default class Icons {
     static get Toolbar_AddButtonWidget_Icon() { return 'fa fa-regular fa-square'; }
     static get Toolbar_AddNumberInputWidget_Icon() { return 'fa fa-hashtag'; }
     static get Toolbar_AddImageWidget_Icon() { return 'fa fa-regular fa-image'; }

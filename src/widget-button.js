@@ -46,14 +46,14 @@ class WidgetButton extends Widget {
             id="button_${this.id}" 
             name="${this.name}">`;
         if (this.label)
-            bodyhtml += `<span>${this.label}</span>`;
+            bodyhtml += `<span data-part="label">${this.label}</span>`;
         bodyhtml += `</button>`;
 
         template.designMode.bodySection = bodyhtml;
         template.runMode.bodySection = bodyhtml;
         template.viewMode.bodySection = "";     // buttons don't render in view mode
 
-        super._renderInternal(container, template, parser);
+        super._renderDOM(container, template, parser);
     }
 }
 

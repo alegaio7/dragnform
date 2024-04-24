@@ -7,6 +7,8 @@ export const FORMS_DESIGNER_VERSION = "1.0.0";
 export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
 export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
 
+export const WIDGET_DEFAULT_HEIGHT = "80px";
+
 export const WIDGET_IMAGE_ALIGN_CENTER = 'center';
 export const WIDGET_IMAGE_ALIGN_LEFT = 'left';
 export const WIDGET_IMAGE_ALIGN_RIGHT = 'right';

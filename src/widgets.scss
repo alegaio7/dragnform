@@ -1,4 +1,5 @@
 // sass variables
+$background-color: #fff;
 $widget-controls-min-height: 1.75rem;
 $widget-default-padding: 15px;
 $widget-error: #f00;
@@ -8,12 +9,14 @@ $widget-container-width: 1000px;
 $widget-container-bp-1: 1366px;
 $widget-container-width-bp-1: 1200px;
 $widget-container-bp-2: 1800px;
-$widget-container-width-bp-2: 1600px;
+$widget-toolbar-estimate-height: 150px;
+$widget-container-height: calc(100vh - $widget-toolbar-estimate-height);    // take full height minus some space for the toolbar
 $widget-container-max-height: 1400px;
+$widget-container-width-bp-2: 1600px;
 $widget-designer-radius: 0.25rem;
 $widget-grip-color: #888;
 $widget-grip-width: 1rem;
-$widget-min-height: 5rem;
+$widget-min-height: 55px;
 $widget-remove-color: #f00;
 $widget-remove-width: 1rem;
 $widget-tip-color: #888;
@@ -22,7 +25,6 @@ $widget-toolbar-button-bg-color: #eee;
 $widget-toolbar-button-bg-hover-color: #ddd;
 $widget-toolbar-button-color: #222;
 $widget-toolbar-button-height: 2rem;
-$widget-toolbar-estimate-height: 150px;
 $widget-toolbar-group-border-color: #eee;
 $widget-toolbar-group-title-color: #555;
 $widget-toolbar-padding: 0.5rem;
@@ -33,6 +35,10 @@ $widget-toolbar-padding: 0.5rem;
 
 // designer - toolbar
 .widget-designer {
+    button, input {
+        font-family: inherit;
+    }
+
     .widget-toolbar [data-render-mode] {
         display: none;
     }
@@ -117,6 +123,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-container, .widget-toolbar {
     font-family: Poppins;
     font-weight: 300;
+    font-size: 16px;
     margin-right: auto;
     margin-left: auto;
     width: $widget-container-width;
@@ -130,7 +137,7 @@ $widget-toolbar-padding: 0.5rem;
 
     border: 1px solid $widget-border-design-color;
     border-radius: $widget-designer-radius;
-    height: calc(100vh - $widget-toolbar-estimate-height);    // take full height minus some space for the toolbar
+    height: $widget-container-height;
     max-height: $widget-container-max-height;
     min-height: 200px;
     overflow-y: auto;
@@ -151,7 +158,6 @@ $widget-toolbar-padding: 0.5rem;
 
 // widgets
 .widget {
-    padding-bottom: 1rem;
     min-height: $widget-min-height;
 
     &[data-mode="design"] {
@@ -185,7 +191,7 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    button {
+    button, [data-part="label"] {
         cursor: pointer;
     }
 
@@ -364,4 +370,42 @@ $widget-toolbar-padding: 0.5rem;
     &::after {
         content: ' '
     }
+}
+
+// flyter
+[class^="flyter"] {
+    font-family: Poppins;
+    font-weight: 300;
+    font-size: 16px;
+
+    button, input {
+        font-family: inherit;
+    }
+
+    input {
+        border: 1px solid $widget-border-design-color;
+        border-radius: $widget-designer-radius;
+    }
+
+    button {
+        border: 1px solid $widget-toolbar-border-color;
+        border-radius: $widget-designer-radius;
+        background-color: $widget-toolbar-button-bg-color;
+        color: $widget-toolbar-button-color;
+        height: $widget-toolbar-button-height;
+        &:hover {
+            background-color: $widget-toolbar-button-bg-hover-color;
+        }
+    }
+}
+
+.flyter-popup {
+    border: 1px solid $widget-border-design-color;
+    border-radius: $widget-designer-radius;
+    padding: $widget-default-padding;
+    background-color: $background-color;
+}
+
+.flyter-buttons-container {
+    margin-top: $widget-default-padding;
 }

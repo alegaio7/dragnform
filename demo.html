@@ -8,23 +8,17 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         <!-- <link href="bootstrap.css" rel="stylesheet"> -->
-        <link href="widgets.css" rel="stylesheet">
-        <script src="Sortable.min.js"></script>
+        <link href="css/widgets.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
         <div id="widgets"></div>
         <div id="json-arena"></div>
-        <script src="strings.en.js"></script>
-        <script src="icons.js"></script>
+        <!-- <script type="text/javascript" src="https://unpkg.com/flyter/bundles/flyter.vanilla.min.js"></script> -->
+        <script src="src/strings.en.js"></script>
+        <script src="/dist/main.js"></script>
         <script type="module">
-            //import Canvas from './canvas.js';
-            import Designer from './designer.js';
-            import * as constants from './constants.js';
-            import jsPDFExporter from './jspdf-exporter.js';
-
-            //var canvas = new Canvas();
-            var designer = new Designer({
+            var designer = new afodexpdf.Designer({
                 callbacks: {
                     onNewForm: function(e) {
                         document.getElementById('json-arena').innerText = "";
@@ -38,11 +32,11 @@
                     onSavePdf: function(data, e) {
                         e.preventDefault();
                         document.getElementById('json-arena').innerText = JSON.stringify(data.features, null, 2);
-                        var exp = new jsPDFExporter();
+                        var exp = new afodexpdf.jsPDFExporter();
                         exp.exportPDF(data.features, { saveToFile: true }); // save to file
                     },
                     onRenderModeChanged: function(modeInfo, e) {
-                        if (modeInfo.intendedMode === constants.WIDGET_MODE_VIEW) {
+                        if (modeInfo.intendedMode === afodexpdf.constants.WIDGET_MODE_VIEW) {
                             var f = window.designer.extractFeatures();
                             document.getElementById('json-arena').innerText = JSON.stringify(f, null, 2);
                         }
@@ -77,7 +71,7 @@
                         //widget: "form-group"
                     },
                 },
-                renderMode: constants.WIDGET_MODE_DESIGN
+                renderMode: afodexpdf.constants.WIDGET_MODE_DESIGN
             });
 
             window.designer = designer;
