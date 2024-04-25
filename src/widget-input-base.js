@@ -37,7 +37,7 @@ class WidgetInputBase extends Widget {
         template.runMode.bodySection = bodyhtml.replace("{0}", `input_run_${this.id}`);
     
         // view mode body
-        var labelHtml = this._getLabelHTML(false).replace("{0}", `input_run_${this.id}`);
+        var labelHtml = this._getLabelHTML(true);
         bodyhtml = `${labelHtml ? labelHtml : ""}
             <span data-part="value" ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}>${v}</span>`;
         template.viewMode.bodySection = bodyhtml;
@@ -54,7 +54,8 @@ class WidgetInputBase extends Widget {
             });
     }
 
-    _getLabelHTML(addForAttr = true) {
+    // view mode does not render "for" attribute of labels, and does not render required mark
+    _getLabelHTML(forViewMode = false) {
         if (!this.label)
             return "";
 
@@ -64,16 +65,18 @@ class WidgetInputBase extends Widget {
             labelClass = `class="${this.globalClasses.label}"`;
         
         // labels in widgets should be annotated with data-part="label" to allow looking for the element in base class
-        var html = `<label ${labelClass}${addForAttr ? ' for="{0}"' : ''} data-part="label">`;  
+        var html = `<label ${labelClass}${forViewMode === false ? ' for="{0}"' : ''}>`;  
         var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
-        if (this.required && 
+        if (!forViewMode &&
+            this.required && 
             this.requiredAttributeSettings.mark && 
             this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
             html  += reqMarkHtml;
 
-        html  += `${this.label}`
+        html  += `<span data-part="label">${this.label}</span>`
 
-        if (this.required && 
+        if (!forViewMode &&
+            this.required && 
             this.requiredAttributeSettings.mark && 
             this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
             html  += reqMarkHtml;

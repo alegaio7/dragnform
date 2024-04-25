@@ -1,4 +1,6 @@
 import * as constants from './constants.js';
+import flyter from 'flyter';
+import { createPopper } from '@popperjs/core';
 
 export default class Widget {
     constructor(type, fragment) {
@@ -37,7 +39,8 @@ export default class Widget {
         this.height = h;
         
         this.id = fragment.id;
-        this.label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
+        this._inPlaceEditor = false;
+        this._label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
         this._labelEl = null; // filled when rendered
         this.name = fragment.name ?? this.id;
         this.type = type;
@@ -60,6 +63,12 @@ export default class Widget {
     // Props begin
     get domElement() { return this._el; }
 
+    get label() { return this._label; }
+    set label(value) { 
+        this._label = value;
+        this._updateUI();
+    }
+    
     get labelElement() { return this._labelEl; }
     
     get renderMode() { return this._renderMode; }
@@ -76,21 +85,29 @@ export default class Widget {
     set validations(value) { this._validations = value; }
     
     get value() { return this._value; }
-    // Props end
-
     // must be implemented by child classes. 
     set value(value) { 
         this._value = value
         this._updateContols();
     } 
-
+    // Props end
+    
     clearError() {
         this._el.classList.remove(`has-error`);
     }
 
+    enableInPlaceEditor() {
+        this._inPlaceEditor = this._attachInlineEditor();
+    }
+
     // exports widget info as json
     exportJson() {
-        var json = {columns: this.columns, id: this.id, label: this.label, type: this.type};
+        var json = {
+            columns: this.columns, 
+            id: this.id, 
+            label: this.label, 
+            type: this.type
+        };
         return json;
     }
 
@@ -101,7 +118,9 @@ export default class Widget {
         if (!this._el)
             return; // some widgets may not be rendered, like submit buttons.
         recursive = recursive ?? true;
-        return featureExtractor.extractFeatures(this._el, recursive);
+        var viewEl = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_VIEW}"]`);
+        if (viewEl)
+            return featureExtractor.extractFeatures(viewEl, recursive);
     }
     
     setError(r) {
@@ -137,9 +156,12 @@ export default class Widget {
     }
 
     removeFromDom() {
-        if (this._el) {
-            this._el.remove();
+        if (this._flyter) {
+            this._flyter.getRendeder().destroy();
+            this._flyter.destroy();
         }
+        if (this._el)
+            this._el.remove();
     }
 
     /// <summary>
@@ -157,7 +179,59 @@ export default class Widget {
         return constants.WIDGET_VALIDATION_PATTERNS.find(p => p.name === name);
     }
 
+    /// *******************************************************************************
     /// Private methods
+    /// *******************************************************************************
+
+    /// <summary>
+    /// Attaches an inline editor (flyter) to the widget's label, so it can be editted in place.
+    /// </summary>
+    _attachInlineEditor() {
+        var _t = this;
+        if (this.labelElement) {
+            this._flyter = flyter.attach(this.labelElement, { 
+                type: {
+                    name: 'text'
+                },
+                okButton: {
+                    text: Strings.Flyter_OkButtonText,
+                },
+                cancelButton: {
+                    text: Strings.Flyter_CancelButtonText,
+                },
+                initialValue: this.label,
+                onSubmit: async function(value, instance) {
+                    _t.label = value;
+                },
+                renderer: {
+                    name: 'popup',
+                    config: {
+                        popper: createPopper,
+                        closeOnClickOutside: false,
+                        onShow: async function(renderer) {
+                            var inp = renderer.getMarkup().querySelector('input');
+                            if (inp) {
+                                inp.focus();
+                                inp.select();
+                                inp.addEventListener("keydown", function(e) {
+                                    if (e.key === "Escape") {
+                                        renderer.getSession().cancel();
+                                        inp.removeEventListener("keydown", this);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+                submitOnEnter: true
+            });
+
+            return true;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Returns a template object containing the sections to be rendered by the widget.
     /// Each widget must suply logic to render itself in 3 modes: design, run and view.
@@ -263,7 +337,7 @@ export default class Widget {
     }
 
     _updateContols() {
-        // implement in child classes
+        // implemented in child classes
     }
 
     _updateUI() {
@@ -276,5 +350,17 @@ export default class Widget {
         }
 
         this._el.setAttribute('data-mode', this.renderMode);
+
+        // only modify label's markup if not using in-place editor, since this editor changes the original markup
+        if (this._labelEl && !this._inPlaceEditor)
+            this._labelEl.innerHTML = this.label;
+
+        // update the labels in the other views
+        var rmLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_RUN}"] [data-part="label"]`);
+        if (rmLabel)
+            rmLabel.innerHTML = this.label;
+        var vwLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_VIEW}"] [data-part="label"]`);
+        if (vwLabel)
+            vwLabel.innerHTML = this.label;
     }
 }

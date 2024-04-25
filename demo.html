@@ -39,7 +39,8 @@
                         if (modeInfo.intendedMode === afodexpdf.constants.WIDGET_MODE_VIEW) {
                             var f = window.designer.extractFeatures();
                             document.getElementById('json-arena').innerText = JSON.stringify(f, null, 2);
-                        }
+                        } else
+                            document.getElementById('json-arena').innerHTML = "";
                     }
                 },
                 containerId: "widgets",

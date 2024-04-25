@@ -297,10 +297,7 @@
 }
 [class^=flyter] button, [class^=flyter] input {
   font-family: inherit;
-}
-[class^=flyter] input {
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
+  outline: none;
 }
 [class^=flyter] button {
   border: 1px solid #ccc;
@@ -312,14 +309,30 @@
 [class^=flyter] button:hover {
   background-color: #ddd;
 }
+[class^=flyter] button:focus {
+  border-color: #007bff;
+}
 
 .flyter-popup {
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   padding: 15px;
-  background-color: #fff;
+  background-color: #f4f4f4;
 }
 
 .flyter-buttons-container {
   margin-top: 15px;
+}
+
+.flyter-read-container {
+  display: inline-block;
+}
+
+.flyter-text-input {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 2px 8px;
+}
+.flyter-text-input:focus {
+  border-color: #007bff;
 }/*# sourceMappingURL=widgets.css.map */

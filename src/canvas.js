@@ -56,8 +56,10 @@ export default class Canvas {
     /// </summary>
     clearCanvas() {
         this._setupSortable();
-        this._container.innerHTML = '';
+        if (this._widgets && this._widgets.length)
+            this._widgets.forEach(w => w.removeFromDom());
         this._widgets = [];
+        this._container.innerHTML = '';
     }
 
     /// <summary>
@@ -231,6 +233,8 @@ export default class Canvas {
     /// Private methods
     /// ********************************************************************************************************************
     
+
+
     /// <summary>
     /// Parses a JSON object and creates widgets. Widgets are stored in the _widgets array.
     /// </summary>
@@ -295,29 +299,8 @@ export default class Canvas {
         if (this._widgetRenderOptions.renderRemove) {
             w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
         }
-
-        if (w.labelElement)
-            flyter.attach(w.labelElement, { 
-                type: {
-                    name: 'text'
-                },
-                okButton: {
-                    text: Strings.Flyter_OkButtonText,
-                },
-                cancelButton: {
-                    text: Strings.Flyter_CancelButtonText,
-                },
-                initialValue: w.label,
-                onOpen: function(instance) {
-                    
-                },
-                renderer: {
-                    name: 'popup',
-                    config: {
-                        popper: createPopper,
-                    }
-                }
-            });
+        if (this._widgetRenderOptions.enableInPlaceEditor)
+            w.enableInPlaceEditor();
     }
 
     /// <summary>

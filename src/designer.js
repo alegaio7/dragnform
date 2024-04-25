@@ -119,6 +119,7 @@ export default class Designer {
                 visible: true
             },
             widgetRenderOptions: {
+                enableInPlaceEditor: true,
                 renderGrip: true,
                 renderRemove: true,
                 renderTips: true,

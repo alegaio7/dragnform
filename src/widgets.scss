@@ -1,5 +1,7 @@
 // sass variables
-$background-color: #fff;
+$flyter-popup-background-color: #f4f4f4;
+$flyter-input-focus-boder-color: #007bff;
+
 $widget-controls-min-height: 1.75rem;
 $widget-default-padding: 15px;
 $widget-error: #f00;
@@ -380,11 +382,7 @@ $widget-toolbar-padding: 0.5rem;
 
     button, input {
         font-family: inherit;
-    }
-
-    input {
-        border: 1px solid $widget-border-design-color;
-        border-radius: $widget-designer-radius;
+        outline: none;
     }
 
     button {
@@ -396,6 +394,9 @@ $widget-toolbar-padding: 0.5rem;
         &:hover {
             background-color: $widget-toolbar-button-bg-hover-color;
         }
+        &:focus {
+            border-color: $flyter-input-focus-boder-color;
+        }
     }
 }
 
@@ -403,9 +404,23 @@ $widget-toolbar-padding: 0.5rem;
     border: 1px solid $widget-border-design-color;
     border-radius: $widget-designer-radius;
     padding: $widget-default-padding;
-    background-color: $background-color;
+    background-color: $flyter-popup-background-color; 
 }
 
 .flyter-buttons-container {
     margin-top: $widget-default-padding;
+}
+
+.flyter-read-container {
+    display: inline-block;;
+}
+
+.flyter-text-input {
+    border: 1px solid $widget-border-design-color;
+    border-radius: $widget-designer-radius;
+    padding: 2px 8px;
+
+    &:focus {
+        border-color: $flyter-input-focus-boder-color;
+    }
 }
