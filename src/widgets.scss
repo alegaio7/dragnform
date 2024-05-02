@@ -19,8 +19,10 @@ $widget-designer-radius: 0.25rem;
 $widget-grip-color: #888;
 $widget-grip-width: 1rem;
 $widget-min-height: 55px;
-$widget-remove-color: #f00;
-$widget-remove-width: 1rem;
+$widget-properties-button-color: #333;
+$widget-properties-button-width: 1rem;
+$widget-remove-button-color: #f00;
+$widget-remove-button-width: 1rem;
 $widget-tip-color: #888;
 $widget-toolbar-border-color: #ccc;
 $widget-toolbar-button-bg-color: #eee;
@@ -259,27 +261,46 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-.widget-remove {
+.widget-properties, .widget-remove {
     position: absolute;
-    right: 0.1rem;
-    top: 0.1rem;
-    width: $widget-remove-width;
     z-index: 10;
 
     &::after {
-        content: '×';
         font-size: 1.5rem;
-        color: $widget-remove-color;
         opacity: 0.5;
-        line-height: 1;
         cursor: pointer;
-
     }
 
     &:hover::after {
         opacity: 1;
     }
 }
+
+.widget-properties {
+    right: 1.5rem;
+    top: 0.1rem;
+    width: $widget-properties-button-width;
+
+    &::after {
+        content: '...';
+        line-height: 0.6;
+        color: $widget-properties-button-color;
+    }
+}
+
+.widget-remove {
+    right: 0.1rem;
+    top: 0.1rem;
+    width: $widget-remove-button-width;
+
+    &::after {
+        content: '×';
+        line-height: 1;
+        color: $widget-remove-button-color;
+    }
+}
+
+
 
 .widget-label {
     font-weight: bold;
@@ -383,7 +404,7 @@ $widget-toolbar-padding: 0.5rem;
     button, input {
         font-family: inherit;
         outline: none;
-    }
+    }   
 
     button {
         border: 1px solid $widget-toolbar-border-color;

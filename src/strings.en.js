@@ -34,6 +34,7 @@ class Strings {
     static get Toolbar_RenderMode_GroupTitle () { return 'Current mode'; }
 
     // widgets
+    static get WidgetPropertiesButtonTitle() { return 'Widget properties'; }
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
     static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
 

@@ -130,9 +130,35 @@ export default class Widget {
     }
 
     /// <summary>
+    /// Registers a handler for the 'widget properties' button
+    /// </summary>
+    registerPropertiesButtonHandler(handler, dettach) {
+        if (!this._el)
+            throw new Error('widget not rendered');
+        dettach = !!dettach;
+        if (!handler)
+            throw new Error('handler is required');
+        if (typeof handler !== 'function')
+            throw new Error('handler must be a function');
+
+        if (!this._widgetPropertiesBtn) 
+            this._widgetPropertiesBtn = this._el.querySelector('.widget-properties');
+        if (!this._widgetPropertiesBtn)
+            return;
+        if (!dettach)
+            this._widgetPropertiesBtn.addEventListener('click', (e) => {
+                handler(this, e);
+            });
+        else {
+            this._widgetPropertiesBtn.removeEventListener('click', handler);
+            this._widgetPropertiesBtn = null;
+        }
+    }
+
+    /// <summary>
     /// Registers a handler for the remove button
     /// </summary>
-    registerRemoveHandler(handler, dettach) {
+    registerRemoveButtonHandler(handler, dettach) {
         if (!this._el)
             throw new Error('widget not rendered');
         dettach = !!dettach;
@@ -250,7 +276,8 @@ export default class Widget {
             heading: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${constants.WIDGET_MODE_DESIGN}" ${h}>`,
             designMode: {
                 openingSection: `<div data-show-when="${constants.WIDGET_MODE_DESIGN}">`,
-                removeSection: this.widgetRenderOptions.renderRemove ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : null,
+                designControlSection: `<div class="widget-properties" title="${Strings.WidgetPropertiesButtonTitle}"></div>` +
+                    (this.widgetRenderOptions.renderRemove ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : ""),
                 bodySection: null,
                 gripSection: this.widgetRenderOptions.renderGrip ? `<div class="widget-grip"></div>` : null,
                 tipSection: this.widgetRenderOptions.renderTips ? `<div class="widget-tip"></div>` : null,
@@ -259,7 +286,7 @@ export default class Widget {
             },
             runMode: {
                 openingSection: `<div data-show-when="${constants.WIDGET_MODE_RUN}">`,
-                removeSection: null,
+                designControlSection: null,
                 bodySection: null,
                 gripSection: null,
                 tipSection: this.widgetRenderOptions.renderTips ? `<div class="widget-tip"></div>` : null,
@@ -303,7 +330,7 @@ export default class Widget {
             var html = template.heading;                        // not optional
             // design mode parts
             html += template.designMode.openingSection;         // not optional
-            html += template.designMode.removeSection ?? "";
+            html += template.designMode.designControlSection ?? "";
             html += template.designMode.bodySection ?? "";
             html += template.designMode.gripSection ?? "";
             html += template.designMode.tipSection ?? "";
@@ -312,7 +339,7 @@ export default class Widget {
 
             // run mode parts
             html += template.runMode.openingSection;            // not optional
-            html += template.runMode.removeSection ?? "";
+            html += template.runMode.designControl ?? "";
             html += template.runMode.bodySection ?? "";
             html += template.runMode.gripSection ?? "";
             html += template.runMode.tipSection ?? "";

@@ -296,9 +296,11 @@ export default class Canvas {
 
     _renderSingleWidget(w, p) {
         w.render(this._container, p);
-        if (this._widgetRenderOptions.renderRemove) {
-            w.registerRemoveHandler(this._removeWidgetInternal.bind(this), false);
-        }
+        if (this._widgetRenderOptions.renderRemove)
+            w.registerRemoveButtonHandler(this._removeWidgetInternal.bind(this), false);
+        
+        w.registerPropertiesButtonHandler(this._showWidgetProperties.bind(this), false);
+
         if (this._widgetRenderOptions.enableInPlaceEditor)
             w.enableInPlaceEditor();
     }
@@ -328,5 +330,18 @@ export default class Canvas {
                     this._widgets.splice(evt.newIndex, 0, w);
                 }.bind(this)
             });
+    }
+
+    _showWidgetProperties(sender, e) {
+        alert("TODO!");
+        // var s = sender.label ? sender.label : sender.id;
+        // var n = confirm(Strings.WidgetRemoveConfirmationMessage.replace("{0}", s));
+        // if (!n)
+        //     return;
+        // var i = this._widgets.indexOf(sender);
+        // if (i === -1)
+        //     throw new Error('widget not found in widgets array');
+        // this._widgets.splice(i, 1);
+        // sender.removeFromDom();
     }
 }
