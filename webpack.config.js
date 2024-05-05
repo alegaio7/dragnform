@@ -3,6 +3,7 @@
 const path = require('path');
 const { library } = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == 'production';
 
@@ -15,7 +16,7 @@ const config = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        library: 'afodexpdf',
+        library: 'justformit',
     },
     optimization: {
         minimize: isProduction,
@@ -31,7 +32,12 @@ const config = {
         ],
     },
     plugins: [
-        new TerserPlugin()
+        new TerserPlugin(),
+        new CopyPlugin({
+            patterns: [
+                { from: 'editors', to: "editors" }
+            ]
+        })
     ],
     module: {
         rules: [

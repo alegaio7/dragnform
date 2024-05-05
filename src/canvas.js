@@ -14,10 +14,10 @@ import flyter, {
     withCheckboxType,
     withRadioType,
   } from 'flyter';
-  import { createPopper } from '@popperjs/core';
+import mustache from 'mustache';
 
 export default class Canvas {
-    constructor(widgetsContainerEl, widgetRenderOptions, renderMode) {
+    constructor(widgetsContainerEl, widgetEditorsContainerEl, widgetRenderOptions, renderMode) {
         this._domParser = new DOMParser();
         this._featureExtractor = null;
 
@@ -27,6 +27,13 @@ export default class Canvas {
     
         this._widgetRenderOptions = widgetRenderOptions ?? {};
         this._container = widgetsContainerEl; 
+        this._editingWidgetInfo = null;
+        this._editorsContainer = widgetEditorsContainerEl;
+        this._editorTemplates = new Map();
+        
+        this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
+        this._rememberedProperties.set("columns", 12);
+
         this._sourceJson = {
             name: Strings.Canvas_NewForm_Name,
             version: constants.FORMS_DESIGNER_VERSION,
@@ -34,14 +41,22 @@ export default class Canvas {
         };
         this._widgets = [];
 
+        // flyter inline editor setup BEGIN
         withPopupRenderer(); // Load the popup renderer
         // withInlineRenderer(); // Load the inline renderer
         withTextType();     // Load the text type
+        // flyter inline editor setup END
     }
 
     addWidget(jsonObj) {
         if (!jsonObj)
             throw new Error('json object is required');
+
+        // patches the json object with the remembered properties
+        this._rememberedProperties.forEach((v, k) => {
+            jsonObj[k] = v;
+        });
+
         var w = this.createWidget(jsonObj);
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
@@ -332,16 +347,76 @@ export default class Canvas {
             });
     }
 
-    _showWidgetProperties(sender, e) {
-        alert("TODO!");
-        // var s = sender.label ? sender.label : sender.id;
-        // var n = confirm(Strings.WidgetRemoveConfirmationMessage.replace("{0}", s));
-        // if (!n)
-        //     return;
-        // var i = this._widgets.indexOf(sender);
-        // if (i === -1)
-        //     throw new Error('widget not found in widgets array');
-        // this._widgets.splice(i, 1);
-        // sender.removeFromDom();
+    /// <summary>
+    /// Shows the properties editor for a widget. Editor template data is cached, once per widget type.
+    /// </summary>
+    async _showWidgetProperties(sender, e) {
+        var editorData, editorHtml, editorProps;
+        if (this._editorTemplates.has(sender.type)) {
+            editorData = this._editorTemplates.get(sender.type);
+            editorHtml = editorData.html;
+        } else {
+            editorData = await sender.getPropertiesEditorTemplate();
+            // once editor template data is obtained, replace the placeholders with the actual values
+            if (!editorData.replacements)
+                editorData.replacements = {};
+            editorData.replacements.accept = Strings.WidgetEditor_Common_Accept;
+            editorData.replacements.cancel = Strings.WidgetEditor_Common_Cancel;
+            editorHtml = mustache.render(editorData.template, editorData.replacements);
+            editorData.html = editorHtml;
+            this._editorTemplates.set(sender.type, editorData);
+        }
+
+        this._editorsContainer.innerHTML = editorHtml;
+
+        // update modal control properties
+        editorProps = sender.getEditorProperties();
+        if (editorProps) {
+            editorProps.forEach(p => {
+                var el = document.getElementById(p.elementId);
+                if (el) {
+                    if (p.readonly)
+                        el.innerHTML = p.value;
+                    else
+                        el.value = p.value;
+                }
+            });
+        }
+
+        // attach handlers to buttons
+        var acceptButton = this._editorsContainer.querySelector('[data-action="accept"]');
+        var _t = this;
+        if (acceptButton)
+            acceptButton.onclick = function() {
+                _t._updateWidgetPropertiesFromEditor(_t._editingWidgetInfo);
+            }.bind(this);
+
+        this._editingWidgetInfo = {widget: sender, properties: editorProps};
+        var modal = this._editorsContainer.querySelector('.widget-properties-editor');
+        modal.showModal();
+    }
+
+    /// <summary>
+    /// Updates the widget properties from the editor modal
+    /// </summary>
+    _updateWidgetPropertiesFromEditor(widgetInfo) {
+        widgetInfo.widget.batchUpdating = true;
+        if (widgetInfo.properties) {
+            widgetInfo.properties.forEach(p => {
+                if (p.readonly)
+                    return;
+                if (p.name in widgetInfo.widget) {
+                    var el = document.getElementById(p.elementId);
+                    if (el) {
+                        widgetInfo.widget[p.name] = el.value;
+                        if (this._rememberedProperties.has(p.name))
+                            this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]); // don't use the element's value since its string. use the parsed value instead
+                    }
+                }
+            });
+        }
+        widgetInfo.widget.batchUpdating = false;
+        var modal = this._editorsContainer.querySelector('.widget-properties-editor');
+        modal.close();
     }
 }

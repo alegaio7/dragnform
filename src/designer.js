@@ -355,7 +355,8 @@ export default class Designer {
         }
         html += `<div class="widget-container"></div>`;
         html += "</div>";
-
+        html += `<div class="widget-editors-container"></div>`;
+        html += "</div>";
         this._container.innerHTML = html;
 
         document.querySelectorAll(`#${this._container.id} [data-action]`).forEach(b => {
@@ -365,7 +366,8 @@ export default class Designer {
         });
 
         var el = this._container.querySelector('.widget-container');
-        this._canvas = new Canvas(el, options.widgetRenderOptions, constants.WIDGET_MODE_DESIGN);
+        var editorsEl = this._container.querySelector('.widget-editors-container');
+        this._canvas = new Canvas(el, editorsEl, options.widgetRenderOptions, constants.WIDGET_MODE_DESIGN);
     }
 
     _updateUI() {

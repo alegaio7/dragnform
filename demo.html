@@ -18,7 +18,7 @@
         <script src="src/strings.en.js"></script>
         <script src="/dist/main.js"></script>
         <script type="module">
-            var designer = new afodexpdf.Designer({
+            var designer = new justformit.Designer({
                 callbacks: {
                     onNewForm: function(e) {
                         document.getElementById('json-arena').innerText = "";
@@ -32,11 +32,11 @@
                     onSavePdf: function(data, e) {
                         e.preventDefault();
                         document.getElementById('json-arena').innerText = JSON.stringify(data.features, null, 2);
-                        var exp = new afodexpdf.jsPDFExporter();
+                        var exp = new justformit.jsPDFExporter();
                         exp.exportPDF(data.features, { saveToFile: true }); // save to file
                     },
                     onRenderModeChanged: function(modeInfo, e) {
-                        if (modeInfo.intendedMode === afodexpdf.constants.WIDGET_MODE_VIEW) {
+                        if (modeInfo.intendedMode === justformit.constants.WIDGET_MODE_VIEW) {
                             var f = window.designer.extractFeatures();
                             document.getElementById('json-arena').innerText = JSON.stringify(f, null, 2);
                         } else
@@ -72,7 +72,7 @@
                         //widget: "form-group"
                     },
                 },
-                renderMode: afodexpdf.constants.WIDGET_MODE_DESIGN
+                renderMode: justformit.constants.WIDGET_MODE_DESIGN
             });
 
             window.designer = designer;

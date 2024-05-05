@@ -1,6 +1,14 @@
 // sass variables
-$flyter-popup-background-color: #f4f4f4;
-$flyter-input-focus-boder-color: #007bff;
+$default-accent-color: #007bff;
+$default-background-color: #f4f4f4;
+$default-color: #222;
+$default-font-size: 16px;
+$default-opposite-color: #fff;
+
+$flyter-popup-background-color: $default-background-color;
+$flyter-input-focus-boder-color: $default-accent-color;
+
+$font-family: "Poppins";
 
 $widget-controls-min-height: 1.75rem;
 $widget-default-padding: 15px;
@@ -19,6 +27,10 @@ $widget-designer-radius: 0.25rem;
 $widget-grip-color: #888;
 $widget-grip-width: 1rem;
 $widget-min-height: 55px;
+$widget-modal-backdrop-color: rgba(0, 0, 0, 0.2);
+$widget-modal-border-color: #888;
+$widget-modal-padding: 1rem;
+$widget-modal-title-padding: 0.5rem;
 $widget-properties-button-color: #333;
 $widget-properties-button-width: 1rem;
 $widget-remove-button-color: #f00;
@@ -41,6 +53,21 @@ $widget-toolbar-padding: 0.5rem;
 .widget-designer {
     button, input {
         font-family: inherit;
+        font-size: $default-font-size;
+    }
+
+    button {
+        background-color: $widget-toolbar-button-bg-color;
+        border: 1px solid $widget-toolbar-border-color;
+        border-radius: $widget-designer-radius;
+        color: $widget-toolbar-button-color;
+        cursor: pointer;
+        font-family: inherit;
+        height: $widget-toolbar-button-height;
+
+        &:hover {
+            background-color: $widget-toolbar-button-bg-hover-color;
+        }
     }
 
     .widget-toolbar [data-render-mode] {
@@ -90,20 +117,6 @@ $widget-toolbar-padding: 0.5rem;
     padding: $widget-toolbar-padding;
     margin-bottom: 1rem;
 
-    button {
-        background-color: $widget-toolbar-button-bg-color;
-        border: 1px solid $widget-toolbar-border-color;
-        border-radius: $widget-designer-radius;
-        color: $widget-toolbar-button-color;
-        cursor: pointer;
-        font-family: inherit;
-        height: $widget-toolbar-button-height;
-
-        &:hover {
-            background-color: $widget-toolbar-button-bg-hover-color;
-        }
-    }
-
     .widget-toolbar-group {
         border: 1px solid $widget-toolbar-group-border-color;
         padding: $widget-toolbar-padding;
@@ -125,9 +138,9 @@ $widget-toolbar-padding: 0.5rem;
 
 // container
 .widget-container, .widget-toolbar {
-    font-family: Poppins;
+    font-family: $font-family;
     font-weight: 300;
-    font-size: 16px;
+    font-size: $default-font-size;
     margin-right: auto;
     margin-left: auto;
     width: $widget-container-width;
@@ -300,8 +313,6 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-
-
 .widget-label {
     font-weight: bold;
     display: block;
@@ -395,11 +406,13 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
+// ******
 // flyter
+// ******
 [class^="flyter"] {
-    font-family: Poppins;
-    font-weight: 300;
-    font-size: 16px;
+    font-family: $font-family;
+    // font-weight: 300;
+    font-size: $default-font-size;
 
     button, input {
         font-family: inherit;
@@ -443,5 +456,53 @@ $widget-toolbar-padding: 0.5rem;
 
     &:focus {
         border-color: $flyter-input-focus-boder-color;
+    }
+}
+
+// **************
+// Widget editors
+// **************
+.widget-properties-editor {
+    font-family: inherit;
+    padding: $widget-modal-padding;
+    max-width: 50ch;
+    box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
+    border: 1px solid $widget-modal-border-color;
+    border-radius: $widget-designer-radius;
+    font-family: $font-family;
+
+    input, button {
+        min-height: $widget-controls-min-height;
+        font-family: inherit;
+        font-size: $default-font-size;
+    }
+
+    & > * {
+        margin: 0 0 0.5rem 0;
+    }
+
+    &::backdrop {
+        background-color: $widget-modal-backdrop-color;
+    }
+
+    .widget-properties-editor-header {
+        height: 2rem;
+        background-color: $default-accent-color;
+        color: $default-opposite-color;
+        line-height: 2;
+        padding: 0 $widget-toolbar-padding;
+        border-radius: $widget-designer-radius;
+        margin-bottom: 1rem;
+    }
+
+    .widget-properties-editor-footer {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        height: 2rem;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: end;
+        border-top: 1px solid $widget-modal-border-color;
     }
 }

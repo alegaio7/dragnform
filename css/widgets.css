@@ -5,6 +5,19 @@
 
 .widget-designer button, .widget-designer input {
   font-family: inherit;
+  font-size: 16px;
+}
+.widget-designer button {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  color: #222;
+  cursor: pointer;
+  font-family: inherit;
+  height: 2rem;
+}
+.widget-designer button:hover {
+  background-color: #ddd;
 }
 .widget-designer .widget-toolbar [data-render-mode] {
   display: none;
@@ -43,18 +56,6 @@
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
-.widget-toolbar button {
-  background-color: #eee;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-  color: #222;
-  cursor: pointer;
-  font-family: inherit;
-  height: 2rem;
-}
-.widget-toolbar button:hover {
-  background-color: #ddd;
-}
 .widget-toolbar .widget-toolbar-group {
   border: 1px solid #eee;
   padding: 0.5rem;
@@ -72,7 +73,7 @@
 }
 
 .widget-container, .widget-toolbar {
-  font-family: Poppins;
+  font-family: "Poppins";
   font-weight: 300;
   font-size: 16px;
   margin-right: auto;
@@ -307,8 +308,7 @@
 }
 
 [class^=flyter] {
-  font-family: Poppins;
-  font-weight: 300;
+  font-family: "Poppins";
   font-size: 16px;
 }
 [class^=flyter] button, [class^=flyter] input {
@@ -351,4 +351,44 @@
 }
 .flyter-text-input:focus {
   border-color: #007bff;
+}
+
+.widget-properties-editor {
+  font-family: inherit;
+  padding: 1rem;
+  max-width: 50ch;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  border: 1px solid #888;
+  border-radius: 0.25rem;
+  font-family: "Poppins";
+}
+.widget-properties-editor input, .widget-properties-editor button {
+  min-height: 1.75rem;
+  font-family: inherit;
+  font-size: 16px;
+}
+.widget-properties-editor > * {
+  margin: 0 0 0.5rem 0;
+}
+.widget-properties-editor::backdrop {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.widget-properties-editor .widget-properties-editor-header {
+  height: 2rem;
+  background-color: #007bff;
+  color: #fff;
+  line-height: 2;
+  padding: 0 0.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+.widget-properties-editor .widget-properties-editor-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  height: 2rem;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: end;
+  border-top: 1px solid #888;
 }/*# sourceMappingURL=widgets.css.map */

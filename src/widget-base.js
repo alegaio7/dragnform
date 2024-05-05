@@ -23,17 +23,20 @@ export default class Widget {
         if (!fragment.id)
             throw new Error('Widget id is required');
 
+        this._batchUpdating = true; // to avoid repeated calls to _updateUI while running ctor
         this._renderMode = constants.WIDGET_MODE_DESIGN;
         this._el = null;
+        this._inlineEditorChangingLabel = false; // used when updating label from inline editor instead of modal, to avoid modifiying the label and cause a flyter error
         this._globalClasses = fragment.globalClasses ?? {};
+        this._prevColClass = null; // stores the previous colClas before a column change, to remove it from the classList
         this._validations = fragment.validations ?? [];
         this._value = null;
 
+        this._columns = 12;
         this.columns = fragment.columns ?? 12;
         
         if (!(this.columns >= 1 && this.columns <= 12))
             throw new Error('Widget columns must be between 1 and 12');
-        this.columnsClass = "widget-col-" + this.columns;
 
         var h = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
         this.height = h;
@@ -42,7 +45,7 @@ export default class Widget {
         this._inPlaceEditor = false;
         this._label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
         this._labelEl = null; // filled when rendered
-        this.name = fragment.name ?? this.id;
+        this.name = fragment.name ?? this.id; // the "name" attribute for input elements
         this.type = type;
 
         this.widgetRenderOptions = fragment.widgetRenderOptions ?? {};
@@ -58,9 +61,28 @@ export default class Widget {
         this.widgetClass = 'widget';
         if (fragment.globalClasses && fragment.globalClasses.widget)
             this.widgetClass += ' ' + fragment.globalClasses.widget;
+
+        this._batchUpdating = false;
+        this._updateUI();
     }
 
     // Props begin
+    get batchUpdating() { return this._batchUpdating; }
+    set batchUpdating(value) { 
+        this._batchUpdating = !!value;
+        if (!this._batchUpdating)
+            this._updateUI();
+     }
+
+    get columns() { return this._columns; }
+    set columns(value) { 
+        value = parseInt(value);
+        if (isNaN(value) || value < 1 || value > 12)
+            value = 12;
+        this._columns = value;
+        this._updateUI();
+     }
+
     get domElement() { return this._el; }
 
     get label() { return this._label; }
@@ -123,6 +145,25 @@ export default class Widget {
             return featureExtractor.extractFeatures(viewEl, recursive);
     }
     
+    getEditorProperties() {
+        return [
+            { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
+            { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Id.replace("{0}", this.id), readonly: true },
+            { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label }
+        ];
+    }
+
+    async getPropertiesEditorTemplate() {
+        var html = await fetch('/editors/widget-text.editor.html', { });
+        return {
+            replacements: {
+                columns: Strings.WidgetEditor_Common_Columns,
+                label: Strings.WidgetEditor_Common_Label
+            },
+            template: await html.text()
+        };
+    }
+
     setError(r) {
         var error = this._el.querySelector('.widget-error');
         error.innerHTML = r.message;
@@ -146,8 +187,8 @@ export default class Widget {
         if (!this._widgetPropertiesBtn)
             return;
         if (!dettach)
-            this._widgetPropertiesBtn.addEventListener('click', (e) => {
-                handler(this, e);
+            this._widgetPropertiesBtn.addEventListener('click', async (e) => {
+                await handler(this, e);
             });
         else {
             this._widgetPropertiesBtn.removeEventListener('click', handler);
@@ -182,10 +223,8 @@ export default class Widget {
     }
 
     removeFromDom() {
-        if (this._flyter) {
-            this._flyter.getRendeder().destroy();
+        if (this._flyter)
             this._flyter.destroy();
-        }
         if (this._el)
             this._el.remove();
     }
@@ -227,7 +266,9 @@ export default class Widget {
                 },
                 initialValue: this.label,
                 onSubmit: async function(value, instance) {
+                    _t._inlineEditorChangingLabel = true;
                     _t.label = value;
+                    _t._inlineEditorChangingLabel = false;
                 },
                 renderer: {
                     name: 'popup',
@@ -272,8 +313,11 @@ export default class Widget {
         var h = "";
         if (this.height)
             h = `style="height: ${this.height}"`;
+
+        var colClass = "widget-col-" + this.columns;
+        this._prevColClass = colClass;
         var template = {
-            heading: `<div id="${this.id}" class="${cssClass} ${this.columnsClass}" data-type="${this.type}" data-mode="${constants.WIDGET_MODE_DESIGN}" ${h}>`,
+            heading: `<div id="${this.id}" class="${cssClass} ${colClass}" data-type="${this.type}" data-mode="${constants.WIDGET_MODE_DESIGN}" ${h}>`,
             designMode: {
                 openingSection: `<div data-show-when="${constants.WIDGET_MODE_DESIGN}">`,
                 designControlSection: `<div class="widget-properties" title="${Strings.WidgetPropertiesButtonTitle}"></div>` +
@@ -368,8 +412,15 @@ export default class Widget {
     }
 
     _updateUI() {
-        if (!this._el)
+        if (!this._el || this._batchUpdating)
             return;
+
+        // update columns
+        this._el.classList.remove(this._prevColClass);
+        var colClass = "widget-col-" + this.columns;
+        this._el.classList.add(colClass);
+        this._prevColClass = colClass;
+        
         if (this.widgetRenderOptions.renderTips && this.tip) {
             var tipCtls = this._el.querySelectorAll(`.widget-tip`);
             if (tipCtls && tipCtls.length)
@@ -378,9 +429,14 @@ export default class Widget {
 
         this._el.setAttribute('data-mode', this.renderMode);
 
-        // only modify label's markup if not using in-place editor, since this editor changes the original markup
-        if (this._labelEl && !this._inPlaceEditor)
-            this._labelEl.innerHTML = this.label;
+        if (this._labelEl) {
+            if (!this._inlineEditorChangingLabel) {
+                if (this._flyter)
+                    this._flyter.setValue(this.label);
+                else
+                    this._labelEl.innerHTML = this.label;
+            }
+        }
 
         // update the labels in the other views
         var rmLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_RUN}"] [data-part="label"]`);

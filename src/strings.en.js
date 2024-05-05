@@ -38,6 +38,13 @@ class Strings {
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
     static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
 
+    // widget editors
+    static get WidgetEditor_Common_Accept() { return 'Accept'; }
+    static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
+    static get WidgetEditor_Common_Columns() { return 'Columns'; }
+    static get WidgetEditor_Common_Id() { return 'Widget properties ({0})'; }
+    static get WidgetEditor_Common_Label() { return 'Label'; }
+
     // flyter
     static get Flyter_CancelButtonText() { return 'Cancel'; }
     static get Flyter_OkButtonText() { return 'Accept'; }
