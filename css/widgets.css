@@ -116,11 +116,8 @@
 .widget[data-mode=design] [data-show-when=view], .widget[data-mode=design] [data-show-when=run] {
   display: none;
 }
-.widget[data-mode=view] [data-show-when=view] {
-  display: block;
-}
-.widget[data-mode=view] [data-show-when=design], .widget[data-mode=view] [data-show-when=run] {
-  display: none;
+.widget[data-mode=design] [data-part=label] {
+  cursor: pointer;
 }
 .widget[data-mode=run] [data-show-when=run] {
   display: block;
@@ -128,7 +125,13 @@
 .widget[data-mode=run] [data-show-when=design], .widget[data-mode=run] [data-show-when=view] {
   display: none;
 }
-.widget button, .widget [data-part=label] {
+.widget[data-mode=view] [data-show-when=view] {
+  display: block;
+}
+.widget[data-mode=view] [data-show-when=design], .widget[data-mode=view] [data-show-when=run] {
+  display: none;
+}
+.widget button {
   cursor: pointer;
 }
 .widget input, .widget button {
@@ -143,7 +146,7 @@
 .widget[data-type=button] {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: center;
   padding-top: 15px;
 }
 .widget[data-type=image] {

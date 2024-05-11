@@ -5,20 +5,13 @@ class WidgetInputBase extends Widget {
     constructor(widgetType, fragment) {
         super(widgetType, fragment);
 
-        if (!fragment)
-            fragment = {};
-        
-        // defaults
-        this.required = fragment.required === true ? true : false;
-        this.requiredMessage = fragment.requiredMessage ?? constants.WIDGET_VALIDATION_REQUIRED;
-
-        var _t = this;
-        if (fragment.validations && fragment.validations.length) {
-            fragment.validations.forEach(v => {
-                if (v.type === `required`) {
-                    _t.required = true;
-                    if (v.message)
-                        _t.requiredMessage = v.message;
+        // check common validations
+        var vals = this.validations;
+        if (vals.length) {
+            vals.forEach(v => {
+                if (v.type === "required") {
+                    v.value = !!v.value;
+                    v.message = v.message ?? constants.WIDGET_VALIDATION_REQUIRED;
                 }
             });
         }
@@ -27,63 +20,19 @@ class WidgetInputBase extends Widget {
     /// <summary>
     /// Base rendering logic for input widgets (text, number, etc).
     /// </summary>
-    _renderDOM(container, parser, bodyhtml) {
-        var template = super._getHTMLTemplate();
-        var v = this.value;
-        if (this.value === null || this.value === undefined)
-            v = this.widgetRenderOptions.nullValue ? this.widgetRenderOptions.nullValue : "";
-    
-        template.designMode.bodySection = bodyhtml.replace("{0}", `input_design_${this.id}`); 
-        template.runMode.bodySection = bodyhtml.replace("{0}", `input_run_${this.id}`);
-    
-        // view mode body
-        var labelHtml = this._getLabelHTML(true);
-        bodyhtml = `${labelHtml ? labelHtml : ""}
-            <span data-part="value" ${this.globalClasses.span ? 'class="' + this.globalClasses.span + '"' : ""}>${v}</span>`;
-        template.viewMode.bodySection = bodyhtml;
-
-        super._renderDOM(container, template, parser);
+    _renderDOM(container, parser, html) {
+        super._renderDOM(container, parser, html);
         super._updateUI();
         this._updateContols();
 
         var _t = this;
-        var input = this._el.querySelector("input");
-        if (input)
-            input.addEventListener("blur", function(e) {
-                _t.value = e.currentTarget.value;
+        var inputs = this._el.querySelectorAll("input"); // input for design mode and run mode.
+        if (inputs)
+            inputs.forEach(input => {
+                input.addEventListener("blur", function(e) {
+                    _t.value = e.currentTarget.value;
+                });
             });
-    }
-
-    // view mode does not render "for" attribute of labels, and does not render required mark
-    _getLabelHTML(forViewMode = false) {
-        if (!this.label)
-            return "";
-
-        // widget global class already handled in base class
-        var labelClass = "";
-        if (this.globalClasses.label)
-            labelClass = `class="${this.globalClasses.label}"`;
-        
-        // labels in widgets should be annotated with data-part="label" to allow looking for the element in base class
-        var html = `<label ${labelClass}${forViewMode === false ? ' for="{0}"' : ''}>`;  
-        var reqMarkHtml = `<span class="required-mark">${this.requiredAttributeSettings.mark}</span>`;
-        if (!forViewMode &&
-            this.required && 
-            this.requiredAttributeSettings.mark && 
-            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE)
-            html  += reqMarkHtml;
-
-        html  += `<span data-part="label">${this.label}</span>`
-
-        if (!forViewMode &&
-            this.required && 
-            this.requiredAttributeSettings.mark && 
-            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
-            html  += reqMarkHtml;
-
-        html  += `</label>`;
-
-        return html;
     }
 
     _updateContols() {
@@ -104,14 +53,11 @@ class WidgetInputBase extends Widget {
 
     _validateInputCtl(input) {
         var r;
-        var validations = this.validations;
         if (!input) {
-            r = { result: false, message: `Widget ${this.id}: input not found` };
+            r = { result: false, message: `Widget ${this.id}: input control not found` };
         }
-        else if (!input.value) {
-            var rv = validations.find(x => x.type === "required");
-            if (rv)
-                r = { result: false, message: this.requiredMessage };
+        else if (!input.value && this.required) {
+            r = { result: false, message: this.requiredMessage };
         }
 
         if (!r)

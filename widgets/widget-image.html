@@ -1,0 +1,28 @@
+<div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
+	<div data-show-when="design">
+		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		{{#showRemove}}
+		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		{{/showRemove}}
+        <img class="{{imageClass}}" 
+            id={{imageIdDesign}} 
+            alt="${{label}}"
+            {{#hasImageData}}
+            src="{{imageData}}" 
+            {{/hasImageData}}
+            {{#hasImageStyle}}
+            style="{{imageStyle}}"
+            {{/hasImageStyle}}
+            onload="document.getElementById('{{imageIdRun}}').src=this.src;document.getElementById('{{imageIdView}}').src=this.src;"
+            >
+        {{#showGrip}}
+		<div class="widget-grip"></div>
+		{{/showGrip}}
+	</div>
+	<div data-show-when="run">
+        <img class="{{imageClass}}" id={{imageIdRun}} alt="${{label}}" style="{{imageStyle}}">
+	</div>
+	<div data-show-when="view">
+        <img class="{{imageClass}}" id={{imageIdView}} alt="${{label}}" style="{{imageStyle}}">	
+	</div>
+</div>

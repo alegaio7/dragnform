@@ -188,14 +188,9 @@ $widget-toolbar-padding: 0.5rem;
         [data-show-when="view"], [data-show-when="run"] {
             display: none;
         }
-    }
 
-    &[data-mode="view"] {
-        [data-show-when="view"] {
-            display: block;
-        }
-        [data-show-when="design"], [data-show-when="run"] {
-            display: none;
+        [data-part="label"] {
+            cursor: pointer;
         }
     }
 
@@ -208,7 +203,16 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    button, [data-part="label"] {
+    &[data-mode="view"] {
+        [data-show-when="view"] {
+            display: block;
+        }
+        [data-show-when="design"], [data-show-when="run"] {
+            display: none;
+        }
+    }
+
+    button {
         cursor: pointer;
     }
 
@@ -228,7 +232,7 @@ $widget-toolbar-padding: 0.5rem;
     &[data-type="button"] {
         display: flex;
         flex-direction: column;
-        justify-content: end;
+        justify-content: center;
         padding-top: $widget-default-padding;
     }
 

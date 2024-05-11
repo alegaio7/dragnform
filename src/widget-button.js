@@ -23,7 +23,7 @@ class WidgetButton extends Widget {
             throw new Error('handler must be a function');
 
         if (!this._button)
-            this._button = this._el.querySelector(`#button_${this.id}`);    
+            this._button = this._el.querySelector(`#btn_run_${this.id}`);    
         if (!dettach)
             this._button.addEventListener('click', handler);
         else {
@@ -32,28 +32,42 @@ class WidgetButton extends Widget {
         }
     }
 
-    render(container, parser) {
-        var template = super._getHTMLTemplate();
+    async render(container, parser) {
+        var widgetClass = this.widgetClass ?? "";
+        if (this.widgetRenderOptions.renderGrip)
+            widgetClass = "has-grip" + (widgetClass ? " " : "") + widgetClass;
 
-        var buttonClass = `${this.globalClasses.button ? 'class="' + this.globalClasses.button : ""}`; // class missing closing quote...closing below
+        var buttonIdDesign = `btn_design_${this.id}`;
+        var buttonIdRun = `btn_run_${this.id}`;
+
+        // this.globalClasses.button is a generic class applies to all buttons
+        // this.buttonClass is a class specific to this button instance
+        var buttonClass = this.globalClasses.button ?? ""
         if (this.buttonClass) 
-            buttonClass += (buttonClass === "" ? 'class="' : " ") + `${this.buttonClass}`;
-        if (buttonClass !== "")
-            buttonClass += '"';
+            buttonClass += (buttonClass === "" ? "" : " ") + `${this.buttonClass}`;
 
-        var bodyhtml = `<button type="button" 
-            ${buttonClass}
-            id="button_${this.id}" 
-            name="${this.name}">`;
-        if (this.label)
-            bodyhtml += `<span data-part="label">${this.label}</span>`;
-        bodyhtml += `</button>`;
+        var replacements = {
+            colClass: "widget-col-" + this.columns,
+            hasName: this.name ? true : false,
+            id: this.id,
+            buttonClass: buttonClass,
+            buttonIdDesign: buttonIdDesign,
+            buttonIdRun: buttonIdRun,
+            hasLabel: this.label ? true : false,
+            label: this.label,
+            mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
+            showGrip: this.widgetRenderOptions.renderGrip,
+            showRemove: this.widgetRenderOptions.renderRemove,
+            style: this.height ? `height: ${this.height}` : "", 
+            type: this.type,
+            widgetClass: widgetClass,
+            widgetPropertiesButtonTitle: Strings.WidgetPropertiesButtonTitle,
+            widgetRemoveButtonTitle: Strings.WidgetRemoveButtonTitle,
+        };
 
-        template.designMode.bodySection = bodyhtml;
-        template.runMode.bodySection = bodyhtml;
-        template.viewMode.bodySection = "";     // buttons don't render in view mode
-
-        super._renderDOM(container, template, parser);
+        var html = await super._loadWidgetTemplate("widget-button", replacements);
+        super._renderDOM(container, parser, html);
     }
 }
 

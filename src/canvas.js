@@ -48,7 +48,7 @@ export default class Canvas {
         // flyter inline editor setup END
     }
 
-    addWidget(jsonObj) {
+    async addWidget(jsonObj) {
         if (!jsonObj)
             throw new Error('json object is required');
 
@@ -61,7 +61,7 @@ export default class Canvas {
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
         this._widgets.push(w);
-        this._renderSingleWidget(w, this._domParser);
+        await this._renderSingleWidget(w, this._domParser);
         this._setupSortable();
         return w;
     }
@@ -199,10 +199,10 @@ export default class Canvas {
     /// <summary>
     /// Renders a form from a json-serialized form object
     /// </summary>
-    renderForm(json) {
+    async renderForm(json) {
         this.clearCanvas();
         this._parseJson(json);
-        this._renderWidgets();
+        await this._renderWidgets();
         this._setupSortable();
     }
 
@@ -227,16 +227,16 @@ export default class Canvas {
     /// Validates the form widgets. Each widget implements its own validation mechanisms.
     /// Returns an object with a result property indicating if the form is valid and if not, a validations property containing an array of not-passed validations.
     /// </summary>
-    validate(options) {
+    validate(validationOptions) {
         if (!this._widgets || !this._widgets.length)
             return false;
 
-        if (!options)
-            options = {}
+        if (!validationOptions)
+            validationOptions = {}
 
         var validations = [];
         this._widgets.forEach(w => {
-            let r = w.validate(options);
+            let r = w.validate(validationOptions);
             if (!r.result) {
                 validations.push(r);
             }
@@ -309,8 +309,8 @@ export default class Canvas {
         sender.removeFromDom();
     }
 
-    _renderSingleWidget(w, p) {
-        w.render(this._container, p);
+    async _renderSingleWidget(w, p) {
+        await w.render(this._container, p);
         if (this._widgetRenderOptions.renderRemove)
             w.registerRemoveButtonHandler(this._removeWidgetInternal.bind(this), false);
         
@@ -323,10 +323,10 @@ export default class Canvas {
     /// <summary>
     /// Renders the widgets in the configured container
     /// </summary>
-    _renderWidgets() {
-        this._widgets.forEach(w => {
-            this._renderSingleWidget(w, this._domParser);
-        });
+    async _renderWidgets() {
+        for (const w of this._widgets) {
+            await this._renderSingleWidget(w, this._domParser);
+        }
     }
 
     _setupSortable() {

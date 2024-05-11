@@ -6,6 +6,13 @@ class WidgetImage extends Widget {
         super(constants.WIDGET_TYPE_IMAGE, fragment);
         this._imageData = fragment.data ?? constants.WIDGET_IMAGE_BLANK;
         this.imageAlign = fragment.imageAlign ?? constants.WIDGET_IMAGE_ALIGN_CENTER;
+
+        // if no height came in the json fragment, set it to null so the image shows in its full height
+        this.autoHeight = false;
+        if (!fragment.height) {
+            this.height = null;
+            this.autoHeith = true;
+        }
     }
 
     exportJson() {
@@ -15,36 +22,51 @@ class WidgetImage extends Widget {
         return json;
     }
 
-    render(container, parser) {
-        var template = super._getHTMLTemplate();
+    async render(container, parser) {
+        var widgetClass = this.widgetClass ?? "";
+        if (this.widgetRenderOptions.renderGrip)
+            widgetClass = "has-grip" + (widgetClass ? " " : "") + widgetClass;
 
-        var imageClass = `${this.globalClasses.image ? 'class="' + this.globalClasses.image + '"' : ""}`;
-        var bodyhtml = `<img
-            ${imageClass}
-            id="image_${this.id}"
-            alt="${this.label ? this.label : this.id}"
-            name="${this.name}"
-            src="${this._imageData}"`;
+        var imageIdDesign = `img_design_${this.id}`;
+        var imageIdRun = `img_run_${this.id}`;
+        var imageIdView = `img_view_${this.id}`;
+
+        var imageStyle = "";
         if (this.height || this.imageAlign) {
-            bodyhtml += ` style="`;
-            if (this.height)
-                bodyhtml += `height: ${this.height}; width: auto;`;
+            if (this.height && !this.autoHeight)
+                imageStyle += `height: ${this.height}; width: auto;`;
             if (this.imageAlign === constants.WIDGET_IMAGE_ALIGN_LEFT)
-                bodyhtml += "margin-left: 0; margin-right: auto;";
+                imageStyle += "margin-left: 0; margin-right: auto;";
             else if (this.imageAlign === constants.WIDGET_IMAGE_ALIGN_RIGHT)
-                bodyhtml += "margin-left: auto; margin-right: 0;";
+                imageStyle += "margin-left: auto; margin-right: 0;";
             else
-                bodyhtml += "margin-left: auto; margin-right: auto;";
-            bodyhtml += `"`;
+                imageStyle += "margin-left: auto; margin-right: auto;";
         }
-        bodyhtml += `>`;
 
-        // images render the same in every mode
-        template.designMode.bodySection = bodyhtml;
-        template.runMode.bodySection = bodyhtml;
-        template.viewMode.bodySection = bodyhtml;
+        var replacements = {
+            colClass: "widget-col-" + this.columns,
+            hasImageData: this._imageData ? true : false,
+            hasImageStyle: imageStyle ? true : false,
+            imageData: this._imageData,
+            id: this.id,
+            imageClass: this.globalClasses.image ?? "",
+            imageIdDesign: imageIdDesign,
+            imageIdRun: imageIdRun,
+            imageIdView: imageIdView,
+            imageStyle: imageStyle,
+            label: this.label,
+            mode: constants.WIDGET_MODE_DESIGN,
+            showGrip: this.widgetRenderOptions.renderGrip,
+            showRemove: this.widgetRenderOptions.renderRemove,
+            style: this.height ? `height: ${this.height}` : "",
+            type: this.type,
+            widgetClass: widgetClass,
+            widgetPropertiesButtonTitle: Strings.WidgetPropertiesButtonTitle,
+            widgetRemoveButtonTitle: Strings.WidgetRemoveButtonTitle,
+        };
 
-        super._renderDOM(container, template, parser);
+        var html = await super._loadWidgetTemplate("widget-image", replacements);
+        super._renderDOM(container, parser, html);
     }
 }
 

@@ -1,8 +1,11 @@
 import * as constants from './constants.js';
 import flyter from 'flyter';
 import { createPopper } from '@popperjs/core';
+import mustache from 'mustache';
 
 export default class Widget {
+    static _cachedTemplates = new Map();
+
     constructor(type, fragment) {
         if (!type)
             throw new Error('type is required');
@@ -24,16 +27,16 @@ export default class Widget {
             throw new Error('Widget id is required');
 
         this._batchUpdating = true; // to avoid repeated calls to _updateUI while running ctor
-        this._renderMode = constants.WIDGET_MODE_DESIGN;
+        
+        this._columns = 12;
+        this.columns = fragment.columns ?? 12;
         this._el = null;
         this._inlineEditorChangingLabel = false; // used when updating label from inline editor instead of modal, to avoid modifiying the label and cause a flyter error
         this._globalClasses = fragment.globalClasses ?? {};
         this._prevColClass = null; // stores the previous colClas before a column change, to remove it from the classList
+        this._renderMode = constants.WIDGET_MODE_DESIGN;
         this._validations = fragment.validations ?? [];
         this._value = null;
-
-        this._columns = 12;
-        this.columns = fragment.columns ?? 12;
         
         if (!(this.columns >= 1 && this.columns <= 12))
             throw new Error('Widget columns must be between 1 and 12');
@@ -63,7 +66,6 @@ export default class Widget {
             this.widgetClass += ' ' + fragment.globalClasses.widget;
 
         this._batchUpdating = false;
-        this._updateUI();
     }
 
     // Props begin
@@ -84,6 +86,9 @@ export default class Widget {
      }
 
     get domElement() { return this._el; }
+    
+    get globalClasses() { return this._globalClasses; }
+    set globalClasses(value) { this._globalClasses = value; }
 
     get label() { return this._label; }
     set label(value) { 
@@ -101,8 +106,9 @@ export default class Widget {
         this._updateUI();
      }
 
-    get globalClasses() { return this._globalClasses; }
-    set globalClasses(value) { this._globalClasses = value; }
+    get required() { return this._findValidation("required")?.value === true; }
+    get requiredMessage() { return this._findValidation("required")?.message ?? constants.WIDGET_VALIDATION_REQUIRED; }
+ 
     get validations() { return this._validations; }
     set validations(value) { this._validations = value; }
     
@@ -148,25 +154,26 @@ export default class Widget {
     getEditorProperties() {
         return [
             { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
-            { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Id.replace("{0}", this.id), readonly: true },
+            { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
             { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label }
         ];
     }
 
     async getPropertiesEditorTemplate() {
-        var html = await fetch('/editors/widget-text.editor.html', { });
+        var html = await (await fetch('/editors/widget-text.editor.html')).text();
         return {
             replacements: {
                 columns: Strings.WidgetEditor_Common_Columns,
                 label: Strings.WidgetEditor_Common_Label
             },
-            template: await html.text()
+            template: html
         };
     }
 
     setError(r) {
         var error = this._el.querySelector('.widget-error');
-        error.innerHTML = r.message;
+        if (error)
+            error.innerHTML = r.message;
         this._el.classList.add('has-error');
     }
 
@@ -232,11 +239,11 @@ export default class Widget {
     /// <summary>
     /// Base class only parses the container parameter and returns a DOM reference
     /// </summary>
-    render(container, parser) {
+    async render(container, parser) {
         throw new Error("Child class must implement render method");
     }
 
-    validate() {
+    validate(validationOptions) {
         return { result: true };
     }
 
@@ -299,65 +306,29 @@ export default class Widget {
         return false;
     }
 
-    /// <summary>
-    /// Returns a template object containing the sections to be rendered by the widget.
-    /// Each widget must suply logic to render itself in 3 modes: design, run and view.
-    /// Every widget must begin with a heading and end with a footer.
-    /// The rendering process itself is carried on by each widget.
-    /// </summary>
-    _getHTMLTemplate() {
-        var cssClass = this.widgetClass + "";
-        if (this.widgetRenderOptions.renderGrip)
-            cssClass = "has-grip" + (cssClass ? " " : "") + cssClass;
+    _findValidation(name) {
+        return this.validations.find(v => v.type === name);
+    }
 
-        var h = "";
-        if (this.height)
-            h = `style="height: ${this.height}"`;
-
-        var colClass = "widget-col-" + this.columns;
-        this._prevColClass = colClass;
-        var template = {
-            heading: `<div id="${this.id}" class="${cssClass} ${colClass}" data-type="${this.type}" data-mode="${constants.WIDGET_MODE_DESIGN}" ${h}>`,
-            designMode: {
-                openingSection: `<div data-show-when="${constants.WIDGET_MODE_DESIGN}">`,
-                designControlSection: `<div class="widget-properties" title="${Strings.WidgetPropertiesButtonTitle}"></div>` +
-                    (this.widgetRenderOptions.renderRemove ? `<div class="widget-remove" title="${Strings.WidgetRemoveButtonTitle}"></div>` : ""),
-                bodySection: null,
-                gripSection: this.widgetRenderOptions.renderGrip ? `<div class="widget-grip"></div>` : null,
-                tipSection: this.widgetRenderOptions.renderTips ? `<div class="widget-tip"></div>` : null,
-                validationSection: `<div class="widget-error""></div>`,
-                closingSection: `</div>`
-            },
-            runMode: {
-                openingSection: `<div data-show-when="${constants.WIDGET_MODE_RUN}">`,
-                designControlSection: null,
-                bodySection: null,
-                gripSection: null,
-                tipSection: this.widgetRenderOptions.renderTips ? `<div class="widget-tip"></div>` : null,
-                validationSection: `<div class="widget-error""></div>`,
-                closingSection: `</div>`
-            },
-            viewMode: {
-                openingSection: `<div data-show-when="${constants.WIDGET_MODE_VIEW}">`,
-                bodySection: null,
-                closingSection: `</div>`
-            },
-            footer: `</div>`
-        };
-        return template;
+    async _loadWidgetTemplate(name, replacements) {
+        var template;
+        if (Widget._cachedTemplates.has(name))
+            template = Widget._cachedTemplates.get(name);
+        else {
+            template = await (await fetch(`/widgets/${name}.html`)).text();
+            Widget._cachedTemplates.set(name, template);
+        }
+        var html = mustache.render(template, replacements);
+        return html;
     }
 
     /// <summary>
     /// Renders the widget elements into the container and creates the element (DOM) reference
     /// </summary>
-    _renderDOM(container, template, parser) {
+    _renderDOM(container, parser, html) {
         if (!this._el) {
             if (!container)
                 throw new Error('container is required');
-            if (!template)
-                throw new Error('template is required');
-            if (typeof template !== 'object')
-                throw new Error('template must be an object');
 
             if (typeof container === 'string') {
                 var c = document.getElementById(container);
@@ -370,32 +341,6 @@ export default class Widget {
 
             if (!parser)
                 parser = new DOMParser();
-
-            var html = template.heading;                        // not optional
-            // design mode parts
-            html += template.designMode.openingSection;         // not optional
-            html += template.designMode.designControlSection ?? "";
-            html += template.designMode.bodySection ?? "";
-            html += template.designMode.gripSection ?? "";
-            html += template.designMode.tipSection ?? "";
-            html += template.designMode.validationSection ?? "";
-            html += template.designMode.closingSection;         // not optional
-
-            // run mode parts
-            html += template.runMode.openingSection;            // not optional
-            html += template.runMode.designControl ?? "";
-            html += template.runMode.bodySection ?? "";
-            html += template.runMode.gripSection ?? "";
-            html += template.runMode.tipSection ?? "";
-            html += template.runMode.validationSection ?? "";
-            html += template.runMode.closingSection;            // not optional
-
-            // view mode parts
-            html += template.viewMode.openingSection;           // not optional
-            html += template.viewMode.bodySection ?? "";
-            html += template.viewMode.closingSection;           // not optional
-
-            html += template.footer;                            // not optional
 
             var node = parser.parseFromString(html, `text/html`).body.firstElementChild;
             container.appendChild(node);

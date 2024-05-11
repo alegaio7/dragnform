@@ -32,7 +32,8 @@
             "validations": [
                 {
                     "type": "required",
-                    "message": "First name is required."
+                    "message": "First name is required.",
+					"value": true
                 },
                 {
                     "type": "minLength",
@@ -60,7 +61,8 @@
             "validations": [
                 {
                     "type": "required",
-                    "message": "Last name is required."
+                    "message": "Last name is required.",
+					"value": true
                 },
                 {
                     "type": "minLength",
@@ -88,7 +90,8 @@
             "validations": [
                 {
                     "type": "required",
-                    "message": "Email name is required."
+                    "message": "Email name is required.",
+					"value": true
                 },
                 {
                     "type": "pattern",
@@ -151,7 +154,8 @@
                 },
                 {
                     "type": "required",
-                    "message": "Sons are required."
+                    "message": "Sons are required.",
+					"value": true
                 }
             ],
             "value": 0

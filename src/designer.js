@@ -11,17 +11,26 @@ export default class Designer {
             throw new Error('containerId is required');
         
         this._callbacks = options.callbacks ?? [];
+        /* callbacks
+            onNewForm
+            onExportToJson
+            onSavePdf
+            onLoadJson
+            onLoadJsonCompleted
+            onRenderModeChanged
+            onDesignModified    <== // TODO implement
+        */
         this._actionMappings = [
-            { action: 'new-form', widgetType: null, callback: this._callbacks.onNewForm},
-            { action: 'load-json', widgetType: null, callback: this._callbacks.onLoadJson},
-            { action: 'export-json', widgetType: null, callback: this._callbacks.onExportToJson},
-            { action: 'save-pdf', widgetType: null, callback: this._callbacks.onSavePdf},
-            { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT, callback: this._callbacks.onWidgetAdded },
-            { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER, callback: this._callbacks.onWidgetAdded },
-            { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON, callback: this._callbacks.onWidgetAdded },
-            { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE, callback: this._callbacks.onWidgetAdded },
-            { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER, callback: this._callbacks.onWidgetAdded },
-            { action: 'change-render-mode', widgetType: null, callback: this._callbacks.onRenderModeChanged },
+            { action: 'new-form', widgetType: null},
+            { action: 'load-json', widgetType: null},
+            { action: 'export-json', widgetType: null},
+            { action: 'save-pdf', widgetType: null},
+            { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
+            { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
+            { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
+            { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE },
+            { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER },
+            { action: 'change-render-mode', widgetType: null },
         ];
 
         var c = document.getElementById(options.containerId);
@@ -52,17 +61,11 @@ export default class Designer {
         this.renderMode = options.renderMode ?? constants.WIDGET_MODE_DESIGN;
     }
 
-    addWidget(jsonObj) {
-        return this._canvas.addWidget(jsonObj);
-    }
-
     get canvas() {
         return this._canvas;
     }
 
     clearCanvas() {
-        this._canvas.clearCanvas();
-        this._canvas.clearCanvas();
         this._canvas.clearCanvas();
     }
 
@@ -77,16 +80,14 @@ export default class Designer {
     }
 
     /// <summary>
-    /// Finds a widget by its id. This is used to attach events to interactive widgets like buttons, that's why the current mode should be 'run'.
+    /// Finds a widget by its id. This is used to attach events to interactive widgets like buttons.
     findWidget(id) {
-        if (this.renderMode !== constants.WIDGET_MODE_RUN)
-            throw new Error('findWidget can only be called in run mode');
         return this._canvas.findWidget(id);
     }
 
-    renderForm(json) {
+    async renderForm(json) {
         this.renderMode = constants.WIDGET_MODE_DESIGN;
-        this._canvas.renderForm(json);
+        await this._canvas.renderForm(json);
     }
 
     get renderMode() {
@@ -100,8 +101,10 @@ export default class Designer {
         this._updateUI();
     }
 
-    validate() {
-        return this._canvas.validate();
+    validate(validationOptions) {
+        if (this.renderMode !== constants.WIDGET_MODE_RUN)
+            throw new Error('validate can only be called in run mode');
+        return this._canvas.validate(validationOptions);
     }
 
     get widgets() { 
@@ -111,6 +114,23 @@ export default class Designer {
     /// ********************************************************************************************************************
     /// Private methods
     /// ********************************************************************************************************************
+
+    _downloadBlob(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename || 'form.json';
+        document.body.appendChild(a);
+        const clickHandler = (e) => {
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+                removeEventListener('click', clickHandler);
+            }, 150);
+        };
+        a.addEventListener('click', clickHandler, false);
+        a.click();
+        a.remove();
+    }
 
     _getDefaultOptions() {
         return {
@@ -141,15 +161,8 @@ export default class Designer {
 
         // check if action is to create a new widget
         if (am) {
-            // if there's widgetType, there could be a widgetAdded callback
+            // if there's widgetType, let's create a widget
             if (am.widgetType) {
-                // TODO check usability of callbacks
-                /* if (am.callback) {
-                    am.callback({ widgetType: am.widgetType, e: e });
-                    if (e.defaultPrevented)
-                        return;
-                }*/
-
                 if (am.widgetType === constants.WIDGET_TYPE_IMAGE) {
                     var _t = this;
                     if (!this._loadImageInputEl) {
@@ -158,8 +171,8 @@ export default class Designer {
                             this._loadImageInputEl.onchange = function(e2) {
                                 var file = e2.target.files[0];
                                 var reader = new FileReader();
-                                reader.onload = function(e3) {
-                                    _t.addWidget({ 
+                                reader.onload = async function(e3) {
+                                    await _t._canvas.addWidget({ 
                                         type: am.widgetType, 
                                         data: e3.target.result
                                      });
@@ -173,55 +186,52 @@ export default class Designer {
                     return;
                 }
 
-                this.addWidget({ type: am.widgetType });
+                this._canvas.addWidget({ type: am.widgetType });
                 return;
             }
 
             // check for other actions
             if (am.action === "new-form") {
-                if (am.callback && am.callback(e) && e.defaultPrevented)
+                if (this._callbacks.onNewForm && this._callbacks.onNewForm.call(this, e) && e.defaultPrevented)
                     return;
                 this.clearCanvas();
             } else if (am.action === "export-json") {
                 var json = this.exportJson();
-                if (am.callback) {
-                    am.callback(json, e);
+                if (this._callbacks.onExportToJson) {
+                    this._callbacks.onExportToJson.call(this, json, e);
                     if (e.defaultPrevented)
                         return;
                 }
                 const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'form.json';
-                a.click();
-                URL.revokeObjectURL(url);
-
+                this._downloadBlob(blob, 'form.json');
             } else if (am.action === "save-pdf") {
                 this.renderMode = constants.WIDGET_MODE_VIEW;
                 var features = this.extractFeatures();
                 var exp = new jsPDFExporter();
-                if (am.callback) {
+                if (this._callbacks.onSavePdf) {
                     var pdfdata = exp.exportPDF(features, { saveToFile: false }); // save to blob
-                    am.callback({
+                    this._callbacks.onSavePdf.call(this, {
                         features: features, 
                         pdfdata: pdfdata
-                    }, e);
+                        }, e);
                     if (e.defaultPrevented)
                         return;
                 } 
                 exp.exportPDF(features, { saveToFile: true }); // save to file
             } else if (am.action === "load-json") {
                 var json;
-                if (am.callback) {
-                    json = am.callback(e);
+                if (this._callbacks.onLoadJson) {
+                    json = this._callbacks.onLoadJson.call(this, e);
                     if (e.defaultPrevented)
                         return;
                 }
 
                 // if callback returns json, render it
                 if (json) {
-                    _t.renderForm(json);
+                    _t.renderForm(json).then(() => {
+                        if (this._callbacks.onLoadJsonCompleted)
+                            this._callbacks.onLoadJsonCompleted.call(this, json);
+                        });
                     return;
                 }
 
@@ -233,9 +243,11 @@ export default class Designer {
                         this._loadJsonInputEl.onchange = function(e2) {
                             var file = e2.target.files[0];
                             var reader = new FileReader();
-                            reader.onload = function(e3) {
+                            reader.onload = async function(e3) {
                                 var j2 = JSON.parse(e3.target.result);
-                                _t.renderForm(j2);
+                                await _t.renderForm(j2);
+                                if (_t._callbacks.onLoadJsonCompleted)
+                                    _t._callbacks.onLoadJsonCompleted.call(_t, j2);
                             };
                             reader.readAsText(file);
                             _t._loadJsonInputEl.value = null;
@@ -249,7 +261,7 @@ export default class Designer {
                 if (current >= constants.validModes.length)
                     current = 0;
                 var newMode = constants.validModes[current];
-                if (am.callback && am.callback({intendedMode: newMode}, e) && e.defaultPrevented)
+                if (this._callbacks.onRenderModeChanged && this._callbacks.onRenderModeChanged.call(this, {intendedMode: newMode}, e) && e.defaultPrevented)
                     return;
                 this.renderMode = newMode;
             }

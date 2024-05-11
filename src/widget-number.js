@@ -17,10 +17,16 @@ class WidgetNumber extends WidgetInputBase {
                         else if (v.type === "max")
                             throw new Error(`Widget ${this.id}: max must be a valid number`);
                     }
+                    v.value = n;
                 }
             });
         }
     }
+
+    get min() { return this._findValidation("min")?.value; }
+    get minValidationMessage() { return this._findValidation("min")?.message; }
+    get max() { return this._findValidation("max")?.value; }
+    get maxValidationMessage() { return this._findValidation("max")?.message; }
 
     exportJson() {
         var json = super.exportJson();
@@ -31,20 +37,46 @@ class WidgetNumber extends WidgetInputBase {
         return json;
     }
 
-    render(container, parser) {
-        var labelHtml = super._getLabelHTML();
-        var bodyhtml = `${labelHtml ? labelHtml : ""}
-            <input type="text" 
-            id="{0}" 
-            ${this.globalClasses.input ? 'class="' + this.globalClasses.input + '"' : ""}
-            ${this.validations.minLength ? 'minlength="' + this.validations.minLength + '"' : ""}
-            ${this.validations.maxLength ? 'maxlength="' + this.validations.maxLength + '"' : ""}
-            ${this.validations.required ? 'required' : ""}
-            ${this.value ? 'value="' + this.value + '"' : ""}
-            ${this.name ? 'name="' + this.name + '"' : ""}
-            >`;
+    async render(container, parser) {
+        var widgetClass = this.widgetClass ?? "";
+        if (this.widgetRenderOptions.renderGrip)
+            widgetClass = "has-grip" + (widgetClass ? " " : "") + widgetClass;
 
-        super._renderDOM(container, parser, bodyhtml);
+        var inputIdDesign = `input_design_${this.id}`;
+        var inputIdRun = `input_run_${this.id}`;
+        var replacements = {
+            colClass: "widget-col-" + this.columns,
+            hasMax: (typeof this.min === 'number'),
+            hasMin: (typeof this.max === 'number'),
+            hasName: this.name ? true : false,
+            hasTip: this.widgetRenderOptions.renderTips && this.tip,
+            hasValue: this.value ? true : false,
+            id: this.id,
+            inputClass: this.globalClasses.input ?? "",
+            inputIdDesign: inputIdDesign,
+            inputIdRun: inputIdRun,
+            label: this.label,
+            mark: this.requiredAttributeSettings.mark,
+            max: this.max,
+            min: this.min,
+            mode: constants.WIDGET_MODE_DESIGN,
+            labelClass: this.globalClasses.label ?? "",
+            required: this.required,
+            showGrip: this.widgetRenderOptions.renderGrip,
+            showRemove: this.widgetRenderOptions.renderRemove,
+            showRequiredMarkAfter: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER,
+            showRequiredMarkBefore: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE,
+            spanClass: this.globalClasses.span ?? "",
+            style: this.height ? `height: ${this.height}` : "",
+            type: this.type,
+            value: this.value,
+            widgetClass: widgetClass,
+            widgetPropertiesButtonTitle: Strings.WidgetPropertiesButtonTitle,
+            widgetRemoveButtonTitle: Strings.WidgetRemoveButtonTitle,
+        };
+
+        var html = await super._loadWidgetTemplate("widget-number", replacements);
+        super._renderDOM(container, parser, html);
     }
 
     get value() { return super.value; }
@@ -60,25 +92,23 @@ class WidgetNumber extends WidgetInputBase {
     }
 
     validate(validateOptions) {
-        super.clearError();
-        var input = this._el.querySelector(`input`);
+        this.clearError();
+        var input = this._el.querySelector(`[data-show-when="run"] input`);
         var r = super._validateInputCtl(input);
 
-        // if base validation ok, validate number-specific properties
+        // if base validation ok, validate text-specific properties
         if (r.result) {
-            var n = parseInt(input.value, 10);
-            this.validations.forEach(v => {
-                if (v.type === "min") {
-                    if (isNaN(n) || n < v.value)
-                        r = { result: false, message: v.message };
-                } else if (v.type === "max") {
-                    if (isNaN(n) || n > v.value)
-                        r = { result: false, message: v.message };
-                }
-            });
+            if (input.value) {
+                var n = parseInt(input.value, 10);
+                if (typeof this.min === "number" && n < this.min)
+                    r = { result: false, message: this.minValidationMessage };
+                else if (typeof this.max === "number" && n > this.max)
+                    r = { result: false, message: this.maxValidationMessage };
+            }
         }
+
         if (validateOptions && validateOptions.showErrors && !r.result)
-            super.setError(r);
+            this.setError(r);
         return r;
     }
 }

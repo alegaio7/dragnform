@@ -27,7 +27,34 @@
                         document.getElementById('json-arena').innerText = JSON.stringify(json, null, 2);
                     },
                     onLoadJson: function(e) {
+                        
+                    },
+                    onLoadJsonCompleted: function(json) {
+                        var submit = window.designer.findWidget('submit');
+                        if (submit) {
+                            submit.registerClickHandler(e => {
+                                var r = window.designer.validate({showErrors: true});
+                                if (r.result) {
+                                    console.log('Form is valid!'); 
+                                    /*
+                                    json = canvas.exportJson(); // get current form state
 
+                                    // options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
+                                    // render again, to reflect widget that could have changed position via drag, or values 
+                                    canvas.renderForm(c, json, options);
+
+                                    var features = canvas.extractFeatures();
+                                    if (features) {
+                                        document.getElementById('json-arena').innerText = JSON.stringify(features, null, 2);
+
+                                        // Create PDF here
+                                        var e = new jsPDFExporter();
+                                        e.exportPDF(features);
+                                    }
+                                    */
+                                }                                
+                            });
+                        }
                     },
                     onSavePdf: function(data, e) {
                         e.preventDefault();
