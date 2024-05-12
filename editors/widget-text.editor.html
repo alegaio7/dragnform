@@ -3,13 +3,21 @@
         <span id="lblWidgetId">{{id}}</span>
     </div>
     <div>
+        <label for="txtWidgetPropLabel">{{label}}</label>
+        <input type="text" id="txtWidgetPropLabel" />
+    </div>
+    <div>
         <label for="txtWidgetPropColumns">{{columns}}</label>
         <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
     </div>
     <div>
-        <label for="txtWidgetPropLabel">{{label}}</label>
-        <input type="text" id="txtWidgetPropLabel" />
+        <label for="chkWidgetPropAutoHeght">{{autoHeight}}</label>
+        <input type="checkbox" id="chkWidgetPropAutoHeght" />
     </div>
+    <div>
+        <label for="txtWidgetPropHeight">{{height}}</label>
+        <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+    </div>    
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">
             {{accept}}

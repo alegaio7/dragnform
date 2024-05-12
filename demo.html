@@ -75,16 +75,17 @@
                 toolbar: {
                     visible: true,
                     buttons: {
-                        new: true,
-                        load: true,
-                        export: true,
-                        textField: true,
-                        numberField: true,
-                        spacer: true,
                         button: true,
+                        export: true,
                         image: true,
+                        label: true,
+                        load: true,
+                        new: true,
+                        numberField: true,
+                        renderCurrentMode: true,
                         savepdf: true,
-                        renderCurrentMode: true
+                        spacer: true,
+                        textField: true,
                     }
                 },
                 widgetRenderOptions: {
@@ -93,10 +94,9 @@
                     renderTips: true,
                     globalClasses: {
                         button: "btn",
-                        input: "form-control",
+                        input: "",
                         label: "widget-label",
                         span: "widget-value",
-                        //widget: "form-group"
                     },
                 },
                 renderMode: justformit.constants.WIDGET_MODE_DESIGN

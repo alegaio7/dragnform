@@ -7,6 +7,13 @@ export const FORMS_DESIGNER_VERSION = "1.0.0";
 export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
 export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
 
+export const WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT = 'left';
+export const WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER = 'center';
+export const WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT = 'right';
+export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP = 'top';
+export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER = 'center';
+export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM = 'bottom';
+
 export const WIDGET_DEFAULT_HEIGHT = "80px";
 
 export const WIDGET_IMAGE_ALIGN_CENTER = 'center';
@@ -25,6 +32,7 @@ export const validModes = [WIDGET_MODE_DESIGN, WIDGET_MODE_RUN, WIDGET_MODE_VIEW
 
 export const WIDGET_TYPE_BUTTON = 'button';
 export const WIDGET_TYPE_IMAGE = 'image';
+export const WIDGET_TYPE_LABEL = 'label';
 export const WIDGET_TYPE_NUMBER = 'number';
 export const WIDGET_TYPE_SPACER = 'spacer';
 export const WIDGET_TYPE_TEXT = 'text';

@@ -1,4 +1,5 @@
 import * as constants from './constants.js';
+import functions from './functions.js';
 
 export const NODE_TYPE_ELEMENT = 1;
 export const NODE_TYPE_ATTRIBUTE = 2;
@@ -101,25 +102,25 @@ export default class FeatureExtractor {
         addRadius = !!addRadius;
         var json = {};
         var hasBorderInfo = false;
-        if (this._convertToPixels(cs.borderLeftWidth)) {
+        if (functions.convertToPixels(cs.borderLeftWidth)) {
             json.borderLeftWidth = cs.borderLeftWidth;
             json.borderLeftStyle = cs.borderLeftStyle;
             json.borderLeftColor = this._rgbToHex(cs.borderLeftColor);
             hasBorderInfo = true;
         }
-        if (this._convertToPixels(cs.borderLeftWidth)) {
+        if (functions.convertToPixels(cs.borderLeftWidth)) {
             json.borderRightWidth = cs.borderRightWidth;
             json.borderRightStyle = cs.borderRightStyle;
             json.borderRightColor = this._rgbToHex(cs.borderRightColor);
             hasBorderInfo = true;
         }
-        if (this._convertToPixels(cs.borderLeftWidth)) {
+        if (functions.convertToPixels(cs.borderLeftWidth)) {
             json.borderTopWidth = cs.borderTopWidth;
             json.borderTopStyle = cs.borderTopStyle;
             json.borderTopColor = this._rgbToHex(cs.borderTopColor);
             hasBorderInfo = true;
         }
-        if (this._convertToPixels(cs.borderLeftWidth)) {
+        if (functions.convertToPixels(cs.borderLeftWidth)) {
             json.borderBottomWidth = cs.borderBottomWidth;
             json.borderBottomStyle = cs.borderBottomStyle;
             json.borderBottomColor = this._rgbToHex(cs.borderBottomColor);
@@ -144,7 +145,7 @@ export default class FeatureExtractor {
     _getFontProperties(cs) {
         var json = {};
         json.fontFamily = cs.fontFamily;
-        json.fontSize = this._convertToPixels(cs.fontSize);
+        json.fontSize = functions.convertToPixels(cs.fontSize);
         json.fontWeight = cs.fontWeight;
         json.fontStyle = cs.fontStyle;
         json.color = this._rgbToHex(cs.color);
@@ -156,10 +157,6 @@ export default class FeatureExtractor {
         if (cs.textTransform && cs.textTransform !== 'none')
             json.textTransform = cs.textTransform;
         return json;
-    }
-
-    _convertToPixels(value) {
-        return parseFloat(value.replace('px', ''));
     }
 
     _getBoundingClientRect = (element, skipScrollOffset) => { 

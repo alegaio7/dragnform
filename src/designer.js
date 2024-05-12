@@ -25,6 +25,7 @@ export default class Designer {
             { action: 'load-json', widgetType: null},
             { action: 'export-json', widgetType: null},
             { action: 'save-pdf', widgetType: null},
+            { action: 'add-label', widgetType: constants.WIDGET_TYPE_LABEL },
             { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
@@ -275,7 +276,8 @@ export default class Designer {
                 options.toolbar.buttons.new || options.toolbar.buttons.load || options.toolbar.buttons.export || options.toolbar.buttons.savepdf
             );
             var widgetsGroup = options.toolbar.buttons && (
-                options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer
+                options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer || 
+                options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image
             );
             var renderModeGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.renderCurrentMode
@@ -314,6 +316,11 @@ export default class Designer {
             if (widgetsGroup) {
                 html += `<div class="widget-toolbar-group">
                         <div class="widget-toolbar-group-title">${Strings.Toolbar_Widgets_GroupTitle}</div>`;
+                if (options.toolbar.buttons.label)
+                    html += `<button type="button" data-action="add-label" title="${Strings.Toolbar_AddLabelWidget_ButtonTitle}">
+                            <i class="${Icons.Toolbar_AddLabelWidget_Icon}"></i>
+                            <span>${Strings.Toolbar_AddLabelWidget_ButtonLabel}</span>
+                        </button>`;                        
                 if (options.toolbar.buttons.textField)
                     html += `<button type="button" data-action="add-input-text" title="${Strings.Toolbar_AddTextInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddTextInputWidget_Icon}"></i>

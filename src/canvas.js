@@ -4,6 +4,7 @@ import WidgetImage from './widget-image.js';
 import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
 import WidgetText from './widget-text.js';
+import WidgetLabel from './widget-label.js';
 import FeatureExtractor from './feature-extractor.js';
 import Sortable, { create } from 'sortablejs';
 import flyter, {
@@ -101,6 +102,9 @@ export default class Canvas {
         switch(o.type) {
             case constants.WIDGET_TYPE_BUTTON:
                 w = new WidgetButton(o);
+                break;
+            case constants.WIDGET_TYPE_LABEL:
+                w = new WidgetLabel(o);
                 break;
             case constants.WIDGET_TYPE_IMAGE:
                 w = new WidgetImage(o);
@@ -247,8 +251,6 @@ export default class Canvas {
     /// ********************************************************************************************************************
     /// Private methods
     /// ********************************************************************************************************************
-    
-
 
     /// <summary>
     /// Parses a JSON object and creates widgets. Widgets are stored in the _widgets array.
@@ -377,8 +379,12 @@ export default class Canvas {
                 if (el) {
                     if (p.readonly)
                         el.innerHTML = p.value;
-                    else
-                        el.value = p.value;
+                    else {
+                        if (p.type === "boolean")
+                            el.checked = p.value;
+                        else
+                            el.value = p.value;
+                    }
                 }
             });
         }
@@ -408,7 +414,10 @@ export default class Canvas {
                 if (p.name in widgetInfo.widget) {
                     var el = document.getElementById(p.elementId);
                     if (el) {
-                        widgetInfo.widget[p.name] = el.value;
+                        if (p.type === "boolean")
+                            widgetInfo.widget[p.name] = el.checked;
+                        else
+                            widgetInfo.widget[p.name] = el.value;
                         if (this._rememberedProperties.has(p.name))
                             this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]); // don't use the element's value since its string. use the parsed value instead
                     }

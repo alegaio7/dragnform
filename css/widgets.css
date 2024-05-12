@@ -149,11 +149,13 @@
   justify-content: center;
   padding-top: 15px;
 }
+.widget[data-type=label] {
+  display: flex;
+}
 .widget[data-type=image] {
   overflow: hidden;
 }
 .widget[data-type=image] img {
-  width: 100%;
   height: auto;
   display: block;
 }
@@ -369,6 +371,10 @@
   min-height: 1.75rem;
   font-family: inherit;
   font-size: 16px;
+}
+.widget-properties-editor input[type=checkbox] {
+  width: 1.5rem;
+  vertical-align: middle;
 }
 .widget-properties-editor > * {
   margin: 0 0 0.5rem 0;

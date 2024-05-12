@@ -13,6 +13,8 @@ class Strings {
     static get Toolbar_RenderModes_View_ButtonLabel() { return 'View mode'; }
     static get Toolbar_RenderModes_ButtonTitle() { return 'Switch between design and run mode'; }
 
+    static get Toolbar_AddLabelWidget_ButtonLabel() { return 'Label'; }
+    static get Toolbar_AddLabelWidget_ButtonTitle() { return 'Add label'; }    
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }
@@ -40,10 +42,12 @@ class Strings {
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
+    static get WidgetEditor_Common_AutoHeight() { return 'Auto height'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
     static get WidgetEditor_Common_Columns() { return 'Columns'; }
-    static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
+    static get WidgetEditor_Common_Height() { return 'Height'; }
     static get WidgetEditor_Common_Label() { return 'Label'; }
+    static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
 
     // flyter
     static get Flyter_CancelButtonText() { return 'Cancel'; }

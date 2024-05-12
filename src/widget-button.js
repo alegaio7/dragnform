@@ -59,7 +59,7 @@ class WidgetButton extends Widget {
             name: this.name,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
-            style: this.height ? `height: ${this.height}` : "", 
+            style: this._buildStyleAttribute(), 
             type: this.type,
             widgetClass: widgetClass,
             widgetPropertiesButtonTitle: Strings.WidgetPropertiesButtonTitle,

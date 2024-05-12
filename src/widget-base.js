@@ -2,6 +2,7 @@ import * as constants from './constants.js';
 import flyter from 'flyter';
 import { createPopper } from '@popperjs/core';
 import mustache from 'mustache';
+import functions from './functions.js';
 
 export default class Widget {
     static _cachedTemplates = new Map();
@@ -16,6 +17,7 @@ export default class Widget {
         var validTypes = [
             constants.WIDGET_TYPE_BUTTON,
             constants.WIDGET_TYPE_IMAGE,
+            constants.WIDGET_TYPE_LABEL,
             constants.WIDGET_TYPE_NUMBER,
             constants.WIDGET_TYPE_SPACER,
             constants.WIDGET_TYPE_TEXT];
@@ -33,7 +35,7 @@ export default class Widget {
         this._el = null;
         this._inlineEditorChangingLabel = false; // used when updating label from inline editor instead of modal, to avoid modifiying the label and cause a flyter error
         this._globalClasses = fragment.globalClasses ?? {};
-        this._prevColClass = null; // stores the previous colClas before a column change, to remove it from the classList
+        this._prevColClass = "widget-col-" + this.columns; // stores the previous colClass before a column change, to remove it from the classList
         this._renderMode = constants.WIDGET_MODE_DESIGN;
         this._validations = fragment.validations ?? [];
         this._value = null;
@@ -41,8 +43,9 @@ export default class Widget {
         if (!(this.columns >= 1 && this.columns <= 12))
             throw new Error('Widget columns must be between 1 and 12');
 
-        var h = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
-        this.height = h;
+        // if no height came in the json fragment, set it to a default value but set autoHeight true
+        this.autoHeight = fragment.autoHeight ?? false;
+        this.height = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
         
         this.id = fragment.id;
         this._inPlaceEditor = false;
@@ -131,7 +134,9 @@ export default class Widget {
     // exports widget info as json
     exportJson() {
         var json = {
+            autoHeight: this.autoHeight,
             columns: this.columns, 
+            height: this.autoHeight ? null : (this.height ?? null),
             id: this.id, 
             label: this.label, 
             type: this.type
@@ -153,9 +158,11 @@ export default class Widget {
     
     getEditorProperties() {
         return [
-            { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
             { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
-            { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label }
+            { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
+            { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
+            { name: "autoHeight", type: "boolean", elementId: "chkWidgetPropAutoHeght", value: this.autoHeight },
+            { name: "height", type: "number", elementId: "txtWidgetPropHeight", value: functions.convertToPixels(this.height) },
         ];
     }
 
@@ -163,8 +170,10 @@ export default class Widget {
         var html = await (await fetch('/editors/widget-text.editor.html')).text();
         return {
             replacements: {
+                autoHeight: Strings.WidgetEditor_Common_AutoHeight,
                 columns: Strings.WidgetEditor_Common_Columns,
-                label: Strings.WidgetEditor_Common_Label
+                height: Strings.WidgetEditor_Common_Height,
+                label: Strings.WidgetEditor_Common_Label,
             },
             template: html
         };
@@ -251,9 +260,9 @@ export default class Widget {
         return constants.WIDGET_VALIDATION_PATTERNS.find(p => p.name === name);
     }
 
-    /// *******************************************************************************
-    /// Private methods
-    /// *******************************************************************************
+    // *******************************************************************************
+    // Private methods
+    // *******************************************************************************
 
     /// <summary>
     /// Attaches an inline editor (flyter) to the widget's label, so it can be editted in place.
@@ -304,6 +313,13 @@ export default class Widget {
         }
 
         return false;
+    }
+
+    _buildStyleAttribute() {
+        var style = "";
+        if (this.height && !this.autoHeight)
+            style += `height: ${this.height};`;
+        return style;
     }
 
     _findValidation(name) {
@@ -371,6 +387,10 @@ export default class Widget {
             if (tipCtls && tipCtls.length)
                 tipCtls.forEach(t => t.innerHTML = this.tip);
         }
+
+        // update style
+        var style = this._buildStyleAttribute();
+        this._el.setAttribute('style', style);
 
         this._el.setAttribute('data-mode', this.renderMode);
 

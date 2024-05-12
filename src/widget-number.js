@@ -67,7 +67,7 @@ class WidgetNumber extends WidgetInputBase {
             showRequiredMarkAfter: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER,
             showRequiredMarkBefore: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE,
             spanClass: this.globalClasses.span ?? "",
-            style: this.height ? `height: ${this.height}` : "",
+            style: this._buildStyleAttribute(),
             type: this.type,
             value: this.value,
             widgetClass: widgetClass,
