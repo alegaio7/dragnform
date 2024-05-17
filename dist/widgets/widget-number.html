@@ -1,0 +1,78 @@
+<div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
+	<div data-show-when="design">
+		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		{{#showRemove}}
+		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		{{/showRemove}}
+		<label class="{{labelClass}}" for="{{inputIdDesign}}">
+			{{#showRequiredMarkBefore}}
+			<span class="required-mark">{{mark}}</span>
+			{{/showRequiredMarkBefore}}
+			<span data-part="label">{{label}}</span>
+			{{#showRequiredMarkAfter}}
+			<span class="required-mark">{{mark}}</span>
+			{{/showRequiredMarkAfter}}
+		</label>
+		<input type="number" id="{{inputIdDesign}}" {{inputClass}}
+			{{#hasMin}}
+            min="{{min}}"
+			{{/hasMin}}
+			{{#hasMax}}
+            max="{{max}}"
+			{{/hasMax}}
+			{{#required}}
+            required
+			{{/required}}
+			{{#hasValue}}
+            value="{{value}}"
+			{{/hasValue}}
+			{{#hasName}}
+            name="{{name}}"
+			{{/hasName}}
+            >
+		{{#showGrip}}
+		<div class="widget-grip"></div>
+		{{/showGrip}}
+		{{#hasTip}}
+		<div class="widget-tip"></div>
+		{{/hasTip}}
+	</div>
+	<div data-show-when="run">
+		<label class="{{labelClass}}" for="{{inputIdRun}}">
+			{{#showRequiredMarkBefore}}
+			<span class="required-mark">{{mark}}</span>
+			{{/showRequiredMarkBefore}}
+			<span data-part="label">{{label}}</span>
+			{{#showRequiredMarkAfter}}
+			<span class="required-mark">{{mark}}</span>
+			{{/showRequiredMarkAfter}}
+		</label>
+		<input type="number" id="{{inputIdRun}}" {{inputClass}}
+            {{#hasMin}}
+            min="{{min}}"
+            {{/hasMin}}
+            {{#hasMax}}
+            max="{{max}}"
+            {{/hasMax}}
+            {{#required}}
+            required
+            {{/required}}
+            {{#hasValue}}
+            value="{{value}}"
+            {{/hasValue}}
+            {{#hasName}}
+            name="{{name}}"
+            {{/hasName}}
+            >
+		{{#hasTip}}
+		<div class="widget-tip"></div>
+		{{/hasTip}}
+		<div class="widget-error"></div>			
+	</div>
+	<div data-show-when="view">
+		<label class="{{labelClass}}">
+			<span data-part="label">{{label}}</span>
+		</label>
+		<span data-part="value" class="{{spanClass}}">{{value}}</span>		
+	</div>
+</div>

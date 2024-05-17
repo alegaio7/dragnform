@@ -20,6 +20,18 @@ class WidgetImage extends Widget {
         return json;
     }
 
+    refresh() {
+        super.refresh();
+
+        if (!this._el)
+            return;
+        var imageStyle = this._buildImageStyle();
+        var imgs = this._el.querySelectorAll('img');
+        for (var img of imgs) {
+            img.style = imageStyle;
+        }
+    }
+    
     async render(container, parser) {
         var widgetClass = this.widgetClass ?? "";
         if (this.widgetRenderOptions.renderGrip)
@@ -75,18 +87,6 @@ class WidgetImage extends Widget {
         }
 
         return imageStyle;
-    }
-
-    _updateUI() {
-        super._updateUI();
-
-        if (!this._el)
-            return;
-        var imageStyle = this._buildImageStyle();
-        var imgs = this._el.querySelectorAll('img');
-        for (var img of imgs) {
-            img.style = imageStyle;
-        }
     }
 }
 

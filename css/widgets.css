@@ -361,11 +361,12 @@
 .widget-properties-editor {
   font-family: inherit;
   padding: 1rem;
-  max-width: 50ch;
+  max-width: 35rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   border: 1px solid #888;
   border-radius: 0.25rem;
   font-family: "Poppins";
+  max-height: calc(100vh - 10rem);
 }
 .widget-properties-editor input, .widget-properties-editor button {
   min-height: 1.75rem;

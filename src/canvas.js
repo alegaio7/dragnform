@@ -362,14 +362,23 @@ export default class Canvas {
             // once editor template data is obtained, replace the placeholders with the actual values
             if (!editorData.replacements)
                 editorData.replacements = {};
-            editorData.replacements.accept = Strings.WidgetEditor_Common_Accept;
-            editorData.replacements.cancel = Strings.WidgetEditor_Common_Cancel;
+            editorData.replacements.labelAccept = Strings.WidgetEditor_Common_Accept;
+            editorData.replacements.labelCancel = Strings.WidgetEditor_Common_Cancel;
             editorHtml = mustache.render(editorData.template, editorData.replacements);
             editorData.html = editorHtml;
             this._editorTemplates.set(sender.type, editorData);
         }
 
         this._editorsContainer.innerHTML = editorHtml;
+
+        // check if the dialog has an associated script. If so, load it
+        var propEditorWithScript = this._editorsContainer.querySelector(".widget-properties-editor[has-script]");
+        if (propEditorWithScript) {
+            var scriptName = propEditorWithScript.getAttribute("has-script");
+            var scriptNode = document.createElement("script");
+            scriptNode.src = scriptName;
+            propEditorWithScript.appendChild(scriptNode);
+        }
 
         // update modal control properties
         editorProps = sender.getEditorProperties();
@@ -390,22 +399,29 @@ export default class Canvas {
         }
 
         // attach handlers to buttons
-        var acceptButton = this._editorsContainer.querySelector('[data-action="accept"]');
         var _t = this;
+        var modal = this._editorsContainer.querySelector('.widget-properties-editor');
+
+        var acceptButton = this._editorsContainer.querySelector('[data-action="accept"]');
         if (acceptButton)
             acceptButton.onclick = function() {
-                _t._updateWidgetPropertiesFromEditor(_t._editingWidgetInfo);
+                _t._updateWidgetPropertiesFromEditor(_t._editingWidgetInfo, modal);
             }.bind(this);
 
+        var cancelButton = this._editorsContainer.querySelector('[data-action="cancel"]');
+        if (cancelButton)
+            cancelButton.onclick = function() {
+                modal.close();
+            }.bind(this);
+    
         this._editingWidgetInfo = {widget: sender, properties: editorProps};
-        var modal = this._editorsContainer.querySelector('.widget-properties-editor');
         modal.showModal();
     }
 
     /// <summary>
     /// Updates the widget properties from the editor modal
     /// </summary>
-    _updateWidgetPropertiesFromEditor(widgetInfo) {
+    _updateWidgetPropertiesFromEditor(widgetInfo, modal) {
         widgetInfo.widget.batchUpdating = true;
         if (widgetInfo.properties) {
             widgetInfo.properties.forEach(p => {
@@ -425,7 +441,7 @@ export default class Canvas {
             });
         }
         widgetInfo.widget.batchUpdating = false;
-        var modal = this._editorsContainer.querySelector('.widget-properties-editor');
+        widgetInfo.widget.refresh();
         modal.close();
     }
 }

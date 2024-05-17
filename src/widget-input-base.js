@@ -5,16 +5,26 @@ class WidgetInputBase extends Widget {
     constructor(widgetType, fragment) {
         super(widgetType, fragment);
 
+        this.requiredAttributeSettings = fragment.requiredAttributeSettings ?? {};
+        if (!this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
+            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE;
+        if (!this.requiredAttributeSettings.mark)
+            this.requiredAttributeSettings.mark = "*";
+
         // check common validations
-        var vals = this.validations;
-        if (vals.length) {
-            vals.forEach(v => {
-                if (v.type === "required") {
-                    v.value = !!v.value;
-                    v.message = v.message ?? constants.WIDGET_VALIDATION_REQUIRED;
-                }
-            });
+        this._required = false;
+        this.requiredValidationMessage = "";
+        var v = this._findValidation("required");
+        if (v) {
+            this._required = !!v.value;
+            this.requiredValidationMessage = v.message ?? Strings.WidgetValidation_RequiredMessage;
         }
+    }
+
+    get required() { return this._required; }
+    set required(value) {
+        this._required = value;
+        this.refresh();
     }
 
     /// <summary>
@@ -22,7 +32,7 @@ class WidgetInputBase extends Widget {
     /// </summary>
     _renderDOM(container, parser, html) {
         super._renderDOM(container, parser, html);
-        super._updateUI();
+        super.refresh();
         this._updateContols();
 
         var _t = this;
@@ -57,7 +67,7 @@ class WidgetInputBase extends Widget {
             r = { result: false, message: `Widget ${this.id}: input control not found` };
         }
         else if (!input.value && this.required) {
-            r = { result: false, message: this.requiredMessage };
+            r = { result: false, message: this.requiredValidationMessage };
         }
 
         if (!r)

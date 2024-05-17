@@ -28,7 +28,7 @@ export default class Widget {
         if (!fragment.id)
             throw new Error('Widget id is required');
 
-        this._batchUpdating = true; // to avoid repeated calls to _updateUI while running ctor
+        this._batchUpdating = true; // to avoid repeated calls to refresh while running ctor
         
         this._columns = 12;
         this.columns = fragment.columns ?? 12;
@@ -56,12 +56,6 @@ export default class Widget {
 
         this.widgetRenderOptions = fragment.widgetRenderOptions ?? {};
 
-        this.requiredAttributeSettings = fragment.requiredAttributeSettings ?? {};
-        if (!this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER)
-            this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE;
-        if (!this.requiredAttributeSettings.mark)
-            this.requiredAttributeSettings.mark = "*";
-        
         this.tip = fragment.tip;
 
         this.widgetClass = 'widget';
@@ -76,7 +70,7 @@ export default class Widget {
     set batchUpdating(value) { 
         this._batchUpdating = !!value;
         if (!this._batchUpdating)
-            this._updateUI();
+            this.refresh();
      }
 
     get columns() { return this._columns; }
@@ -85,7 +79,7 @@ export default class Widget {
         if (isNaN(value) || value < 1 || value > 12)
             value = 12;
         this._columns = value;
-        this._updateUI();
+        this.refresh();
      }
 
     get domElement() { return this._el; }
@@ -96,7 +90,7 @@ export default class Widget {
     get label() { return this._label; }
     set label(value) { 
         this._label = value;
-        this._updateUI();
+        this.refresh();
     }
     
     get labelElement() { return this._labelEl; }
@@ -106,12 +100,9 @@ export default class Widget {
         if (value === this._renderMode)
             return;
         this._renderMode = value;
-        this._updateUI();
+        this.refresh();
      }
 
-    get required() { return this._findValidation("required")?.value === true; }
-    get requiredMessage() { return this._findValidation("required")?.message ?? constants.WIDGET_VALIDATION_REQUIRED; }
- 
     get validations() { return this._validations; }
     set validations(value) { this._validations = value; }
     
@@ -161,20 +152,15 @@ export default class Widget {
             { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
             { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
             { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
-            { name: "autoHeight", type: "boolean", elementId: "chkWidgetPropAutoHeght", value: this.autoHeight },
+            { name: "autoHeight", type: "boolean", elementId: "chkWidgetPropAutoHeight", value: this.autoHeight },
             { name: "height", type: "number", elementId: "txtWidgetPropHeight", value: functions.convertToPixels(this.height) },
         ];
     }
 
     async getPropertiesEditorTemplate() {
-        var html = await (await fetch('/editors/widget-text.editor.html')).text();
+        var html = await (await fetch('/editors/widget-common.editor.html')).text();
         return {
-            replacements: {
-                autoHeight: Strings.WidgetEditor_Common_AutoHeight,
-                columns: Strings.WidgetEditor_Common_Columns,
-                height: Strings.WidgetEditor_Common_Height,
-                label: Strings.WidgetEditor_Common_Label,
-            },
+            replacements: this._getCommonEditorPropertyReplacements(),
             template: html
         };
     }
@@ -184,6 +170,46 @@ export default class Widget {
         if (error)
             error.innerHTML = r.message;
         this._el.classList.add('has-error');
+    }
+
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+
+        // update columns
+        this._el.classList.remove(this._prevColClass);
+        var colClass = "widget-col-" + this.columns;
+        this._el.classList.add(colClass);
+        this._prevColClass = colClass;
+        
+        if (this.widgetRenderOptions.renderTips && this.tip) {
+            var tipCtls = this._el.querySelectorAll(`.widget-tip`);
+            if (tipCtls && tipCtls.length)
+                tipCtls.forEach(t => t.innerHTML = this.tip);
+        }
+
+        // update style
+        var style = this._buildStyleAttribute();
+        this._el.setAttribute('style', style);
+
+        this._el.setAttribute('data-mode', this.renderMode);
+
+        if (this._labelEl) {
+            if (!this._inlineEditorChangingLabel) {
+                if (this._flyter)
+                    this._flyter.setValue(this.label);
+                else
+                    this._labelEl.innerHTML = this.label;
+            }
+        }
+
+        // update the labels in the other views
+        var rmLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_RUN}"] [data-part="label"]`);
+        if (rmLabel)
+            rmLabel.innerHTML = this.label;
+        var vwLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_VIEW}"] [data-part="label"]`);
+        if (vwLabel)
+            vwLabel.innerHTML = this.label;
     }
 
     /// <summary>
@@ -264,6 +290,15 @@ export default class Widget {
     // Private methods
     // *******************************************************************************
 
+    _addValidation(name, value) {
+        var v = this._findValidation(name);
+        if (!v) {
+            v = { type: name, value: value };
+            this._validations.push(v);
+        }
+        return v;
+    }
+
     /// <summary>
     /// Attaches an inline editor (flyter) to the widget's label, so it can be editted in place.
     /// </summary>
@@ -326,6 +361,16 @@ export default class Widget {
         return this.validations.find(v => v.type === name);
     }
 
+    _getCommonEditorPropertyReplacements() { 
+        return {
+            labelAutoHeight: Strings.WidgetEditor_Common_AutoHeight,
+            labelColumns: Strings.WidgetEditor_Common_Columns,
+            labelHeight: Strings.WidgetEditor_Common_Height,
+            labelRequired: Strings.WidgetEditor_Common_Required,
+            labelWidgetLabel: Strings.WidgetEditor_Common_Label,
+        };
+    }
+
     async _loadWidgetTemplate(name, replacements) {
         var template;
         if (Widget._cachedTemplates.has(name))
@@ -370,45 +415,5 @@ export default class Widget {
 
     _updateContols() {
         // implemented in child classes
-    }
-
-    _updateUI() {
-        if (!this._el || this._batchUpdating)
-            return;
-
-        // update columns
-        this._el.classList.remove(this._prevColClass);
-        var colClass = "widget-col-" + this.columns;
-        this._el.classList.add(colClass);
-        this._prevColClass = colClass;
-        
-        if (this.widgetRenderOptions.renderTips && this.tip) {
-            var tipCtls = this._el.querySelectorAll(`.widget-tip`);
-            if (tipCtls && tipCtls.length)
-                tipCtls.forEach(t => t.innerHTML = this.tip);
-        }
-
-        // update style
-        var style = this._buildStyleAttribute();
-        this._el.setAttribute('style', style);
-
-        this._el.setAttribute('data-mode', this.renderMode);
-
-        if (this._labelEl) {
-            if (!this._inlineEditorChangingLabel) {
-                if (this._flyter)
-                    this._flyter.setValue(this.label);
-                else
-                    this._labelEl.innerHTML = this.label;
-            }
-        }
-
-        // update the labels in the other views
-        var rmLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_RUN}"] [data-part="label"]`);
-        if (rmLabel)
-            rmLabel.innerHTML = this.label;
-        var vwLabel = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_VIEW}"] [data-part="label"]`);
-        if (vwLabel)
-            vwLabel.innerHTML = this.label;
     }
 }

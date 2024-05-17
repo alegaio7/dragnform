@@ -6,58 +6,113 @@ class WidgetText extends WidgetInputBase {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_TEXT, fragment);
 
-        // check validations
-        var vals = this.validations;
-        if (vals.length) {
-            vals.forEach(v => {
-                if (v.type === "minLength" || v.type === "maxLength") {
-                    let n = parseInt(v.value);
-                    if (!(n >= 0)) {
-                        if (v.type === "minLength")
-                            throw new Error(`Widget ${this.id}: minLength must be greater than or equal to 0.`);
-                        else if (v.type === "maxLength")
-                            throw new Error(`Widget ${this.id}: minLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
-                    }
+        this._minLength = 0;
+        this._maxLength = 0;
+        this.minLengthValidationMessage = "";
+        this.maxLengthValidationMessage = "";
+        this.pattern = null;
+        this.patternValidationMessage = "";
 
-                    if (!(n <= constants.WIDGET_TYPE_TEXT_MAX_LENGTH)) {
-                        if (v.type === "minLength")
-                            throw new Error(`Widget ${this.id}: minLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
-                        else if (v.type === "maxLength")
-                            throw new Error(`Widget ${this.id}: maxLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
-                    }
-                
-                    v.value = n;
-                } else if (v.type === "pattern") {
-                    let p = Widget.getRegexPattern(v.value);
-                    if (!p)
-                        throw new Error(`Widget ${this.id}: pattern not found: ${v.value}`);
-                    v.pattern = p;
-                }
-            });
+        var v = this._findValidation("minLength");
+        if (v) {
+            this._minLength = (typeof v.value === "number" ? v.value : 0);
+            if (this._minLength < 0 || this._minLength > constants.WIDGET_TYPE_TEXT_MAX_LENGTH)
+                throw new Error(`Widget ${this.id}: minLength must be greater than or equal to 0.`);
+            this.minLengthValidationMessage = v.message;
+        }
+
+        v = this._findValidation("maxLength");
+        if (v) {
+            this._maxLength = (typeof v.value === "number" ? v.value : 0);
+            if (this._maxLength < 0 || this._maxLength > constants.WIDGET_TYPE_TEXT_MAX_LENGTH)
+                throw new Error(`Widget ${this.id}: minLength must be less than or equal to ${constants.WIDGET_TYPE_TEXT_MAX_LENGTH}`);
+            this.maxLengthValidationMessage = v.message;
+        }
+
+        v = this._findValidation("pattern");
+        if (v) {
+            let p = Widget.getRegexPattern(v.value);
+            if (!p)
+                throw new Error(`Widget ${this.id}: pattern not found: ${v.value}`);
+            this.pattern = p;
+            this.patternValidationMessage = v.message ?? Strings.WidgetValidation_PatternMessage;
         }
     }
 
-    get minLength() { return this._findValidation("minLength")?.value ?? 0; }
-    get minLengthValidationMessage() { return this._findValidation("minLength")?.message ?? ""; }
-    get maxLength() { return this._findValidation("maxLength")?.value ?? null; }
-    get maxLengthValidationMessage() { return this._findValidation("maxLength")?.message ?? ""; }
-    get pattern() { return this._findValidation("pattern")?.pattern ?? ""; }
-    get patternValidationMessage() { return this._findValidation("pattern")?.message ?? ""; }
+    get minLength() { return this._minLength; }
+    set minLength(value) {
+        this._minLength = value;
+        this.refresh();
+    }
+
+    get maxLength() { return this._maxLength; }
+    set maxLength(value) {
+        this._maxLength = value;
+        this.refresh();
+    }
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = {validations: this.validations};
-        if (localProps.validations && localProps.validations.length) {
-            localProps.validations.forEach(v => {
-                if (v.type === "pattern" && v.pattern)
-                    delete v.pattern;  // delete object created in .ctor
-            });
-        }
+        var localProps = {validations: [
+            { type: "minLength", value: this.minLength, message: this.minLengthValidationMessage },
+            { type: "maxLength", value: this.maxLength, message: this.maxLengthValidationMessage },
+            { type: "required", value: this.required, message: this.requiredValidationMessage },
+        ]};
+
+        if (this.pattern)
+            localProps.validations.push({ type: "pattern", value: this.pattern.name, message: this.pattern.message });
+
         localProps.value = this.value ?? null;
         Object.assign(json, localProps);
         return json;
     }
     
+    getEditorProperties() {
+        var props = super.getEditorProperties();
+
+        props.push(
+            { name: "minLength", type: "number", elementId: "txtWidgetPropMinLength", value: this.minLength },
+            { name: "maxLength", type: "number", elementId: "txtWidgetPropMaxLength", value: this.maxLength },
+            { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
+        );
+        return props;
+    }
+
+    async getPropertiesEditorTemplate() {
+        var html = await (await fetch('/editors/widget-text.editor.html')).text();
+        var replacements = this._getCommonEditorPropertyReplacements();
+
+        replacements.labelMinLength = Strings.WidgetEditor_Text_Widget_MinLength;
+        replacements.labelMaxLength = Strings.WidgetEditor_Text_Widget_MaxLength;
+
+        return {
+            replacements: replacements,
+            template: html
+        };
+    }
+
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+
+        super.refresh();
+
+        var inputs = this._el.querySelectorAll("input");
+        if (inputs.length) {
+            inputs.forEach(input => {
+                if (this.minLength !== null)
+                    input.setAttribute("minlength", this.minLength);
+                else
+                    input.removeAttribute("minlength");
+
+                if (this.maxLength > 0)
+                    input.setAttribute("maxlength", this.maxLength);
+                else
+                    input.removeAttribute("maxlength");
+            });
+        }
+    }
+
     /// <summary>
     /// Generates the markup for the input control used in design and run modes. 
     /// The markup for view mode is generated by the base class.
@@ -117,9 +172,9 @@ class WidgetText extends WidgetInputBase {
         // if base validation ok, validate text-specific properties
         if (r.result) {
             if (input.value) {
-                if (this.minLength && input.value.length < this.minLength)
+                if (this.minLength !== null && input.value.length < this.minLength)
                     r = { result: false, message: this.minLengthValidationMessage };
-                else if (this.maxLength && input.value.length > this.maxLength)
+                else if (this.maxLength > 0 && input.value.length > this.maxLength)
                     r = { result: false, message: this.maxLengthValidationMessage };
                 else if (this.pattern && !this.pattern.regex.test(input.value))
                     r = { result: false, message: this.patternValidationMessage };
@@ -130,6 +185,10 @@ class WidgetText extends WidgetInputBase {
             this.setError(r);
         return r;
     }
+
+    // *******************************************************************************
+    // Private methods
+    // *******************************************************************************
 }
 
 export default WidgetText;

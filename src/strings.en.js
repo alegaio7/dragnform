@@ -39,6 +39,8 @@ class Strings {
     static get WidgetPropertiesButtonTitle() { return 'Widget properties'; }
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
     static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
+    static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
+    static get WidgetValidation_RequiredMessage() {return 'Value is required'; }
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
@@ -47,8 +49,14 @@ class Strings {
     static get WidgetEditor_Common_Columns() { return 'Columns'; }
     static get WidgetEditor_Common_Height() { return 'Height'; }
     static get WidgetEditor_Common_Label() { return 'Label'; }
+    static get WidgetEditor_Common_Required() { return 'Required'; }
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
 
+    static get WidgetEditor_Text_Widget_Min() { return 'Min.'; }
+    static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
+    static get WidgetEditor_Text_Widget_Max() { return 'Max.'; }
+    static get WidgetEditor_Text_Widget_MaxLength() { return 'Max. length'; }
+    
     // flyter
     static get Flyter_CancelButtonText() { return 'Cancel'; }
     static get Flyter_OkButtonText() { return 'Accept'; }

@@ -3,24 +3,40 @@
         <span id="lblWidgetId">{{id}}</span>
     </div>
     <div>
-        <label for="txtWidgetPropLabel">{{label}}</label>
+        <label for="txtWidgetPropLabel">{{labelWidgetLabel}}</label>
         <input type="text" id="txtWidgetPropLabel" />
     </div>
     <div>
-        <label for="txtWidgetPropColumns">{{columns}}</label>
+        <label for="txtWidgetPropColumns">{{labelColumns}}</label>
         <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
     </div>
     <div>
-        <label for="chkWidgetPropAutoHeght">{{autoHeight}}</label>
-        <input type="checkbox" id="chkWidgetPropAutoHeght" />
+        <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
+        <input type="checkbox" id="chkWidgetPropAutoHeight" />
     </div>
     <div>
-        <label for="txtWidgetPropHeight">{{height}}</label>
+        <label for="txtWidgetPropHeight">{{labelHeight}}</label>
         <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+    </div>
+    <div>
+        <label for="chkWidgetPropRequired">{{labelRequired}}</label>
+        <input type="checkbox" id="chkWidgetPropRequired" />
     </div>    
+    <div>
+        <label for="txtWidgetPropMinLength">{{labelMinLength}}</label>
+        <input type="number" id="txtWidgetPropMinLength" min="0" />
+    </div>
+    <div>
+        <label for="txtWidgetPropMaxLength">{{labelMaxLength}}</label>
+        <input type="number" id="txtWidgetPropMaxLength" min="0" />
+    </div>
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">
-            {{accept}}
+            {{labelAccept}}
+        </button>
+        &nbsp;
+        <button type="button" data-action="cancel">
+            {{labelCancel}}
         </button>
     </div>    
 </dialog>

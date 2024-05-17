@@ -473,11 +473,12 @@ $widget-toolbar-padding: 0.5rem;
 .widget-properties-editor {
     font-family: inherit;
     padding: $widget-modal-padding;
-    max-width: 50ch;
+    max-width: 35rem;
     box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
     border: 1px solid $widget-modal-border-color;
     border-radius: $widget-designer-radius;
     font-family: $font-family;
+    max-height: calc(100vh - 10rem);
 
     input, button {
         min-height: $widget-controls-min-height;

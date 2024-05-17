@@ -5,36 +5,71 @@ class WidgetNumber extends WidgetInputBase {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_NUMBER, fragment);
 
-        // check validations
-        var vals = this.validations;
-        if (vals.length) {
-            vals.forEach(v => {
-                if (v.type === "min" || v.type === "max") {
-                    let n = parseInt(v.value);
-                    if (isNaN(n) || n === undefined || n === null) {
-                        if (v.type === "min")
-                            throw new Error(`Widget ${this.id}: min must be a valid number`);
-                        else if (v.type === "max")
-                            throw new Error(`Widget ${this.id}: max must be a valid number`);
-                    }
-                    v.value = n;
-                }
-            });
+        this._min = 0;
+        this._max = 0;
+        this.minValidationMessage = "";
+        this.maxValidationMessage = "";
+
+        var v = this._findValidation("min");
+        if (v) {
+            this._min = typeof v.value === "number" ? v.value : null;
+            this.minValidationMessage = v.message;
+        }
+
+        v = this._findValidation("max");
+        if (v) {
+            this._max = typeof v.value === "number" ? v.value : null;
+            this.maxValidationMessage = v.message;
         }
     }
 
-    get min() { return this._findValidation("min")?.value; }
-    get minValidationMessage() { return this._findValidation("min")?.message; }
-    get max() { return this._findValidation("max")?.value; }
-    get maxValidationMessage() { return this._findValidation("max")?.message; }
+    get min() { return this._min; }
+    set min(value) {
+        this._min = value;
+        this.refresh();
+    }
+
+    get max() { return this._max; }
+    set max(value) {
+        this._max = value;
+        this.refresh();
+    }
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = {validations: this.validations};
+        var localProps = {validations: [
+            { type: "min", value: this.min, message: this.minValidationMessage },
+            { type: "max", value: this.max, message: this.maxValidationMessage },
+            { type: "required", value: this.required, message: this.requiredValidationMessage },
+        ]};
         if (!isNaN(this.value) && this.value !== null && this.value !== undefined)
             localProps.value = this.value;
         Object.assign(json, localProps);
         return json;
+    }
+
+    getEditorProperties() {
+        var props = super.getEditorProperties();
+
+        props.push(
+            { name: "min", type: "number", elementId: "txtWidgetPropMin", value: this.min },
+            { name: "max", type: "number", elementId: "txtWidgetPropMax", value: this.max },
+            { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
+        );
+        return props;
+    }
+
+    async getPropertiesEditorTemplate() {
+        var html = await (await fetch('/editors/widget-number.editor.html')).text();
+        var replacements = this._getCommonEditorPropertyReplacements();
+
+        replacements.labelMin = Strings.WidgetEditor_Text_Widget_Min;
+        replacements.labelMax = Strings.WidgetEditor_Text_Widget_Max;
+
+        return {
+            replacements: replacements,
+            template: html
+        };
     }
 
     async render(container, parser) {

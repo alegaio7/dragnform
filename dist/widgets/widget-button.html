@@ -1,0 +1,35 @@
+<div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
+	<div data-show-when="design">
+		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		{{#showRemove}}
+		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		{{/showRemove}}
+        <button type="button" class="{{buttonClass}}" 
+            id={{buttonIdDesign}} 
+            {{#hasName}}
+            name="{{name}}" 
+            {{/hasName}}
+            >
+            {{#hasLabel}}
+            <span data-part="label">{{label}}</span>
+            {{/hasLabel}}
+        </button>
+        {{#showGrip}}
+		<div class="widget-grip"></div>
+		{{/showGrip}}
+	</div>
+	<div data-show-when="run">
+        <button type="button" class="{{buttonClass}}" 
+            id={{buttonIdRun}} 
+            {{#hasName}}
+            name="{{name}}" 
+            {{/hasName}}
+            >
+            {{#hasLabel}}
+            <span data-part="label">{{label}}</span>
+            {{/hasLabel}}
+        </button>
+	</div>
+	<div data-show-when="view">
+	</div>
+</div>
