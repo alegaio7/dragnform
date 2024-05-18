@@ -158,8 +158,11 @@ export default class Widget {
     }
 
     async getPropertiesEditorTemplate() {
-        var html = await (await fetch('/editors/widget-common.editor.html')).text();
+        var baseName = "widget-common";
+        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         return {
+            baseName: baseName,
+            handlingClassName: "WidgetCommonPropertiesEditor",
             replacements: this._getCommonEditorPropertyReplacements(),
             template: html
         };

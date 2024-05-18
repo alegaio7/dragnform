@@ -79,13 +79,16 @@ class WidgetText extends WidgetInputBase {
     }
 
     async getPropertiesEditorTemplate() {
-        var html = await (await fetch('/editors/widget-text.editor.html')).text();
+        var baseName = "widget-text";
+        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         var replacements = this._getCommonEditorPropertyReplacements();
 
         replacements.labelMinLength = Strings.WidgetEditor_Text_Widget_MinLength;
         replacements.labelMaxLength = Strings.WidgetEditor_Text_Widget_MaxLength;
 
         return {
+            baseName: baseName,
+            handlingClassName: "WidgetTextPropertiesEditor",
             replacements: replacements,
             template: html
         };
@@ -110,6 +113,13 @@ class WidgetText extends WidgetInputBase {
                 else
                     input.removeAttribute("maxlength");
             });
+        }
+
+        if (this.required && this.requiredAttributeSettings && this.requiredAttributeSettings.mark) {
+            var beforeMarks = this._el.querySelectorAll(".required-mark[data-position='before']");
+            var afterMarks = this._el.querySelectorAll(".required-mark[data-position='after']");
+            beforeMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE ? "inline" : "none");
+            afterMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER ? "inline" : "none");
         }
     }
 

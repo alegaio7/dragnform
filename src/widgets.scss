@@ -120,7 +120,7 @@ $widget-toolbar-padding: 0.5rem;
     .widget-toolbar-group {
         border: 1px solid $widget-toolbar-group-border-color;
         padding: $widget-toolbar-padding;
-        margin-right: $widget-toolbar-padding;
+        margin: 0 $widget-toolbar-padding $widget-toolbar-padding 0;
         display: inline-block;
         border-radius: $widget-designer-radius;
 

@@ -313,6 +313,27 @@ export default class Designer {
                 html += `</div>`;
             }
 
+            if (renderModeGroup) {
+                html += `<div class="widget-toolbar-group">
+                    <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
+                if (options.toolbar.buttons.renderCurrentMode)
+                    html += `<button type="button" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
+                            <span data-render-mode="design">
+                                <i class="${Icons.Toolbar_DesignMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_Design_ButtonLabel}</span>                            
+                            </span>
+                            <span data-render-mode="run">
+                                <i class="${Icons.Toolbar_RunMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_Run_ButtonLabel}</span>
+                            </span>
+                            <span data-render-mode="view">
+                                <i class="${Icons.Toolbar_ViewMode_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_View_ButtonLabel}</span>
+                            </span>                            
+                        </button>`;
+                html += `</div>`;
+            }
+                        
             if (widgetsGroup) {
                 html += `<div class="widget-toolbar-group">
                         <div class="widget-toolbar-group-title">${Strings.Toolbar_Widgets_GroupTitle}</div>`;
@@ -350,26 +371,6 @@ export default class Designer {
                 html += `</div>`;
             }
 
-            if (renderModeGroup) {
-                html += `<div class="widget-toolbar-group">
-                    <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
-                if (options.toolbar.buttons.renderCurrentMode)
-                    html += `<button type="button" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
-                            <span data-render-mode="design">
-                                <i class="${Icons.Toolbar_DesignMode_Icon}"></i>
-                                <span>${Strings.Toolbar_RenderModes_Design_ButtonLabel}</span>                            
-                            </span>
-                            <span data-render-mode="run">
-                                <i class="${Icons.Toolbar_RunMode_Icon}"></i>
-                                <span>${Strings.Toolbar_RenderModes_Run_ButtonLabel}</span>
-                            </span>
-                            <span data-render-mode="view">
-                                <i class="${Icons.Toolbar_ViewMode_Icon}"></i>
-                                <span>${Strings.Toolbar_RenderModes_View_ButtonLabel}</span>
-                            </span>                            
-                        </button>`;
-                html += `</div>`;
-            }
             html += `</div>`;
         }
         html += `<div class="widget-container"></div>`;

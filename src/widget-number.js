@@ -60,13 +60,16 @@ class WidgetNumber extends WidgetInputBase {
     }
 
     async getPropertiesEditorTemplate() {
-        var html = await (await fetch('/editors/widget-number.editor.html')).text();
+        var baseName = "widget-number";
+        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         var replacements = this._getCommonEditorPropertyReplacements();
 
         replacements.labelMin = Strings.WidgetEditor_Text_Widget_Min;
         replacements.labelMax = Strings.WidgetEditor_Text_Widget_Max;
 
         return {
+            baseName: baseName,
+            handlingClassName: "WidgetNumberPropertiesEditor",
             replacements: replacements,
             template: html
         };

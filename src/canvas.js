@@ -16,6 +16,7 @@ import flyter, {
     withRadioType,
   } from 'flyter';
 import mustache from 'mustache';
+import Widget from './widget-base.js';
 
 export default class Canvas {
     constructor(widgetsContainerEl, widgetEditorsContainerEl, widgetRenderOptions, renderMode) {
@@ -375,9 +376,20 @@ export default class Canvas {
         var propEditorWithScript = this._editorsContainer.querySelector(".widget-properties-editor[has-script]");
         if (propEditorWithScript) {
             var scriptName = propEditorWithScript.getAttribute("has-script");
-            var scriptNode = document.createElement("script");
+            if (!scriptName)
+                scriptName = "/editors/" + editorData.baseName + ".editor.js";
+
+            import(/* webpackIgnore: true */ scriptName).then(module => {
+                if (module && module.default) {
+                    var editor = new module.default();
+                    editor.init();
+                }
+            });
+
+            /* var scriptNode = document.createElement("script");
+            scriptNode.type = "module"; // "text/javascript";
             scriptNode.src = scriptName;
-            propEditorWithScript.appendChild(scriptNode);
+            propEditorWithScript.appendChild(scriptNode); */
         }
 
         // update modal control properties
@@ -441,7 +453,7 @@ export default class Canvas {
             });
         }
         widgetInfo.widget.batchUpdating = false;
-        widgetInfo.widget.refresh();
+        // widgetInfo.widget.refresh(); // not needed since setting batchUpdating = false; will trigger a refresh
         modal.close();
     }
 }

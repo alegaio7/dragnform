@@ -1,0 +1,1 @@
+export default class WidgetCommonPropertiesEditor{constructor(){this.chkAutoHeight=document.getElementById("chkWidgetPropAutoHeight");var t=this;this.chkAutoHeight&&this.chkAutoHeight.addEventListener("change",(function(){t._updateControls()}))}init(){this._updateControls()}_updateControls(){document.getElementById("txtWidgetPropHeight").disabled=this.chkAutoHeight.checked}}
