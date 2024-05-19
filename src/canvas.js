@@ -381,31 +381,55 @@ export default class Canvas {
 
             import(/* webpackIgnore: true */ scriptName).then(module => {
                 if (module && module.default) {
-                    var editor = new module.default();
+                    var options = { 
+                        callbacks: {
+                            onAutoHeightChanged: function(dlg, value) {
+                                sender.autoHeight = value;
+                            },
+                            onColumnsChanged: function(dlg, value) {
+                                sender.columns = value;
+                            },
+                            onHeightChanged: function(dlg, value) {
+                                sender.height = value;
+                            },
+                            onRequiredChanged: function(dlg, value) {
+                                sender.required = value;
+                            }
+                        },
+                        dialogContainer: this._editorsContainer
+                    };
+                    var editor = new module.default(options);
                     editor.init();
                 }
             });
-
-            /* var scriptNode = document.createElement("script");
-            scriptNode.type = "module"; // "text/javascript";
-            scriptNode.src = scriptName;
-            propEditorWithScript.appendChild(scriptNode); */
         }
 
         // update modal control properties
         editorProps = sender.getEditorProperties();
         if (editorProps) {
             editorProps.forEach(p => {
-                var el = document.getElementById(p.elementId);
-                if (el) {
-                    if (p.readonly)
-                        el.innerHTML = p.value;
-                    else {
-                        if (p.type === "boolean")
-                            el.checked = p.value;
-                        else
-                            el.value = p.value;
+                if (p.elementId) {
+                    var el = document.getElementById(p.elementId);
+                    if (el) {
+                        if (p.readonly)
+                            el.innerHTML = p.value;
+                        else {
+                            if (p.type === "boolean")
+                                el.checked = p.value;
+                            else if (p.type === "number" || p.type === "string")
+                                el.value = p.value;
+                        }
                     }
+                } else if (p.elementIds) { // used for properties that are bound to multiple elements like radio buttons
+                    p.elementIds.forEach(eId => {
+                        var el = document.getElementById(eId);
+                        if (el) {
+                            if (el.value === p.value)
+                                el.checked = true;
+                            else
+                                el.checked = false;
+                        }
+                    });
                 }
             });
         }
@@ -437,18 +461,29 @@ export default class Canvas {
         widgetInfo.widget.batchUpdating = true;
         if (widgetInfo.properties) {
             widgetInfo.properties.forEach(p => {
-                if (p.readonly)
-                    return;
-                if (p.name in widgetInfo.widget) {
-                    var el = document.getElementById(p.elementId);
-                    if (el) {
-                        if (p.type === "boolean")
-                            widgetInfo.widget[p.name] = el.checked;
-                        else
-                            widgetInfo.widget[p.name] = el.value;
-                        if (this._rememberedProperties.has(p.name))
-                            this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]); // don't use the element's value since its string. use the parsed value instead
+                if (p.elementId) {
+                    if (p.readonly)
+                        return;
+                    if (p.name in widgetInfo.widget) {
+                        var el = document.getElementById(p.elementId);
+                        if (el) {
+                            if (p.type === "boolean")
+                                widgetInfo.widget[p.name] = el.checked;
+                            else
+                                widgetInfo.widget[p.name] = el.value;
+                            if (this._rememberedProperties.has(p.name))
+                                this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]); // don't use the element's value since its string. use the parsed value instead
+                        }
                     }
+                } else if (p.elementIds) {
+                    p.elementIds.forEach(eId => { 
+                        var el = document.getElementById(eId);
+                        if (el && el.checked) {
+                            widgetInfo.widget[p.name] = el.value;
+                            if (this._rememberedProperties.has(p.name))
+                                this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]);
+                        }
+                    });
                 }
             });
         }

@@ -30,7 +30,11 @@ export default class Widget {
 
         this._batchUpdating = true; // to avoid repeated calls to refresh while running ctor
         
-        this._columns = 12;
+        this._alignment = constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER;
+        if (fragment.alignment)
+            if (fragment.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP || fragment.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER || fragment.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
+                this._alignment = fragment.alignment;
+
         this.columns = fragment.columns ?? 12;
         this._el = null;
         this._inlineEditorChangingLabel = false; // used when updating label from inline editor instead of modal, to avoid modifiying the label and cause a flyter error
@@ -44,8 +48,8 @@ export default class Widget {
             throw new Error('Widget columns must be between 1 and 12');
 
         // if no height came in the json fragment, set it to a default value but set autoHeight true
-        this.autoHeight = fragment.autoHeight ?? false;
-        this.height = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
+        this._autoHeight = fragment.autoHeight ?? false;
+        this._height = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
         
         this.id = fragment.id;
         this._inPlaceEditor = false;
@@ -66,6 +70,24 @@ export default class Widget {
     }
 
     // Props begin
+    get alignment() { return this._alignment; }
+    set alignment(value) { 
+        if (value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP || 
+            value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER || 
+            value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM) {
+            this._alignment = value;
+            this.refresh();
+        }
+        else
+            throw new Error('Invalid alignment value');
+    }
+
+    get autoHeight() { return this._autoHeight; }
+    set autoHeight(value) { 
+        this._autoHeight = !!value;
+        this.refresh();
+    }
+
     get batchUpdating() { return this._batchUpdating; }
     set batchUpdating(value) { 
         this._batchUpdating = !!value;
@@ -86,6 +108,12 @@ export default class Widget {
     
     get globalClasses() { return this._globalClasses; }
     set globalClasses(value) { this._globalClasses = value; }
+
+    get height() { return this._height; }
+    set height(value) { 
+        this._height = value;
+        this.refresh();
+    }
 
     get label() { return this._label; }
     set label(value) { 
@@ -150,10 +178,11 @@ export default class Widget {
     getEditorProperties() {
         return [
             { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
-            { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
-            { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
+            { name: "alignment", type: "multiple", elementIds: ["optAlignTop", "optAlignCenter", "optAlignBottom"], value: this.alignment },
             { name: "autoHeight", type: "boolean", elementId: "chkWidgetPropAutoHeight", value: this.autoHeight },
+            { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
             { name: "height", type: "number", elementId: "txtWidgetPropHeight", value: functions.convertToPixels(this.height) },
+            { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
         ];
     }
 
@@ -178,6 +207,21 @@ export default class Widget {
     refresh() {
         if (!this._el || this._batchUpdating)
             return;
+
+        // update alignment
+        var sections = this._el.querySelectorAll(`[data-show-when]`);
+        if (sections && sections.length)
+            sections.forEach(s => {
+                s.classList.remove("widget-align-start");
+                s.classList.remove("widget-align-center");
+                s.classList.remove("widget-align-end");
+                if (this.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP)
+                    s.classList.add("widget-align-start");
+                else if (this.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER)
+                    s.classList.add("widget-align-center");
+                else if (this.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
+                    s.classList.add("widget-align-end");
+            });
 
         // update columns
         this._el.classList.remove(this._prevColClass);
@@ -366,6 +410,9 @@ export default class Widget {
 
     _getCommonEditorPropertyReplacements() { 
         return {
+            labelAlignBottom: Strings.WidgetEditor_Common_Align_Bottom,
+            labelAlignCenter: Strings.WidgetEditor_Common_Align_Center,
+            labelAlignTop: Strings.WidgetEditor_Common_Align_Top,
             labelAutoHeight: Strings.WidgetEditor_Common_AutoHeight,
             labelColumns: Strings.WidgetEditor_Common_Columns,
             labelHeight: Strings.WidgetEditor_Common_Height,

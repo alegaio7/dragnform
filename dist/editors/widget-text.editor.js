@@ -1,1 +1,1 @@
-import WidgetCommonPropertiesEditor from"./widget-common.editor.js";export default class WidgetTextPropertiesEditor extends WidgetCommonPropertiesEditor{constructor(){super()}init(){super.init(),this._updateControls()}_updateControls(){super._updateControls()}}
+import WidgetCommonPropertiesEditor from"./widget-common.editor.js";export default class WidgetTextPropertiesEditor extends WidgetCommonPropertiesEditor{constructor(t){super(t)}init(){super.init(),this._updateControls()}_updateControls(){super._updateControls()}}

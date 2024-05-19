@@ -110,8 +110,13 @@
 .widget[data-mode=design] {
   border: 1px dashed #ccc;
 }
+.widget > [data-show-when] {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
 .widget[data-mode=design] [data-show-when=design] {
-  display: block;
+  display: flex;
 }
 .widget[data-mode=design] [data-show-when=view], .widget[data-mode=design] [data-show-when=run] {
   display: none;
@@ -120,13 +125,13 @@
   cursor: pointer;
 }
 .widget[data-mode=run] [data-show-when=run] {
-  display: block;
+  display: flex;
 }
 .widget[data-mode=run] [data-show-when=design], .widget[data-mode=run] [data-show-when=view] {
   display: none;
 }
 .widget[data-mode=view] [data-show-when=view] {
-  display: block;
+  display: flex;
 }
 .widget[data-mode=view] [data-show-when=design], .widget[data-mode=view] [data-show-when=run] {
   display: none;
@@ -234,6 +239,18 @@
 .widget-value {
   width: 100%;
   display: block;
+}
+
+.widget-align-start {
+  justify-content: start;
+}
+
+.widget-align-center {
+  justify-content: center;
+}
+
+.widget-align-end {
+  justify-content: end;
 }
 
 [class*=widget-col-] {
@@ -373,7 +390,7 @@
   font-family: inherit;
   font-size: 16px;
 }
-.widget-properties-editor input[type=checkbox] {
+.widget-properties-editor input[type=checkbox], .widget-properties-editor input[type=radio] {
   width: 1.5rem;
   vertical-align: middle;
 }

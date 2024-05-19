@@ -1,8 +1,8 @@
 import WidgetCommonPropertiesEditor from "./widget-common.editor.js";
 
 export default class WidgetTextPropertiesEditor extends WidgetCommonPropertiesEditor {
-    constructor() {
-        super();
+    constructor(options) {
+        super(options);
     }
 
     init() {

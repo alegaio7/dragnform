@@ -1,5 +1,5 @@
 export const DEFAULT_PDF_DPI = 72;              // default PDF DPI
-export const DEFAULT_PDF_FONT_SIZE = 16;              // default PDF DPI
+export const DEFAULT_PDF_FONT_SIZE = 16;        // default PDF DPI
 export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
 
 export const FORMS_DESIGNER_VERSION = "1.0.0";
@@ -37,8 +37,6 @@ export const WIDGET_TYPE_NUMBER = 'number';
 export const WIDGET_TYPE_SPACER = 'spacer';
 export const WIDGET_TYPE_TEXT = 'text';
 
-
-
 export const WIDGET_PDF_OBJECT_BOX = 'box';
 // export const WIDGET_PDF_OBJECT_LABEL = 'label';
 export const WIDGET_PDF_OBJECT_SIMPLE_TEXT = 'simpletext';
@@ -47,12 +45,6 @@ export const WIDGET_PDF_OBJECT_IMAGE = 'image';
 
 export const WIDGET_TYPE_NUMBER_MAX = 1_000_000;
 export const WIDGET_TYPE_TEXT_MAX_LENGTH = 500;
-
-export const WIDGET_VALIDATION_MIN_LENGTH = 'Value is too short';
-export const WIDGET_VALIDATION_MIN_VALUE = 'Value is too low';
-export const WIDGET_VALIDATION_MAX_LENGTH = 'Value is too long';
-export const WIDGET_VALIDATION_MAX_VALUE = 'Value is too high';
-export const WIDGET_VALIDATION_PATTERN = 'Value is too long';
 
 export const WIDGET_VALIDATION_ALPHA_ONLY_REGEX = /^[a-zA-Z_\s]+$/;
 export const WIDGET_VALIDATION_ALPHA_AND_ACCENTS_ONLY_REGEX = /^[a-zA-ZÑñÁáÉéïíöóüúü_\s]+$/;
@@ -63,15 +55,14 @@ export const WIDGET_VALIDATION_NUMBERS_ONLY_REGEX = /^[0-9]+$/;
 export const WIDGET_VALIDATION_EMAIL_REGEX = /^[A-Za-z0-9]+[A-Za-z0-9!#$%&\*\+\._-]*@[A-Za-z0-9]+([.]{0,1}[A-Za-z0-9_-]+)*\.[A-Za-z]{2,6}$/;
 
 // add more custom patterns here, but define first the pattern above
-// TODO how to localize these messages?
 export const WIDGET_VALIDATION_PATTERNS = [
-    {name: 'alpha', regex: WIDGET_VALIDATION_ALPHA_ONLY_REGEX, validationMessage: 'Only letters and spaces are allowed'},
-    {name: 'alpha_accents', regex: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_ONLY_REGEX, validationMessage: 'Only letters, spaces and accents are allowed'},
-    {name: 'alpha_numbers', regex: WIDGET_VALIDATION_ALPHA_AND_NUMBERS_REGEX, validationMessage: 'Only letters and numbers are allowed'},
-    {name: 'alpha_accents_numbers', regex: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_AND_NUMBERS_REGEX, validationMessage: 'Only letters, spaces, accents and numbers are allowed'},
-    {name: 'numbers', regex: WIDGET_VALIDATION_NUMBERS_ONLY_REGEX, validationMessage: 'Only numbers are allowed'},
-    {name: 'address', regex: WIDGET_VALIDATION_ADDRESS_REGEX, validationMessage: 'Invalid address. Only letters, numbers, spaces, accents, commas, periods and hyphens are allowed'},
-    {name: 'email', regex: WIDGET_VALIDATION_EMAIL_REGEX, validationMessage: 'Invalid email format'}
+    {name: 'alpha', regex: WIDGET_VALIDATION_ALPHA_ONLY_REGEX, validationMessage: Strings.Pattern_Validation_AlphaOnly},
+    {name: 'alpha_accents', regex: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_ONLY_REGEX, validationMessage: Strings.Pattern_Validation_AlphaAccentsOnly},
+    {name: 'alpha_numbers', regex: WIDGET_VALIDATION_ALPHA_AND_NUMBERS_REGEX, validationMessage: Strings.Pattern_Validation_AlphaNumbers},
+    {name: 'alpha_accents_numbers', regex: WIDGET_VALIDATION_ALPHA_AND_ACCENTS_AND_NUMBERS_REGEX, validationMessage: Strings.Pattern_Validation_AlphaAccentsNumbers},
+    {name: 'numbers', regex: WIDGET_VALIDATION_NUMBERS_ONLY_REGEX, validationMessage: Strings.Pattern_Validation_NumbersOnly},
+    {name: 'address', regex: WIDGET_VALIDATION_ADDRESS_REGEX, validationMessage: Strings.Pattern_Validation_Address},
+    {name: 'email', regex: WIDGET_VALIDATION_EMAIL_REGEX, validationMessage: Strings.Pattern_Validation_Email}
 ];
 
 export const WIDGET_IMAGE_BLANK = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABISURBVFhH7c4xAQAwDASh+jf91cCW4VDA20m1RC1RS9QStUQtUUvUErVELVFL1BK1RC1RS9QStUQtUUvUErVELVFL1BInW9sHBi0waLd0FpsAAAAASUVORK5CYII=";

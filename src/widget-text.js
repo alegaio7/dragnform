@@ -115,11 +115,14 @@ class WidgetText extends WidgetInputBase {
             });
         }
 
+        var beforeMarks = this._el.querySelectorAll(".required-mark[data-position='before']");
+        var afterMarks = this._el.querySelectorAll(".required-mark[data-position='after']");
         if (this.required && this.requiredAttributeSettings && this.requiredAttributeSettings.mark) {
-            var beforeMarks = this._el.querySelectorAll(".required-mark[data-position='before']");
-            var afterMarks = this._el.querySelectorAll(".required-mark[data-position='after']");
             beforeMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE ? "inline" : "none");
             afterMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER ? "inline" : "none");
+        } else {
+            beforeMarks.forEach(m => m.style.display = "none");
+            afterMarks.forEach(m => m.style.display = "none");
         }
     }
 

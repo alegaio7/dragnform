@@ -2,6 +2,15 @@ class Strings {
     // canvas
     static get Canvas_NewForm_Name() { return "New form"; }
 
+    // patter validation messages
+    static get Pattern_Validation_AlphaOnly() { return 'Only letters and spaces are allowed'; }
+    static get Pattern_Validation_AlphaAccentsOnly() { return 'Only letters, spaces and accents are allowed'; }
+    static get Pattern_Validation_AlphaNumbers() { return 'Only letters and numbers are allowed'; }
+    static get Pattern_Validation_AlphaAccentsNumbers() { return 'Only letters, spaces, accents and numbers are allowed'; }
+    static get Pattern_Validation_NumbersOnly() { return 'Only numbers are allowed'; }
+    static get Pattern_Validation_Address() { return 'Invalid address. Only letters, numbers, spaces, accents, commas, periods and hyphens are allowed'; }
+    static get Pattern_Validation_Email() { return 'Invalid email format'; }
+
     // designer
     static get Toolbar_AddButtonWidget_ButtonLabel() { return 'Button'; }
     static get Toolbar_AddButtonWidget_ButtonTitle() { return 'Add button'; }
@@ -44,6 +53,9 @@ class Strings {
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
+    static get WidgetEditor_Common_Align_Bottom() { return 'Bottom'; }
+    static get WidgetEditor_Common_Align_Center() { return 'Center'; }
+    static get WidgetEditor_Common_Align_Top() { return 'Top'; }
     static get WidgetEditor_Common_AutoHeight() { return 'Auto height'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
     static get WidgetEditor_Common_Columns() { return 'Columns'; }
