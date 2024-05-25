@@ -30,10 +30,19 @@ export default class Widget {
 
         this._batchUpdating = true; // to avoid repeated calls to refresh while running ctor
         
-        this._alignment = constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER;
-        if (fragment.alignment)
-            if (fragment.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP || fragment.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER || fragment.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
-                this._alignment = fragment.alignment;
+        this._horizontalAlignment = constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER;
+        if (fragment.horizontalAlignment && 
+            (fragment.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT || 
+            fragment.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER || 
+            fragment.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT))
+                this._horizontalAlignment = fragment.horizontalAlignment;
+                        
+        this._verticalAlignment = constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER;
+        if (fragment.verticalAlignment && 
+            (fragment.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP || 
+            fragment.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER || 
+            fragment.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM))
+                this._verticalAlignment = fragment.verticalAlignment;
 
         this.columns = fragment.columns ?? 12;
         this._el = null;
@@ -70,18 +79,6 @@ export default class Widget {
     }
 
     // Props begin
-    get alignment() { return this._alignment; }
-    set alignment(value) { 
-        if (value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP || 
-            value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER || 
-            value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM) {
-            this._alignment = value;
-            this.refresh();
-        }
-        else
-            throw new Error('Invalid alignment value');
-    }
-
     get autoHeight() { return this._autoHeight; }
     set autoHeight(value) { 
         this._autoHeight = !!value;
@@ -115,6 +112,18 @@ export default class Widget {
         this.refresh();
     }
 
+    get horizontalAlignment() { return this._horizontalAlignment; }
+    set horizontalAlignment(value) { 
+        if (value === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT || 
+            value === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER || 
+            value === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT) {
+            this._horizontalAlignment = value;
+            this.refresh();
+        }
+        else
+            throw new Error('Invalid alignment value');
+    }
+
     get label() { return this._label; }
     set label(value) { 
         this._label = value;
@@ -139,7 +148,19 @@ export default class Widget {
     set value(value) { 
         this._value = value
         this._updateContols();
-    } 
+    }
+
+    get verticalAlignment() { return this._verticalAlignment; }
+    set verticalAlignment(value) { 
+        if (value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM || 
+            value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER || 
+            value === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP) {
+            this._verticalAlignment = value;
+            this.refresh();
+        }
+        else
+            throw new Error('Invalid vertical alignment value');
+    }    
     // Props end
     
     clearError() {
@@ -178,7 +199,8 @@ export default class Widget {
     getEditorProperties() {
         return [
             { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
-            { name: "alignment", type: "multiple", elementIds: ["optAlignTop", "optAlignCenter", "optAlignBottom"], value: this.alignment },
+            { name: "horizontalAlignment", type: "multiple", elementIds: ["optAlignHLeft", "optAlignHCenter", "optAlignHRight"], value: this.horizontalAlignment },
+            { name: "verticalAlignment", type: "multiple", elementIds: ["optAlignVTop", "optAlignVCenter", "optAlignVBottom"], value: this.verticalAlignment },
             { name: "autoHeight", type: "boolean", elementId: "chkWidgetPropAutoHeight", value: this.autoHeight },
             { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
             { name: "height", type: "number", elementId: "txtWidgetPropHeight", value: functions.convertToPixels(this.height) },
@@ -208,19 +230,29 @@ export default class Widget {
         if (!this._el || this._batchUpdating)
             return;
 
-        // update alignment
+        // update alignments
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length)
             sections.forEach(s => {
-                s.classList.remove("widget-align-start");
-                s.classList.remove("widget-align-center");
-                s.classList.remove("widget-align-end");
-                if (this.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP)
-                    s.classList.add("widget-align-start");
-                else if (this.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER)
-                    s.classList.add("widget-align-center");
-                else if (this.alignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
-                    s.classList.add("widget-align-end");
+                s.classList.remove("widget-h-align-start");
+                s.classList.remove("widget-h-align-center");
+                s.classList.remove("widget-h-align-end");
+                s.classList.remove("widget-v-align-start");
+                s.classList.remove("widget-v-align-center");
+                s.classList.remove("widget-v-align-end");
+                if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP)
+                    s.classList.add("widget-v-align-start");
+                else if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER)
+                    s.classList.add("widget-v-align-center");
+                else if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
+                    s.classList.add("widget-v-align-end");
+
+                if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT)
+                    s.classList.add("widget-h-align-start");
+                else if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER)
+                    s.classList.add("widget-h-align-center");
+                else if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT)
+                    s.classList.add("widget-h-align-end");
             });
 
         // update columns
@@ -410,13 +442,18 @@ export default class Widget {
 
     _getCommonEditorPropertyReplacements() { 
         return {
-            labelAlignBottom: Strings.WidgetEditor_Common_Align_Bottom,
-            labelAlignCenter: Strings.WidgetEditor_Common_Align_Center,
-            labelAlignTop: Strings.WidgetEditor_Common_Align_Top,
+            labelAlignHLeft: Strings.WidgetEditor_Common_Align_H_Left,
+            labelAlignHCenter: Strings.WidgetEditor_Common_Align_H_Center,
+            labelAlignHRight: Strings.WidgetEditor_Common_Align_H_Right,
+            labelAlignVBottom: Strings.WidgetEditor_Common_Align_V_Bottom,
+            labelAlignVCenter: Strings.WidgetEditor_Common_Align_V_Center,
+            labelAlignVTop: Strings.WidgetEditor_Common_Align_V_Top,
             labelAutoHeight: Strings.WidgetEditor_Common_AutoHeight,
             labelColumns: Strings.WidgetEditor_Common_Columns,
             labelHeight: Strings.WidgetEditor_Common_Height,
+            labelHorizontalAlignment: Strings.WidgetEditor_Common_HorizontalAlignment,
             labelRequired: Strings.WidgetEditor_Common_Required,
+            labelVerticalAlignment: Strings.WidgetEditor_Common_VerticalAlignment,
             labelWidgetLabel: Strings.WidgetEditor_Common_Label,
         };
     }

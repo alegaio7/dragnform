@@ -1,5 +1,5 @@
 <div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
-	<div data-show-when="design">
+	<div data-show-when="design" class="widget-h-align-left widget-v-align-center">
 		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
 		{{#showRemove}}
 		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
@@ -37,7 +37,7 @@
 		<div class="widget-tip"></div>
 		{{/hasTip}}
 	</div>
-	<div data-show-when="run">
+	<div data-show-when="run" class="widget-h-align-left widget-v-align-center">
 		<label class="{{labelClass}}" for="{{inputIdRun}}">
 			{{#showRequiredMarkBefore}}
 			<span class="required-mark">{{mark}}</span>
@@ -69,7 +69,7 @@
 		{{/hasTip}}
 		<div class="widget-error"></div>			
 	</div>
-	<div data-show-when="view">
+	<div data-show-when="view" class="widget-h-align-left widget-v-align-center">
 		<label class="{{labelClass}}">
 			<span data-part="label">{{label}}</span>
 		</label>

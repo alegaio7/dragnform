@@ -392,9 +392,18 @@ export default class Canvas {
                             onHeightChanged: function(dlg, value) {
                                 sender.height = value;
                             },
+                            onHorizontalAlignmentChanged: function(dlg, value) {
+                                sender.horizontalAlignment = value;
+                            },
+                            onLabelChanged: function(dlg, value) {
+                                sender.label = value;
+                            },
                             onRequiredChanged: function(dlg, value) {
                                 sender.required = value;
-                            }
+                            },
+                            onVerticalAlignmentChanged: function(dlg, value) {
+                                sender.verticalAlignment = value;
+                            },
                         },
                         dialogContainer: this._editorsContainer
                     };

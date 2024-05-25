@@ -241,15 +241,27 @@
   display: block;
 }
 
-.widget-align-start {
+.widget-h-align-start {
+  align-items: start;
+}
+
+.widget-h-align-center {
+  align-items: center;
+}
+
+.widget-h-align-end {
+  align-items: end;
+}
+
+.widget-v-align-start {
   justify-content: start;
 }
 
-.widget-align-center {
+.widget-v-align-center {
   justify-content: center;
 }
 
-.widget-align-end {
+.widget-v-align-end {
   justify-content: end;
 }
 
@@ -327,6 +339,12 @@
 }
 .required-mark::after {
   content: " ";
+}
+
+.widget-dialog-section-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin: 1rem 0 0 0;
 }
 
 [class^=flyter] {

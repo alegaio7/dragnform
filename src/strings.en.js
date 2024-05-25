@@ -53,15 +53,20 @@ class Strings {
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
-    static get WidgetEditor_Common_Align_Bottom() { return 'Bottom'; }
-    static get WidgetEditor_Common_Align_Center() { return 'Center'; }
-    static get WidgetEditor_Common_Align_Top() { return 'Top'; }
+    static get WidgetEditor_Common_Align_H_Left() { return 'Left'; }
+    static get WidgetEditor_Common_Align_H_Center() { return 'Center'; }
+    static get WidgetEditor_Common_Align_H_Right() { return 'Right'; }
+    static get WidgetEditor_Common_Align_V_Bottom() { return 'Bottom'; }
+    static get WidgetEditor_Common_Align_V_Center() { return 'Center'; }
+    static get WidgetEditor_Common_Align_V_Top() { return 'Top'; }
     static get WidgetEditor_Common_AutoHeight() { return 'Auto height'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
     static get WidgetEditor_Common_Columns() { return 'Columns'; }
     static get WidgetEditor_Common_Height() { return 'Height'; }
+    static get WidgetEditor_Common_HorizontalAlignment() { return 'Horizontal alignment';}
     static get WidgetEditor_Common_Label() { return 'Label'; }
     static get WidgetEditor_Common_Required() { return 'Required'; }
+    static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
 
     static get WidgetEditor_Text_Widget_Min() { return 'Min.'; }

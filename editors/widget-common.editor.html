@@ -19,12 +19,22 @@
         <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
     </div>
     <div>
-        <label for="optAlignTop">{{labelAlignTop}}</label>
-        <input type="radio" id="optAlignTop" value="top" name="alignment" />
-        <label for="optAlignCenter">{{labelAlignCenter}}</label>
-        <input type="radio" id="optAlignCenter" value="center" name="alignment"/>
-        <label for="optAlignBottom">{{labelAlignBottom}}</label>
-        <input type="radio" id="optAlignBottom" value="bottom" name="alignment"/>
+        <h6 class="widget-dialog-section-title">{{labelHorizontalAlignment}}</h6>
+        <label for="optAlignHLeft">{{labelAlignHLeft}}</label>
+        <input type="radio" id="optAlignHLeft" value="left" name="halignment" />
+        <label for="optAlignHCenter">{{labelAlignHCenter}}</label>
+        <input type="radio" id="optAlignHCenter" value="center" name="halignment"/>
+        <label for="optAlignHRight">{{labelAlignHRight}}</label>
+        <input type="radio" id="optAlignHRight" value="right" name="halignment"/>
+    </div>      
+    <div>
+        <h6 class="widget-dialog-section-title">{{labelVerticalAlignment}}</h6>
+        <label for="optAlignVTop">{{labelAlignVTop}}</label>
+        <input type="radio" id="optAlignVTop" value="top" name="valignment" />
+        <label for="optAlignVCenter">{{labelAlignVCenter}}</label>
+        <input type="radio" id="optAlignVCenter" value="center" name="valignment"/>
+        <label for="optAlignVBottom">{{labelAlignVBottom}}</label>
+        <input type="radio" id="optAlignVBottom" value="bottom" name="valignment"/>
     </div>  
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">
