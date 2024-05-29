@@ -58,7 +58,7 @@ class WidgetImage extends Widget {
             mode: constants.WIDGET_MODE_DESIGN,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
-            style: this._buildStyleAttribute(),
+            style: this._buildOuterStyleAttribute(),
             type: this.type,
             widgetClass: widgetClass,
             widgetPropertiesButtonTitle: Strings.WidgetPropertiesButtonTitle,

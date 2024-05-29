@@ -333,7 +333,7 @@ export default class Designer {
                         </button>`;
                 html += `</div>`;
             }
-                        
+
             if (widgetsGroup) {
                 html += `<div class="widget-toolbar-group">
                         <div class="widget-toolbar-group-title">${Strings.Toolbar_Widgets_GroupTitle}</div>`;

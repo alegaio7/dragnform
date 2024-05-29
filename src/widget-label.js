@@ -20,6 +20,21 @@ class WidgetLabel extends Widget {
         return json;
     }
 
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+        super.refresh();
+        var style = this._buildSectionsStyleAttribute();
+        var sections = this._el.querySelectorAll(`[data-show-when]`);
+        if (sections && sections.length) {
+            sections.forEach(s => {
+                var label = s.querySelector(".widget-label");
+                if (label)
+                    label.setAttribute("style", style);
+            });
+        }
+    }
+
     async render(container, parser) {
         var widgetClass = this.widgetClass ?? "";
         if (this.widgetRenderOptions.renderGrip)
@@ -47,7 +62,7 @@ class WidgetLabel extends Widget {
             name: this.name,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
-            style: this._buildStyleAttribute(), 
+            style: this._buildOuterStyleAttribute(), 
             type: this.type,
             widgetClass: widgetClass,
             widgetPropertiesButtonTitle: Strings.WidgetPropertiesButtonTitle,
@@ -61,26 +76,6 @@ class WidgetLabel extends Widget {
     // *******************************************************************************
     // Private methods
     // *******************************************************************************
-
-    _buildStyleAttribute() {
-        var style = super._buildStyleAttribute();
-
-        if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER)
-            style += "justify-content: center;";
-        else if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
-            style += "justify-content: end;";
-        else
-            style += "justify-content: start;";
-
-        if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER)
-            style += "align-items: center;";
-        else if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT)
-            style += "align-items: end;";
-        else
-            style += "align-items: start;";
-
-        return style;
-    }
 }
 
 export default WidgetLabel;

@@ -10,20 +10,24 @@ export default class jsPDFExporter {
             options = {};
 
         this.options = options;
+
+        this._validFontWeights = [constants.HTML_FONT_SIZE_NORMAL, constants.HTML_FONT_SIZE_BOLD];
+        this._validFontStyles = [constants.HTML_FONT_STYLE_NORMAL, constants.HTML_FONT_STYLE_ITALIC];
+
         if (!this.options.font)
             this.options.font = {};
-        if (!this.options.font.weightMappings) {
-            this.options.font.weightMappings = [];
-            this.options.font.weightMappings.push({ fontWeight: 100, pdfFontWeight: 'normal' });
-            this.options.font.weightMappings.push({ fontWeight: 200, pdfFontWeight: 'normal' });
-            this.options.font.weightMappings.push({ fontWeight: 300, pdfFontWeight: 'normal' });
-            this.options.font.weightMappings.push({ fontWeight: 400, pdfFontWeight: 'normal' });
-            this.options.font.weightMappings.push({ fontWeight: 500, pdfFontWeight: 'bold' });
-            this.options.font.weightMappings.push({ fontWeight: 600, pdfFontWeight: 'bold' });
-            this.options.font.weightMappings.push({ fontWeight: 700, pdfFontWeight: 'bold' });
-            this.options.font.weightMappings.push({ fontWeight: 800, pdfFontWeight: 'bold' });
-            this.options.font.weightMappings.push({ fontWeight: 900, pdfFontWeight: 'bold' });
-        }
+        // if (!this.options.font.weightMappings) {
+        //     this.options.font.weightMappings = [];
+        //     this.options.font.weightMappings.push({ fontWeight: 100, pdfFontWeight: 'normal' });
+        //     this.options.font.weightMappings.push({ fontWeight: 200, pdfFontWeight: 'normal' });
+        //     this.options.font.weightMappings.push({ fontWeight: 300, pdfFontWeight: 'normal' });
+        //     this.options.font.weightMappings.push({ fontWeight: 400, pdfFontWeight: 'normal' });
+        //     this.options.font.weightMappings.push({ fontWeight: 500, pdfFontWeight: 'bold' });
+        //     this.options.font.weightMappings.push({ fontWeight: 600, pdfFontWeight: 'bold' });
+        //     this.options.font.weightMappings.push({ fontWeight: 700, pdfFontWeight: 'bold' });
+        //     this.options.font.weightMappings.push({ fontWeight: 800, pdfFontWeight: 'bold' });
+        //     this.options.font.weightMappings.push({ fontWeight: 900, pdfFontWeight: 'bold' });
+        // }
 
         if (!this.options.font.defaultWeight)
             this.options.font.defaultWeight = 300;
@@ -178,17 +182,17 @@ export default class jsPDFExporter {
             ff = this.options.font.defaultFamily;
 
         // style
-        if (w.fontStyle && "italic normal".indexOf(w.fontStyle) >= 0)
+        if (w.fontStyle && this._validFontStyles.includes(w.fontStyle))
             fs = w.fontStyle;
         if (!fs)
-            fs = 'normal';
+            fs = constants.HTML_FONT_STYLE_NORMAL;
 
         // weight
-        if (!("normal bold bolder".indexOf(w.fontWeight) >=0)) {
+        if (!this._validFontWeights.includes(w.fontWeight)) {
             if (w.fontWeight)
                 fw = parseInt(w.fontWeight);
             
-            if (this.options.font.weightMappings) {
+            if (this.options.font.weightMappings && fw) {
                 var fwm = this.options.font.weightMappings.find(x => x.fontWeight === fw);
                 if (fwm)
                     fw = fwm.pdfFontWeight;
@@ -203,7 +207,7 @@ export default class jsPDFExporter {
             fn = constants.DEFAULT_PDF_FONT_SIZE;
         fn *= this._hRatio * this.options.cssToPdfScaling;
 
-        return {name: ff, style: fs, size: fn, weight: fw, color: w.color};
+        return {name: ff, style: fs, size: fn, weight: fw, color: w.color, underline: w.underline };
     }
 
     _renderBox(w, doc, parent) {
@@ -250,12 +254,18 @@ export default class jsPDFExporter {
         doc.setFont(fi.name, fi.style, fi.weight);
         doc.setFontSize(fi.size);
         doc.setTextColor(fi.color);
+
     }
 
     _renderSimpleText(w, doc, parent) {
+        var fi = this._getFontInfo(w, parent);
         var r = this._adjustRect(w);
         var y = r.y + r.height;
         doc.text(w.text, r.x, y);
+        if (fi.underline) {
+            const textWidth = doc.getTextWidth(w.text);
+            doc.line(r.x, r.y, r.x + textWidth, r.y)
+        }
     }
 
     _renderImage(w, doc, parent) {

@@ -9,7 +9,25 @@
     <div>
         <label for="txtWidgetPropColumns">{{labelColumns}}</label>
         <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
-    </div>
+    </div>    
+    <div>
+        <h6 class="widget-dialog-section-title">{{labelFontProperties}}</h6>
+        <div>
+            <label for="txtWidgetFontSize">{{labelFontSize}}</label>
+            <input type="number" id="txtWidgetFontSize" min="6" max="96" />
+        </div>
+        <div>
+            <h6 class="widget-dialog-section-title">{{labelFontWeight}}</h6>
+            <label for="optFontWeightNormal">{{labelFontWeightNormal}}</label>
+            <input type="radio" id="optFontWeightNormal" value="normal" name="fontWeight" />
+            <label for="optFontWeightBold">{{labelFontWeightBold}}</label>
+            <input type="radio" id="optFontWeightBold" value="bold" name="fontWeight"/>
+        </div>
+        <div>
+            <label for="chkWidgetPropFontUnderline">{{labelFontUnderline}}</label>
+            <input type="checkbox" id="chkWidgetPropFontUnderline" />
+        </div>
+    </div>       
     <div>
         <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
         <input type="checkbox" id="chkWidgetPropAutoHeight" />

@@ -25,7 +25,7 @@ $widget-container-max-height: 1400px;
 $widget-container-width-bp-2: 1600px;
 $widget-designer-radius: 0.25rem;
 $widget-grip-color: #888;
-$widget-grip-width: 1rem;
+$widget-grip-width: 0.8rem;
 $widget-min-height: 55px;
 $widget-modal-backdrop-color: rgba(0, 0, 0, 0.2);
 $widget-modal-border-color: #888;
@@ -231,7 +231,8 @@ $widget-toolbar-padding: 0.5rem;
     &.has-grip {
         input, label, button {
             display: inline-block;
-            width: calc(100% - $widget-grip-width);
+            //width: calc(100% - $widget-grip-width);
+            width: 100%;
         }
     }
 
@@ -244,6 +245,21 @@ $widget-toolbar-padding: 0.5rem;
 
     &[data-type="label"] {
         display: flex;
+
+        [data-part="label"] {
+            text-decoration: inherit;
+
+            span, div {
+                text-decoration: inherit;
+            }
+        }
+    }
+
+    &[data-type="text"] {
+        input {
+            font-size: inherit;
+            font-weight: inherit;
+        }
     }
 
     &[data-type="image"] {
@@ -276,6 +292,7 @@ $widget-toolbar-padding: 0.5rem;
     position: absolute;
     right: 0rem;
     top: 0rem;
+    font-size: 1.2rem;
     width: $widget-grip-width;
     height: 100%;
     display: flex;
@@ -328,7 +345,7 @@ $widget-toolbar-padding: 0.5rem;
 }
 
 .widget-label {
-    font-weight: bold;
+    // font-weight: bold;
     display: block;
 }
 
@@ -342,17 +359,29 @@ $widget-toolbar-padding: 0.5rem;
     display: block;
 }
 
-// alignements
+// alignments
 .widget-h-align-start {
     align-items: start;
+
+    .widget-label {
+        text-align: left;
+    }
 }
 
 .widget-h-align-center {
     align-items: center;
+
+    .widget-label {
+        text-align: center;
+    }
 }
 
 .widget-h-align-end {
     align-items: end;
+
+    .widget-label {
+        text-align: right;
+    }
 }
 
 .widget-v-align-start {
@@ -439,7 +468,7 @@ $widget-toolbar-padding: 0.5rem;
 // component styles
 .required-mark {
     font-weight: bold;
-    font-size: 0.8rem;
+    font-size: 80%;
     color: $widget-error;
     &::after {
         content: ' '
@@ -450,7 +479,6 @@ $widget-toolbar-padding: 0.5rem;
 // dialog editors
 // ******
 .widget-dialog-section-title {
-    font-size: 0.75rem;
     font-weight: bold;
     margin: 1rem 0 0 0;
 }
@@ -460,11 +488,11 @@ $widget-toolbar-padding: 0.5rem;
 // ******
 [class^="flyter"] {
     font-family: $font-family;
-    // font-weight: 300;
-    font-size: $default-font-size;
+    // font-size: $default-font-size;
 
     button, input {
         font-family: inherit;
+        font-size: $default-font-size;
         outline: none;
     }   
 
@@ -514,7 +542,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-properties-editor {
     font-family: inherit;
     padding: $widget-modal-padding;
-    max-width: 35rem;
+    width: clamp(10rem, 100%, 30rem);
     box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
     border: 1px solid $widget-modal-border-color;
     border-radius: $widget-designer-radius;

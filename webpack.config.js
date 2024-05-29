@@ -13,7 +13,11 @@ const config = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        library: 'justformit',
+        filename: 'justformit.js',
+        library: {
+            name: 'justformit',
+            type: 'var'
+        }
     },
     optimization: {
         minimize: isProduction,

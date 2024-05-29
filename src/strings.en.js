@@ -62,6 +62,12 @@ class Strings {
     static get WidgetEditor_Common_AutoHeight() { return 'Auto height'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
     static get WidgetEditor_Common_Columns() { return 'Columns'; }
+    static get WidgetEditor_Common_FontProperties() { return 'Font properties'; }
+    static get WidgetEditor_Common_FontSize() { return 'Font size'; }
+    static get WidgetEditor_Common_FontUnderline() { return 'Underline'; }
+    static get WidgetEditor_Common_FontWeight() { return 'Font weight'; }
+    static get WidgetEditor_Common_FontWeight_Bold() { return 'Bold'; }
+    static get WidgetEditor_Common_FontWeight_Normal() { return 'Normal'; }
     static get WidgetEditor_Common_Height() { return 'Height'; }
     static get WidgetEditor_Common_HorizontalAlignment() { return 'Horizontal alignment';}
     static get WidgetEditor_Common_Label() { return 'Label'; }

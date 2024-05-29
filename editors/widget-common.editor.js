@@ -31,6 +31,31 @@ export default class WidgetCommonPropertiesEditor {
             });
         }
 
+        this.txtFontSize = document.getElementById('txtWidgetFontSize');
+        if (this.txtFontSize && this._callbacks.onFontSizeChanged)
+            this.txtFontSize.addEventListener('change', function() {
+                var n = parseInt(_t.txtFontSize.value, 10);
+                _t._callbacks.onFontSizeChanged(_t, n);
+            });
+
+
+        this.optFontWeights = this._dialogContainer.querySelectorAll('input[name="fontWeight"]');
+        if (this.optFontWeights && this._callbacks.onFontWeightChanged) {
+            this.optFontWeights.forEach(function(opt) {
+                opt.addEventListener('change', function() {
+                    _t._callbacks.onFontWeightChanged(_t, this.value);
+                });
+            });
+        }
+
+        this.chkFontUnderline = document.getElementById('chkWidgetPropFontUnderline');
+        if (this.chkFontUnderline)
+            this.chkFontUnderline.addEventListener('change', function() {
+                _t._updateControls();
+                if (_t._callbacks.onFontUnderlineChanged)
+                    _t._callbacks.onFontUnderlineChanged(_t, _t.chkFontUnderline.checked);
+            });
+
         this.txtColumns = document.getElementById('txtWidgetPropColumns');
         if (this.txtColumns && this._callbacks.onColumnsChanged)
             this.txtColumns.addEventListener('change', function() {
@@ -51,7 +76,7 @@ export default class WidgetCommonPropertiesEditor {
             this.txtHeight.addEventListener('change', function() {
                 if (!_t.chkAutoHeight.checked) {
                     var n = parseInt(_t.txtHeight.value, 10);
-                    _t._callbacks.onHeightChanged(_t, _t.txtHeight.value);
+                    _t._callbacks.onHeightChanged(_t, n);
                 }
             });
 

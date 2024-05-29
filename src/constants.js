@@ -1,6 +1,17 @@
+// pdf
 export const DEFAULT_PDF_DPI = 72;              // default PDF DPI
 export const DEFAULT_PDF_FONT_SIZE = 16;        // default PDF DPI
 export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
+
+// html
+export const HTML_DEFAULT_FONT_SIZE = 16;
+export const HTML_DEFAULT_FONT_WEIGHT = 400;
+export const HTML_MIN_FONT_SIZE = 6;
+export const HTML_MAX_FONT_SIZE = 96;
+export const HTML_FONT_SIZE_NORMAL = "normal";
+export const HTML_FONT_SIZE_BOLD = "bold";
+export const HTML_FONT_STYLE_NORMAL = "normal";
+export const HTML_FONT_STYLE_ITALIC = "italic";
 
 export const FORMS_DESIGNER_VERSION = "1.0.0";
 

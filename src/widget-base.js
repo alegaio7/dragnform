@@ -30,7 +30,7 @@ export default class Widget {
 
         this._batchUpdating = true; // to avoid repeated calls to refresh while running ctor
         
-        this._horizontalAlignment = constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER;
+        this._horizontalAlignment = constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT;
         if (fragment.horizontalAlignment && 
             (fragment.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT || 
             fragment.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER || 
@@ -46,6 +46,20 @@ export default class Widget {
 
         this.columns = fragment.columns ?? 12;
         this._el = null;
+
+        this._fontSize = constants.HTML_DEFAULT_FONT_SIZE;
+        if (fragment.fontSize && fragment.fontSize >= constants.HTML_MIN_FONT_SIZE && fragment.fontSize <= constants.HTML_MAX_FONT_SIZE) 
+            this._fontSize = fragment.fontSize;
+
+        this._fontUnderline = false;
+        if (fragment.fontUnderline === true)
+            this._fontUnderline = true;
+
+        this._validFontWeights = [constants.HTML_FONT_SIZE_NORMAL, constants.HTML_FONT_SIZE_BOLD];
+        this._fontWeight = constants.HTML_FONT_SIZE_NORMAL;
+        if (fragment.fontWeight && this._validFontWeights.includes(fragment.fontWeight))
+            this._fontWeight = fragment.fontWeight;
+        
         this._inlineEditorChangingLabel = false; // used when updating label from inline editor instead of modal, to avoid modifiying the label and cause a flyter error
         this._globalClasses = fragment.globalClasses ?? {};
         this._prevColClass = "widget-col-" + this.columns; // stores the previous colClass before a column change, to remove it from the classList
@@ -103,6 +117,28 @@ export default class Widget {
 
     get domElement() { return this._el; }
     
+    get fontSize() { return this._fontSize; }
+    set fontSize(value) { 
+        if (value >= constants.HTML_MIN_FONT_SIZE && value <= constants.HTML_MAX_FONT_SIZE) {
+            this._fontSize = value;
+            this.refresh();
+        }
+    }
+
+    get fontUnderline() { return this._fontUnderline; }
+    set fontUnderline(value) { 
+        this._fontUnderline = value;
+        this.refresh();
+    }
+
+    get fontWeight() { return this._fontWeight; }
+    set fontWeight(value) { 
+        if (this._validFontWeights.indexOf(value) >= 0) {
+            this._fontWeight = value;
+            this.refresh();
+        }
+    }
+
     get globalClasses() { return this._globalClasses; }
     set globalClasses(value) { this._globalClasses = value; }
 
@@ -176,10 +212,14 @@ export default class Widget {
         var json = {
             autoHeight: this.autoHeight,
             columns: this.columns, 
+            fontSize: this.fontSize,
+            fontWeight: this.fontWeight,
             height: this.autoHeight ? null : (this.height ?? null),
+            horizontalAlignment: this.horizontalAlignment,
             id: this.id, 
             label: this.label, 
-            type: this.type
+            type: this.type,
+            verticalAlignment: this.verticalAlignment,
         };
         return json;
     }
@@ -198,13 +238,16 @@ export default class Widget {
     
     getEditorProperties() {
         return [
-            { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
-            { name: "horizontalAlignment", type: "multiple", elementIds: ["optAlignHLeft", "optAlignHCenter", "optAlignHRight"], value: this.horizontalAlignment },
-            { name: "verticalAlignment", type: "multiple", elementIds: ["optAlignVTop", "optAlignVCenter", "optAlignVBottom"], value: this.verticalAlignment },
             { name: "autoHeight", type: "boolean", elementId: "chkWidgetPropAutoHeight", value: this.autoHeight },
             { name: "columns", type: "number", elementId: "txtWidgetPropColumns", value: this.columns },
+            { name: "fontSize", type: "number", elementId: "txtWidgetFontSize", value: this.fontSize },
+            { name: "fontUnderline", type: "boolean", elementId: "chkWidgetPropFontUnderline", value: this.fontUnderline },
+            { name: "fontWeight", type: "multiple", elementIds: ["optFontWeightNormal", "optFontWeightBold"], value: this.fontWeight },
             { name: "height", type: "number", elementId: "txtWidgetPropHeight", value: functions.convertToPixels(this.height) },
+            { name: "horizontalAlignment", type: "multiple", elementIds: ["optAlignHLeft", "optAlignHCenter", "optAlignHRight"], value: this.horizontalAlignment },
+            { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
             { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
+            { name: "verticalAlignment", type: "multiple", elementIds: ["optAlignVTop", "optAlignVCenter", "optAlignVBottom"], value: this.verticalAlignment },
         ];
     }
 
@@ -268,7 +311,7 @@ export default class Widget {
         }
 
         // update style
-        var style = this._buildStyleAttribute();
+        var style = this._buildOuterStyleAttribute();
         this._el.setAttribute('style', style);
 
         this._el.setAttribute('data-mode', this.renderMode);
@@ -429,11 +472,23 @@ export default class Widget {
         return false;
     }
 
-    _buildStyleAttribute() {
+    _buildSectionsStyleAttribute() {
+        var style = "";
+        if (this.fontSize)
+            style += `font-size: ${this.fontSize}px;`;
+        if (this.fontWeight)
+            style += `font-weight: ${this.fontWeight};`;
+        if (this.fontUnderline)
+            style += `text-decoration: underline;`;
+        return style;
+    }
+
+    _buildOuterStyleAttribute() {
         var style = "";
         if (this.height && !this.autoHeight)
             style += `height: ${this.height};`;
-        return style;
+
+       return style;
     }
 
     _findValidation(name) {
@@ -450,6 +505,12 @@ export default class Widget {
             labelAlignVTop: Strings.WidgetEditor_Common_Align_V_Top,
             labelAutoHeight: Strings.WidgetEditor_Common_AutoHeight,
             labelColumns: Strings.WidgetEditor_Common_Columns,
+            labelFontProperties: Strings.WidgetEditor_Common_FontProperties,
+            labelFontSize: Strings.WidgetEditor_Common_FontSize,
+            labelFontUnderline: Strings.WidgetEditor_Common_FontUnderline,
+            labelFontWeight: Strings.WidgetEditor_Common_FontWeight,
+            labelFontWeightBold: Strings.WidgetEditor_Common_FontWeight_Bold,
+            labelFontWeightNormal: Strings.WidgetEditor_Common_FontWeight_Normal,
             labelHeight: Strings.WidgetEditor_Common_Height,
             labelHorizontalAlignment: Strings.WidgetEditor_Common_HorizontalAlignment,
             labelRequired: Strings.WidgetEditor_Common_Required,

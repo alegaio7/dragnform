@@ -160,7 +160,7 @@ class WidgetText extends WidgetInputBase {
             showRequiredMarkAfter: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER,
             showRequiredMarkBefore: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE,
             spanClass: this.globalClasses.span ?? "",
-            style: this._buildStyleAttribute(),
+            style: this._buildOuterStyleAttribute(),
             type: this.type,
             value: this.value,
             widgetClass: widgetClass,

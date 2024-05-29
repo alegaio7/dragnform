@@ -34,7 +34,13 @@ export default class Canvas {
         this._editorTemplates = new Map();
         
         this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
+        this._rememberedProperties.set("autoHeight", false);
         this._rememberedProperties.set("columns", 12);
+        this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
+        this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
+        this._rememberedProperties.set("height", constants.WIDGET_DEFAULT_HEIGHT);
+        this._rememberedProperties.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
+        this._rememberedProperties.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
 
         this._sourceJson = {
             name: Strings.Canvas_NewForm_Name,
@@ -321,6 +327,8 @@ export default class Canvas {
 
         if (this._widgetRenderOptions.enableInPlaceEditor)
             w.enableInPlaceEditor();
+
+        w.refresh();
     }
 
     /// <summary>
@@ -389,6 +397,15 @@ export default class Canvas {
                             onColumnsChanged: function(dlg, value) {
                                 sender.columns = value;
                             },
+                            onFontSizeChanged: function(dlg, value) {
+                                sender.fontSize = value;
+                            },
+                            onFontUnderlineChanged: function(dlg, value) {
+                                sender.fontUnderline = value;
+                            },                            
+                            onFontWeightChanged: function(dlg, value) {
+                                sender.fontWeight = value;
+                            },                      
                             onHeightChanged: function(dlg, value) {
                                 sender.height = value;
                             },
