@@ -170,6 +170,8 @@ export default class jsPDFExporter {
             w.fontStyle = parent.fontStyle;
         if (!w.fontWeight)
             w.fontWeight = parent.fontWeight;
+        if (!w.fontUnderline)
+            w.fontUnderline = parent.fontUnderline;
     }
 
     _getFontInfo(w, parent) {
@@ -206,8 +208,7 @@ export default class jsPDFExporter {
         if (!fn)
             fn = constants.DEFAULT_PDF_FONT_SIZE;
         fn *= this._hRatio * this.options.cssToPdfScaling;
-
-        return {name: ff, style: fs, size: fn, weight: fw, color: w.color, underline: w.underline };
+        return {name: ff, style: fs, size: fn, weight: fw, color: w.color, underline: w.fontUnderline };
     }
 
     _renderBox(w, doc, parent) {
@@ -230,7 +231,7 @@ export default class jsPDFExporter {
             
             this._lastStateInfo = w;
 
-            console.log(`Rendering styled widget font:${w.fontFamily}, size:${w.fontSize}, style:${w.fontStyle}, weight:${w.fontWeight}`);
+            console.log(`Rendering styled widget font:${w.fontFamily}, size:${w.fontSize}, style:${w.fontStyle}, weight:${w.fontWeight}, underline: ${w.fontUnderline}`);
             this._setStyledText(w, doc, parent);
 
         } else if (w.type === constants.WIDGET_PDF_OBJECT_SIMPLE_TEXT) {
@@ -254,7 +255,6 @@ export default class jsPDFExporter {
         doc.setFont(fi.name, fi.style, fi.weight);
         doc.setFontSize(fi.size);
         doc.setTextColor(fi.color);
-
     }
 
     _renderSimpleText(w, doc, parent) {
@@ -264,7 +264,7 @@ export default class jsPDFExporter {
         doc.text(w.text, r.x, y);
         if (fi.underline) {
             const textWidth = doc.getTextWidth(w.text);
-            doc.line(r.x, r.y, r.x + textWidth, r.y)
+            doc.line(r.x, r.y + r.height, r.x + textWidth, r.y + r.height);
         }
     }
 

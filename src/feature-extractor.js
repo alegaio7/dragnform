@@ -148,6 +148,7 @@ export default class FeatureExtractor {
         json.fontSize = functions.convertToPixels(cs.fontSize);
         json.fontWeight = cs.fontWeight;
         json.fontStyle = cs.fontStyle;
+        json.fontUnderline = cs.textDecorationLine === 'underline';
         json.color = this._rgbToHex(cs.color);
         if (cs.textDecoration.style && cs.textDecoration.style !== 'none') {
             json.textDecorationColor = this._rgbToHex(cs.textDecoration.color);
