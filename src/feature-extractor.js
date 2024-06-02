@@ -19,24 +19,53 @@ export default class FeatureExtractor {
         this._colorRegex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
         this._range = document.createRange();
         this._scrollOffset = 0;
+        this._relOffsetX = 0;
+        this._relOffsetY = 0;
     }
 
-    extractFeatures(el, recursive, skipScrollOffset) {
+    extractFeatures(el, options) {
         if (!el)
             throw new Error('Feature extractor: element is required');
         
         if (typeof el !== 'object')
             throw new Error('Feature extractor: element must be an object');
 
-        skipScrollOffset = !!skipScrollOffset;
-        recursive = !!recursive;
-        var json = this._parseTag(el, skipScrollOffset);
+        if (!options)
+            options = {};
+
+        options.recursive = !!options.recursive;
+        options.skipScrollOffset = !!options.skipScrollOffset;
+        options.isRootContainer = !!options.isRootContainer;
+        
+        var relOffsetX, relOffsetY;
+
+        var json = this._parseTag(el, options.skipScrollOffset);
         if (!json)
             return null;
 
-        if (recursive)
+        // keep track of container's relative position, we'll need to to substitute the absolute position of children
+        if (options.isRootContainer) {
+            json.relOffsetX = json.x;
+            json.relOffsetY = json.y;
+            relOffsetX = json.x;
+            relOffsetY = json.y;
+            json.x = 0;
+            json.y = 0;
+        } else {
+            relOffsetX = 0;
+            relOffsetY = 0;
+            if (options.relOffsetX)
+                relOffsetX = options.relOffsetX;
+            if (options.relOffsetY)
+                relOffsetY = options.relOffsetY;
+
+            json.x -= relOffsetX;
+            json.y -= relOffsetY;
+        }
+
+        if (options.recursive)
             el.childNodes.forEach((node) => {
-                var childJson = this.extractFeatures(node, recursive);
+                var childJson = this.extractFeatures(node, options);
                 if (childJson) {
                     if (!json.children)
                         json.children = [];

@@ -56,12 +56,15 @@
                             });
                         }
                     },
-                    onSavePdf: function(data, e) {
+                    /*onSavePdf: function(data, e) {
                         e.preventDefault();
                         document.getElementById('json-arena').innerText = JSON.stringify(data.features, null, 2);
                         var exp = new justformit.jsPDFExporter();
-                        exp.exportPDF(data.features, { saveToFile: true }); // save to file
-                    },
+                        exp.exportPDF(data.features, { 
+                            saveToFile: true,
+                            renderContainerBox: true
+                         }); // save to file
+                    },*/
                     onRenderModeChanged: function(modeInfo, e) {
                         if (modeInfo.intendedMode === justformit.constants.WIDGET_MODE_VIEW) {
                             var f = window.designer.extractFeatures();

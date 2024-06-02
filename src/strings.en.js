@@ -75,9 +75,9 @@ class Strings {
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
 
-    static get WidgetEditor_Text_Widget_Min() { return 'Min.'; }
+    static get WidgetEditor_Text_Widget_MinValue() { return 'Min.'; }
     static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
-    static get WidgetEditor_Text_Widget_Max() { return 'Max.'; }
+    static get WidgetEditor_Text_Widget_MaxValue() { return 'Max.'; }
     static get WidgetEditor_Text_Widget_MaxLength() { return 'Max. length'; }
     
     // flyter

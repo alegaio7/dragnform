@@ -27,10 +27,6 @@ export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM = 'bottom';
 
 export const WIDGET_DEFAULT_HEIGHT = "80px";
 
-export const WIDGET_IMAGE_ALIGN_CENTER = 'center';
-export const WIDGET_IMAGE_ALIGN_LEFT = 'left';
-export const WIDGET_IMAGE_ALIGN_RIGHT = 'right';
-
 export const WIDGET_LABEL_DEFAULT_VALUE = "(New label)";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE = "beforeLabel";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER = "afterLabel";

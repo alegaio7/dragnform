@@ -27,6 +27,31 @@ class WidgetInputBase extends Widget {
         this.refresh();
     }
 
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+        super.refresh();
+        var style = this._buildSectionsStyleAttribute();
+        var sections = this._el.querySelectorAll(`[data-show-when]`);
+        if (sections && sections.length) {
+            sections.forEach(s => {
+                var label = s.querySelector(".widget-label [data-part='label']");
+                if (label)
+                    label.setAttribute("style", style);
+            });
+        }
+
+        var beforeMarks = this._el.querySelectorAll(".required-mark[data-position='before']");
+        var afterMarks = this._el.querySelectorAll(".required-mark[data-position='after']");
+        if (this.required && this.requiredAttributeSettings && this.requiredAttributeSettings.mark) {
+            beforeMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE ? "inline" : "none");
+            afterMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER ? "inline" : "none");
+        } else {
+            beforeMarks.forEach(m => m.style.display = "none");
+            afterMarks.forEach(m => m.style.display = "none");
+        }
+    }
+
     /// <summary>
     /// Base rendering logic for input widgets (text, number, etc).
     /// </summary>

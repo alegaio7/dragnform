@@ -10,9 +10,26 @@ class WidgetButton extends Widget {
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = { buttonClass: this.buttonClass };
+        var localProps = { 
+            buttonClass: this.buttonClass
+        };
         Object.assign(json, localProps);
         return json;
+    }
+
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+        super.refresh();
+        var style = this._buildSectionsStyleAttribute();
+        var sections = this._el.querySelectorAll(`[data-show-when]`);
+        if (sections && sections.length) {
+            sections.forEach(s => {
+                var label = s.querySelector("[data-part='label']");
+                if (label)
+                    label.setAttribute("style", style);
+            });
+        }
     }
 
     registerClickHandler(handler, dettach) {

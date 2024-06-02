@@ -16,21 +16,21 @@ export default class jsPDFExporter {
 
         if (!this.options.font)
             this.options.font = {};
-        // if (!this.options.font.weightMappings) {
-        //     this.options.font.weightMappings = [];
-        //     this.options.font.weightMappings.push({ fontWeight: 100, pdfFontWeight: 'normal' });
-        //     this.options.font.weightMappings.push({ fontWeight: 200, pdfFontWeight: 'normal' });
-        //     this.options.font.weightMappings.push({ fontWeight: 300, pdfFontWeight: 'normal' });
-        //     this.options.font.weightMappings.push({ fontWeight: 400, pdfFontWeight: 'normal' });
-        //     this.options.font.weightMappings.push({ fontWeight: 500, pdfFontWeight: 'bold' });
-        //     this.options.font.weightMappings.push({ fontWeight: 600, pdfFontWeight: 'bold' });
-        //     this.options.font.weightMappings.push({ fontWeight: 700, pdfFontWeight: 'bold' });
-        //     this.options.font.weightMappings.push({ fontWeight: 800, pdfFontWeight: 'bold' });
-        //     this.options.font.weightMappings.push({ fontWeight: 900, pdfFontWeight: 'bold' });
-        // }
+        if (!this.options.font.weightMappings) {
+            this.options.font.weightMappings = [];
+            this.options.font.weightMappings.push({ fontWeight: 100, pdfFontWeight: 'normal' });
+            this.options.font.weightMappings.push({ fontWeight: 200, pdfFontWeight: 'normal' });
+            this.options.font.weightMappings.push({ fontWeight: 300, pdfFontWeight: 'normal' });
+            this.options.font.weightMappings.push({ fontWeight: 400, pdfFontWeight: 'normal' });
+            this.options.font.weightMappings.push({ fontWeight: 500, pdfFontWeight: 'bold' });
+            this.options.font.weightMappings.push({ fontWeight: 600, pdfFontWeight: 'bold' });
+            this.options.font.weightMappings.push({ fontWeight: 700, pdfFontWeight: 'bold' });
+            this.options.font.weightMappings.push({ fontWeight: 800, pdfFontWeight: 'bold' });
+            this.options.font.weightMappings.push({ fontWeight: 900, pdfFontWeight: 'bold' });
+        }
 
-        if (!this.options.font.defaultWeight)
-            this.options.font.defaultWeight = 300;
+        if (!this.options.font.defaultFontWeight)
+            this.options.font.defaultFontWeight = "normal";
         if (!this.options.font.defaultFamily)
             this.options.font.defaultFamily = 'Poppins';
         if (!this.options.cssToPdfScaling)
@@ -83,10 +83,13 @@ export default class jsPDFExporter {
         if (options.saveToFile && !options.filename)
             options.filename = "form.pdf";
 
+        var mergedOptions = {};
+        Object.assign(mergedOptions, this.options);
+        Object.assign(mergedOptions, options);
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ 
-            unit: 'px',
-            format: [this.options.pageSize.width, this.options.pageSize.height],
+            unit: 'pt',
+            format: [mergedOptions.pageSize.width, mergedOptions.pageSize.height],
             hotfixes: ["px_scaling"]
          }); // create jsPDF object
     
@@ -109,15 +112,19 @@ export default class jsPDFExporter {
         // and multiply it by the A4 paper proportion (height / width) which is roughly 1.4142
         this._hRatio = constants.PAPER_SIZE_A4_HEIGHT / (features.width * (constants.PAPER_SIZE_A4_HEIGHT / constants.PAPER_SIZE_A4_WIDTH));
 
-        if (this.options.renderContainerBox)
+        if (mergedOptions.renderContainerBox) {
+            doc.saveGraphicsState();
+            doc.setDrawColor(255, 0, 0);
             this._renderBox(features, doc, null);       // render container box
+            doc.restoreGraphicsState();
+        }
 
-        features.widgetFeatures.forEach(w => {
-            this._renderWidgetFeatures(w, doc, null);
+        features.widgetFeatures.forEach(wf => {
+            this._renderWidgetFeatures(wf, doc, null);
         });
 
-        if (options.saveToFile)
-            doc.save(options.filename);
+        if (mergedOptions.saveToFile)
+            doc.save(mergedOptions.filename);
         else
             return doc.output("blob");
     }
@@ -174,25 +181,25 @@ export default class jsPDFExporter {
             w.fontUnderline = parent.fontUnderline;
     }
 
-    _getFontInfo(w, parent) {
+    _getFontInfo(wf, parent) {
         var ff, fw, fs;
-        this._copyFromParentFont(w, parent);
+        this._copyFromParentFont(wf, parent);
 
         // name
-        ff = w.fontFamily;
+        ff = wf.fontFamily;
         if (!ff)
             ff = this.options.font.defaultFamily;
 
         // style
-        if (w.fontStyle && this._validFontStyles.includes(w.fontStyle))
-            fs = w.fontStyle;
+        if (wf.fontStyle && this._validFontStyles.includes(wf.fontStyle))
+            fs = wf.fontStyle;
         if (!fs)
             fs = constants.HTML_FONT_STYLE_NORMAL;
 
         // weight
-        if (!this._validFontWeights.includes(w.fontWeight)) {
-            if (w.fontWeight)
-                fw = parseInt(w.fontWeight);
+        if (!this._validFontWeights.includes(wf.weight)) {
+            if (wf.fontWeight)
+                fw = parseInt(wf.fontWeight);
             
             if (this.options.font.weightMappings && fw) {
                 var fwm = this.options.font.weightMappings.find(x => x.fontWeight === fw);
@@ -202,68 +209,70 @@ export default class jsPDFExporter {
         }
         
         if (!fw)
-            fw = this.options.font.defaultWeight;
+            fw = this.options.font.defaultFontWeight;
 
-        var fn = parseInt(w.fontSize, 10);
+        var fn = parseInt(wf.fontSize, 10);
         if (!fn)
             fn = constants.DEFAULT_PDF_FONT_SIZE;
         fn *= this._hRatio * this.options.cssToPdfScaling;
-        return {name: ff, style: fs, size: fn, weight: fw, color: w.color, underline: w.fontUnderline };
+        return {name: ff, style: fs, size: fn, weight: fw, color: wf.color, underline: wf.fontUnderline };
     }
 
     _renderBox(w, doc, parent) {
         if (w.hasBorderInfo) {
             this._copyFromParentBox(w, parent);
             var r = this._adjustRect(w);
-            doc.rect(r.x, r.y, r.width, r.height);
+            doc.rect(r.x, r.y, r.width, r.height, 'S');
         }
-        this._copyFromParentFont(w, parent);
+        else
+            this._copyFromParentFont(w, parent);
     }
 
-    _renderWidgetFeatures(w, doc, parent) {
-        this._checkNewPage(w, doc);
+    _renderWidgetFeatures(wf, doc, parent) {
+        this._checkNewPage(wf, doc);
 
-        if (w.type === constants.WIDGET_PDF_OBJECT_BOX) {
-            this._renderBox(w, doc, parent);
-        } else if (w.type === constants.WIDGET_PDF_OBJECT_STYLED_TEXT) {
+        if (wf.type === constants.WIDGET_PDF_OBJECT_BOX) {
+            this._renderBox(wf, doc, parent);
+        } else if (wf.type === constants.WIDGET_PDF_OBJECT_STYLED_TEXT) {
             if (this._lastStateInfo)
                 this._saveState(this._getFontInfo(this._lastStateInfo));
             
-            this._lastStateInfo = w;
+            this._lastStateInfo = wf;
 
-            console.log(`Rendering styled widget font:${w.fontFamily}, size:${w.fontSize}, style:${w.fontStyle}, weight:${w.fontWeight}, underline: ${w.fontUnderline}`);
-            this._setStyledText(w, doc, parent);
+            debugger
+            console.log(`Rendering styled widget font:${wf.fontFamily}, size:${wf.fontSize}, style:${wf.fontStyle}, weight:${wf.fontWeight}, underline: ${wf.fontUnderline}`);
+            this._setStyledText(wf, doc, parent);
 
-        } else if (w.type === constants.WIDGET_PDF_OBJECT_SIMPLE_TEXT) {
-            this._renderSimpleText(w, doc, parent);
-        } else if (w.type === constants.WIDGET_PDF_OBJECT_IMAGE) {
-            this._renderImage(w, doc, parent);
+        } else if (wf.type === constants.WIDGET_PDF_OBJECT_SIMPLE_TEXT) {
+            this._renderSimpleText(wf, doc, parent);
+        } else if (wf.type === constants.WIDGET_PDF_OBJECT_IMAGE) {
+            this._renderImage(wf, doc, parent);
         }
 
-        if (w.children && w.children.length) {
-            w.children.forEach(c => {
-                this._renderWidgetFeatures(c, doc, w);
+        if (wf.children && wf.children.length) {
+            wf.children.forEach(c => {
+                this._renderWidgetFeatures(c, doc, wf);
             });
         }
 
-        if (w.type === constants.WIDGET_PDF_OBJECT_STYLED_TEXT && this._renderState.length)
+        if (wf.type === constants.WIDGET_PDF_OBJECT_STYLED_TEXT && this._renderState.length)
             this._lastStateInfo = this._restoreState(doc);
     }
 
-    _setStyledText(w, doc, parent) {
-        var fi = this._getFontInfo(w, parent);
+    _setStyledText(wf, doc, parent) {
+        var fi = this._getFontInfo(wf, parent);
         doc.setFont(fi.name, fi.style, fi.weight);
         doc.setFontSize(fi.size);
         doc.setTextColor(fi.color);
     }
 
-    _renderSimpleText(w, doc, parent) {
-        var fi = this._getFontInfo(w, parent);
-        var r = this._adjustRect(w);
+    _renderSimpleText(wf, doc, parent) {
+        var fi = this._getFontInfo(wf, parent);
+        var r = this._adjustRect(wf);
         var y = r.y + r.height;
-        doc.text(w.text, r.x, y);
+        doc.text(wf.text, r.x, y);
         if (fi.underline) {
-            const textWidth = doc.getTextWidth(w.text);
+            const textWidth = doc.getTextWidth(wf.text);
             doc.line(r.x, r.y + r.height, r.x + textWidth, r.y + r.height);
         }
     }

@@ -210,7 +210,10 @@ export default class Designer {
                 var features = this.extractFeatures();
                 var exp = new jsPDFExporter();
                 if (this._callbacks.onSavePdf) {
-                    var pdfdata = exp.exportPDF(features, { saveToFile: false }); // save to blob
+                    var pdfdata = exp.exportPDF(features, { 
+                        saveToFile: false,
+                        renderContainerBox: false
+                    }); // save to blob
                     this._callbacks.onSavePdf.call(this, {
                         features: features, 
                         pdfdata: pdfdata
@@ -218,7 +221,10 @@ export default class Designer {
                     if (e.defaultPrevented)
                         return;
                 } 
-                exp.exportPDF(features, { saveToFile: true }); // save to file
+                exp.exportPDF(features, { 
+                    saveToFile: true,
+                    renderContainerBox: false
+                 }); // save to file
             } else if (am.action === "load-json") {
                 var json;
                 if (this._callbacks.onLoadJson) {

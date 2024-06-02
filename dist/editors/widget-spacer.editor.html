@@ -1,0 +1,28 @@
+<dialog class="widget-properties-editor" has-script>
+    <div class="widget-properties-editor-header">
+        <span id="lblWidgetId">{{id}}</span>
+    </div>
+    <div class="widget-dialog-section">
+        <div class="widget-dialog-subsection w-4">
+            <label for="txtWidgetPropColumns">{{labelColumns}}</label>
+            <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
+        </div>    
+        <div class="widget-dialog-subsection w-4">
+            <label for="txtWidgetPropHeight">{{labelHeight}}</label>
+            <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+        </div>
+        <div class="widget-dialog-subsection w-4">
+            <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
+            <input type="checkbox" id="chkWidgetPropAutoHeight" />
+        </div>
+    </div>
+    <div class="widget-properties-editor-footer">
+        <button type="button" data-action="accept">
+            {{labelAccept}}
+        </button>
+        &nbsp;
+        <button type="button" data-action="cancel">
+            {{labelCancel}}
+        </button>        
+    </div>    
+</dialog>

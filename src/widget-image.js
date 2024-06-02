@@ -7,17 +7,28 @@ class WidgetImage extends Widget {
         if (fragment.autoHeight === undefined)
             this.autoHeight = true; // set true to allow images to adjust to full height
         this._imageData = fragment.data ?? constants.WIDGET_IMAGE_BLANK;
-        this.imageAlign = fragment.imageAlign ?? constants.WIDGET_IMAGE_ALIGN_CENTER;
     }
 
     exportJson() {
         var json = super.exportJson();
         var localProps = {
-            imageAlign: this.imageAlign, 
             data: this._imageData
         };
         Object.assign(json, localProps);
         return json;
+    }
+
+    async getPropertiesEditorTemplate() {
+        var baseName = "widget-image";
+        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
+        var replacements = this._getCommonEditorPropertyReplacements();
+
+        return {
+            baseName: baseName,
+            handlingClassName: "WidgetImagePropertiesEditor",
+            replacements: replacements,
+            template: html
+        };
     }
 
     refresh() {
@@ -75,12 +86,12 @@ class WidgetImage extends Widget {
 
     _buildImageStyle() {
         var imageStyle = "";
-        if (this.height || this.imageAlign) {
+        if (this.height || this.horizontalAlignment) {
             if (this.height && !this.autoHeight)
                 imageStyle += `height: ${this.height}; width: auto;`;
-            if (this.imageAlign === constants.WIDGET_IMAGE_ALIGN_LEFT)
+            if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT)
                 imageStyle += "margin-left: 0; margin-right: auto;";
-            else if (this.imageAlign === constants.WIDGET_IMAGE_ALIGN_RIGHT)
+            else if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT)
                 imageStyle += "margin-left: auto; margin-right: 0;";
             else
                 imageStyle += "margin-left: auto; margin-right: auto;";

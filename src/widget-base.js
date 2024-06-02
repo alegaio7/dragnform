@@ -225,15 +225,17 @@ export default class Widget {
     }
 
     // extract widget features using a injected extractor.
-    extractFeatures(featureExtractor, recursive) {
+    extractFeatures(featureExtractor, options) {
         if (!featureExtractor)
             throw new Error('featureExtractor is required');
         if (!this._el)
             return; // some widgets may not be rendered, like submit buttons.
-        recursive = recursive ?? true;
+        if (!options)
+            options = {};
+        options.recursive = options.recursive ?? true;
         var viewEl = this._el.querySelector(`[data-show-when="${constants.WIDGET_MODE_VIEW}"]`);
         if (viewEl)
-            return featureExtractor.extractFeatures(viewEl, recursive);
+            return featureExtractor.extractFeatures(viewEl, options);
     }
     
     getEditorProperties() {

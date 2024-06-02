@@ -5,13 +5,17 @@
 		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
 		{{/showRemove}}
 		<label class="{{labelClass}}" for="{{inputIdDesign}}">
-			{{#showRequiredMarkBefore}}
-			<span class="required-mark">{{mark}}</span>
+			<span class="required-mark" data-position="before" 
+			{{^showRequiredMarkBefore}}
+			style="display:none;"
 			{{/showRequiredMarkBefore}}
+			>{{mark}}</span>
 			<span data-part="label">{{label}}</span>
-			{{#showRequiredMarkAfter}}
-			<span class="required-mark">{{mark}}</span>
+			<span class="required-mark" data-position="after" 
+			{{^showRequiredMarkAfter}}
+			style="display:none;"
 			{{/showRequiredMarkAfter}}
+			>{{mark}}</span>
 		</label>
 		<input type="number" id="{{inputIdDesign}}" {{inputClass}}
 			{{#hasMin}}
@@ -39,13 +43,17 @@
 	</div>
 	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
 		<label class="{{labelClass}}" for="{{inputIdRun}}">
-			{{#showRequiredMarkBefore}}
-			<span class="required-mark">{{mark}}</span>
+			<span class="required-mark" data-position="before" 
+			{{^showRequiredMarkBefore}}
+			style="display:none;"
 			{{/showRequiredMarkBefore}}
+			>{{mark}}</span>
 			<span data-part="label">{{label}}</span>
-			{{#showRequiredMarkAfter}}
-			<span class="required-mark">{{mark}}</span>
+			<span class="required-mark" data-position="after" 
+			{{^showRequiredMarkAfter}}
+			style="display:none;"
 			{{/showRequiredMarkAfter}}
+			>{{mark}}</span>
 		</label>
 		<input type="number" id="{{inputIdRun}}" {{inputClass}}
             {{#hasMin}}

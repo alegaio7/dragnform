@@ -38,8 +38,10 @@ export default class Canvas {
         this._rememberedProperties.set("columns", 12);
         this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
         this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
+        // this._rememberedProperties.set("fontUnderline", false);
         this._rememberedProperties.set("height", constants.WIDGET_DEFAULT_HEIGHT);
         this._rememberedProperties.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
+        this._rememberedProperties.set("required", false);
         this._rememberedProperties.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
 
         this._sourceJson = {
@@ -179,12 +181,20 @@ export default class Canvas {
 
         this._featureExtractor.setScrollOffset(this._container.scrollTop);
 
-        var json = this._featureExtractor.extractFeatures(this._container, false, true); // not recursive for container, each widget will handle its children
+        var json = this._featureExtractor.extractFeatures(this._container, {
+            recursive: false,           // not recursive for container, each widget will handle its children
+            skipScrollOffset: true,
+            isRootContainer: true       // when true, loads the relative offset of the root container in json.relOffsetX and json.relOffsetY
+        }); 
         json.container = true;
         json.widgetFeatures = [];
         var _t = this;
         this._widgets.forEach(w => {
-            var j = w.extractFeatures(_t._featureExtractor, true);
+            var j = w.extractFeatures(_t._featureExtractor, {
+                recursive: true,
+                relOffsetX: json.relOffsetX,
+                relOffsetY: json.relOffsetY
+            });
             if (j) {
                 json.widgetFeatures.push(j);
             }

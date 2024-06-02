@@ -52,8 +52,8 @@ class WidgetNumber extends WidgetInputBase {
         var props = super.getEditorProperties();
 
         props.push(
-            { name: "min", type: "number", elementId: "txtWidgetPropMin", value: this.min },
-            { name: "max", type: "number", elementId: "txtWidgetPropMax", value: this.max },
+            { name: "min", type: "number", elementId: "txtWidgetPropMinValue", value: this.min },
+            { name: "max", type: "number", elementId: "txtWidgetPropMaxValue", value: this.max },
             { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
         );
         return props;
@@ -64,8 +64,8 @@ class WidgetNumber extends WidgetInputBase {
         var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         var replacements = this._getCommonEditorPropertyReplacements();
 
-        replacements.labelMin = Strings.WidgetEditor_Text_Widget_Min;
-        replacements.labelMax = Strings.WidgetEditor_Text_Widget_Max;
+        replacements.labelMinValue = Strings.WidgetEditor_Text_Widget_MinValue;
+        replacements.labelMaxValue = Strings.WidgetEditor_Text_Widget_MaxValue;
 
         return {
             baseName: baseName,
@@ -73,6 +73,26 @@ class WidgetNumber extends WidgetInputBase {
             replacements: replacements,
             template: html
         };
+    }
+
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+        super.refresh();
+        var inputs = this._el.querySelectorAll("input");
+        if (inputs.length) {
+            inputs.forEach(input => {
+                if (this.min !== null)
+                    input.setAttribute("min", this.min);
+                else
+                    input.removeAttribute("min");
+
+                if (this.max != null)
+                    input.setAttribute("max", this.max);
+                else
+                    input.removeAttribute("max");
+            });
+        }
     }
 
     async render(container, parser) {

@@ -123,6 +123,7 @@
 }
 .widget[data-mode=design] [data-part=label] {
   cursor: pointer;
+  text-decoration: inherit;
 }
 .widget[data-mode=run] [data-show-when=run] {
   display: flex;
@@ -353,11 +354,43 @@
 
 .required-mark {
   font-weight: bold;
+  text-decoration: none;
   font-size: 80%;
   color: #f00;
 }
 .required-mark::after {
   content: " ";
+  text-decoration: none;
+}
+
+.widget-dialog-section {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+}
+.widget-dialog-section h1, .widget-dialog-section h2, .widget-dialog-section h3, .widget-dialog-section h4, .widget-dialog-section h5, .widget-dialog-section h6 {
+  margin: 0;
+}
+.widget-dialog-section .widget-dialog-subsection {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.widget-dialog-section .widget-dialog-subsection.w-2 {
+  width: calc(16.66% - 0.0833333333rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-3 {
+  width: calc(25% - 0.125rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-4 {
+  width: calc(33.33% - 0.1666666667rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-6 {
+  width: calc(50% - 0.25rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-8 {
+  width: calc(66.66% - 0.4rem - 1px);
 }
 
 .widget-dialog-section-title {
@@ -400,6 +433,7 @@
 
 .flyter-read-container {
   display: inline-block;
+  text-decoration: inherit;
 }
 
 .flyter-text-input {
@@ -412,23 +446,32 @@
 }
 
 .widget-properties-editor {
+  box-sizing: border-box;
   font-family: inherit;
   padding: 1rem;
-  width: clamp(10rem, 100%, 30rem);
+  width: clamp(10rem, 100%, 35rem);
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   border: 1px solid #888;
   border-radius: 0.25rem;
   font-family: "Poppins";
   max-height: calc(100vh - 10rem);
 }
+.widget-properties-editor > *, .widget-properties-editor *::before, .widget-properties-editor *::after {
+  box-sizing: inherit;
+}
 .widget-properties-editor input, .widget-properties-editor button {
   min-height: 1.75rem;
   font-family: inherit;
   font-size: 16px;
 }
+.widget-properties-editor input {
+  vertical-align: middle;
+}
 .widget-properties-editor input[type=checkbox], .widget-properties-editor input[type=radio] {
   width: 1.5rem;
-  vertical-align: middle;
+}
+.widget-properties-editor input[type=number] {
+  width: 5rem;
 }
 .widget-properties-editor > * {
   margin: 0 0 0.5rem 0;

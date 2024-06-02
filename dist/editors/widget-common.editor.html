@@ -2,41 +2,45 @@
     <div class="widget-properties-editor-header">
         <span id="lblWidgetId">{{id}}</span>
     </div>
-    <div>
-        <label for="txtWidgetPropLabel">{{labelWidgetLabel}}</label>
-        <input type="text" id="txtWidgetPropLabel" />
+    <div class="widget-dialog-section">
+        <div class="widget-dialog-subsection w-8">
+            <label for="txtWidgetPropLabel">{{labelWidgetLabel}}</label>
+            <input type="text" id="txtWidgetPropLabel" />
+        </div>
+        <div class="widget-dialog-subsection w-4">
+            <label for="txtWidgetPropColumns">{{labelColumns}}</label>
+            <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
+        </div>    
     </div>
-    <div>
-        <label for="txtWidgetPropColumns">{{labelColumns}}</label>
-        <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
-    </div>    
-    <div>
-        <h4 class="widget-dialog-section-title">{{labelFontProperties}}</h4>
-        <div>
+    <div class="widget-dialog-section">
+        <h6 class="widget-dialog-section-title">{{labelFontProperties}}</h6>
+        <div class="widget-dialog-subsection w-6">
             <label for="txtWidgetFontSize">{{labelFontSize}}</label>
             <input type="number" id="txtWidgetFontSize" min="6" max="96" />
         </div>
+        <div class="widget-dialog-subsection w-6">
+            <label for="chkWidgetPropFontUnderline">{{labelFontUnderline}}</label>
+            <input type="checkbox" id="chkWidgetPropFontUnderline" />
+        </div>
         <div>
-            <h6 class="widget-dialog-section-title">{{labelFontWeight}}</h6>
+            <span>{{labelFontWeight}}:</span>
             <label for="optFontWeightNormal">{{labelFontWeightNormal}}</label>
             <input type="radio" id="optFontWeightNormal" value="normal" name="fontWeight" />
             <label for="optFontWeightBold">{{labelFontWeightBold}}</label>
             <input type="radio" id="optFontWeightBold" value="bold" name="fontWeight"/>
         </div>
-        <div>
-            <label for="chkWidgetPropFontUnderline">{{labelFontUnderline}}</label>
-            <input type="checkbox" id="chkWidgetPropFontUnderline" />
+    </div>
+    <div class="widget-dialog-section">
+        <div class="widget-dialog-subsection w-6">
+            <label for="txtWidgetPropHeight">{{labelHeight}}</label>
+            <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+        </div>
+        <div class="widget-dialog-subsection w-6">
+            <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
+            <input type="checkbox" id="chkWidgetPropAutoHeight" />
         </div>
     </div>
-    <div>
-        <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
-        <input type="checkbox" id="chkWidgetPropAutoHeight" />
-    </div>
-    <div>
-        <label for="txtWidgetPropHeight">{{labelHeight}}</label>
-        <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
-    </div>
-    <div>
+    <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelHorizontalAlignment}}</h6>
         <label for="optAlignHLeft">{{labelAlignHLeft}}</label>
         <input type="radio" id="optAlignHLeft" value="left" name="halignment" />
@@ -45,7 +49,7 @@
         <label for="optAlignHRight">{{labelAlignHRight}}</label>
         <input type="radio" id="optAlignHRight" value="right" name="halignment"/>
     </div>      
-    <div>
+    <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelVerticalAlignment}}</h6>
         <label for="optAlignVTop">{{labelAlignVTop}}</label>
         <input type="radio" id="optAlignVTop" value="top" name="valignment" />

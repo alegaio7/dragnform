@@ -197,6 +197,7 @@ $widget-toolbar-padding: 0.5rem;
 
         [data-part="label"] {
             cursor: pointer;
+            text-decoration: inherit; // to allow for underline
         }
     }
 
@@ -468,16 +469,52 @@ $widget-toolbar-padding: 0.5rem;
 // component styles
 .required-mark {
     font-weight: bold;
+    text-decoration: none;
     font-size: 80%;
     color: $widget-error;
     &::after {
-        content: ' '
+        content: ' ';
+        text-decoration: none;
     }
 }
 
 // ******
 // dialog editors
 // ******
+$widget-section-padding: 0.25rem;
+.widget-dialog-section {
+    border: 1px solid $widget-border-design-color;
+    border-radius: $widget-designer-radius;
+    padding: $widget-section-padding;
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+    }
+
+    .widget-dialog-subsection {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        vertical-align: middle;
+
+        &.w-2 {
+            width: calc(16.66% - $widget-section-padding / 6 * 2 - 1px);
+        }
+        &.w-3 {
+            width: calc(25% - $widget-section-padding / 4 * 2 - 1px);
+        }
+        &.w-4 {
+            width: calc(33.33% - $widget-section-padding / 3 * 2 - 1px);
+        }
+        &.w-6 {
+            width: calc(50% - $widget-section-padding / 2 * 2 - 1px);
+        }
+        &.w-8 {
+            width: calc(66.66% - $widget-section-padding / 1.25 * 2 - 1px);
+        }
+    }
+}
+
 .widget-dialog-section-title {
     font-weight: bold;
     margin: 1rem 0 0 0;
@@ -524,6 +561,7 @@ $widget-toolbar-padding: 0.5rem;
 
 .flyter-read-container {
     display: inline-block;;
+    text-decoration: inherit; // to allow for underline
 }
 
 .flyter-text-input {
@@ -540,9 +578,13 @@ $widget-toolbar-padding: 0.5rem;
 // Widget editors
 // **************
 .widget-properties-editor {
+    box-sizing: border-box;
+    > *, *::before, *::after {
+        box-sizing: inherit;
+    }
     font-family: inherit;
     padding: $widget-modal-padding;
-    width: clamp(10rem, 100%, 30rem);
+    width: clamp(10rem, 100%, 35rem);
     box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
     border: 1px solid $widget-modal-border-color;
     border-radius: $widget-designer-radius;
@@ -555,11 +597,18 @@ $widget-toolbar-padding: 0.5rem;
         font-size: $default-font-size;
     }
 
-    input[type="checkbox"], input[type="radio"] {
-        width: 1.5rem;
+    input {
         vertical-align: middle;
     }
+
+    input[type="checkbox"], input[type="radio"] {
+        width: 1.5rem;
+    }
     
+    input[type="number"] {
+        width: 5rem;
+    }
+
     & > * {
         margin: 0 0 0.5rem 0;
     }

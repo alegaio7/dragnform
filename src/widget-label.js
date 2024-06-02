@@ -12,9 +12,7 @@ class WidgetLabel extends Widget {
     exportJson() {
         var json = super.exportJson();
         var localProps = { 
-            horizontalAlignment: this.horizontalAlignment,
             labelClass: this.labelClass,
-            verticalAlignment: this.verticalAlignment,
          };
         Object.assign(json, localProps);
         return json;
@@ -28,7 +26,7 @@ class WidgetLabel extends Widget {
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {
-                var label = s.querySelector(".widget-label");
+                var label = s.querySelector(".widget-label [data-part='label']");
                 if (label)
                     label.setAttribute("style", style);
             });

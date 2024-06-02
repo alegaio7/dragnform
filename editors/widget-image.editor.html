@@ -3,32 +3,10 @@
         <span id="lblWidgetId">{{id}}</span>
     </div>
     <div class="widget-dialog-section">
-        <div class="widget-dialog-subsection w-8">
-            <label for="txtWidgetPropLabel">{{labelWidgetLabel}}</label>
-            <input type="text" id="txtWidgetPropLabel" />
-        </div>
         <div class="widget-dialog-subsection w-4">
             <label for="txtWidgetPropColumns">{{labelColumns}}</label>
             <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
         </div>    
-    </div>
-    <div class="widget-dialog-section">
-        <h6 class="widget-dialog-section-title">{{labelFontProperties}}</h6>
-        <div class="widget-dialog-subsection w-6">
-            <label for="txtWidgetFontSize">{{labelFontSize}}</label>
-            <input type="number" id="txtWidgetFontSize" min="6" max="96" />
-        </div>
-        <div class="widget-dialog-subsection w-6">
-            <label for="chkWidgetPropFontUnderline">{{labelFontUnderline}}</label>
-            <input type="checkbox" id="chkWidgetPropFontUnderline" />
-        </div>
-        <div>
-            <span>{{labelFontWeight}}:</span>
-            <label for="optFontWeightNormal">{{labelFontWeightNormal}}</label>
-            <input type="radio" id="optFontWeightNormal" value="normal" name="fontWeight" />
-            <label for="optFontWeightBold">{{labelFontWeightBold}}</label>
-            <input type="radio" id="optFontWeightBold" value="bold" name="fontWeight"/>
-        </div>
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection w-6">
@@ -49,15 +27,6 @@
         <label for="optAlignHRight">{{labelAlignHRight}}</label>
         <input type="radio" id="optAlignHRight" value="right" name="halignment"/>
     </div>      
-    <div class="widget-dialog-section">
-        <h6 class="widget-dialog-section-title">{{labelVerticalAlignment}}</h6>
-        <label for="optAlignVTop">{{labelAlignVTop}}</label>
-        <input type="radio" id="optAlignVTop" value="top" name="valignment" />
-        <label for="optAlignVCenter">{{labelAlignVCenter}}</label>
-        <input type="radio" id="optAlignVCenter" value="center" name="valignment"/>
-        <label for="optAlignVBottom">{{labelAlignVBottom}}</label>
-        <input type="radio" id="optAlignVBottom" value="bottom" name="valignment"/>
-    </div>  
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">
             {{labelAccept}}
