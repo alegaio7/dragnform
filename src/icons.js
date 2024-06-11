@@ -12,5 +12,6 @@ export default class Icons {
     static get Toolbar_NewForm_Icon() { return 'fa fa-regular fa-file'; }
     static get Toolbar_RunMode_Icon() { return 'fa fa-play'; }
     static get Toolbar_SavePdf_Icon() { return 'fa fa-regular fa-file-pdf'; }
+    static get Toolbar_ValidateForm_Icon() { return 'fa fa-list-check'; }
     static get Toolbar_ViewMode_Icon() { return 'fa fa-regular fa-eye'; }
 }

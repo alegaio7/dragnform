@@ -38,7 +38,6 @@ export default class Canvas {
         this._rememberedProperties.set("columns", 12);
         this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
         this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
-        // this._rememberedProperties.set("fontUnderline", false);
         this._rememberedProperties.set("height", constants.WIDGET_DEFAULT_HEIGHT);
         this._rememberedProperties.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
         this._rememberedProperties.set("required", false);
@@ -334,6 +333,7 @@ export default class Canvas {
             w.registerRemoveButtonHandler(this._removeWidgetInternal.bind(this), false);
         
         w.registerPropertiesButtonHandler(this._showWidgetProperties.bind(this), false);
+        w.registerDoubleClickHandler(this._showWidgetProperties.bind(this), false);
 
         if (this._widgetRenderOptions.enableInPlaceEditor)
             w.enableInPlaceEditor();
@@ -505,6 +505,12 @@ export default class Canvas {
                         if (el) {
                             if (p.type === "boolean")
                                 widgetInfo.widget[p.name] = el.checked;
+                            else if (p.type === "number") {
+                                if (el.value === "" || isNaN(el.value))
+                                    widgetInfo.widget[p.name] = null;
+                                else
+                                    widgetInfo.widget[p.name] = parseInt(el.value, 10);
+                            }
                             else
                                 widgetInfo.widget[p.name] = el.value;
                             if (this._rememberedProperties.has(p.name))

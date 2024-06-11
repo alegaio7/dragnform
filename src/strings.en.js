@@ -21,6 +21,8 @@ class Strings {
     static get Toolbar_RenderModes_Run_ButtonLabel() { return 'Run mode'; }
     static get Toolbar_RenderModes_View_ButtonLabel() { return 'View mode'; }
     static get Toolbar_RenderModes_ButtonTitle() { return 'Switch between design and run mode'; }
+    static get Toolbar_RenderModes_ValidateForm_ButtonTitle() { return 'Validate form in run mode'; }
+    static get Toolbar_RenderModes_ValidateForm_ButtonLabel() { return 'Validate'; }
 
     static get Toolbar_AddLabelWidget_ButtonLabel() { return 'Label'; }
     static get Toolbar_AddLabelWidget_ButtonTitle() { return 'Add label'; }    
@@ -44,12 +46,15 @@ class Strings {
     static get Toolbar_Layout_GroupTitle() { return 'Layout'; }
     static get Toolbar_RenderMode_GroupTitle () { return 'Current mode'; }
 
+    // Validation
+    static get Validation_Form_Valid () { return 'The form is valid!'; }
+
     // widgets
     static get WidgetPropertiesButtonTitle() { return 'Widget properties'; }
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
     static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
     static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
-    static get WidgetValidation_RequiredMessage() {return 'Value is required'; }
+    static get WidgetValidation_RequiredMessage() {return 'A value for this field is required'; }
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
@@ -75,11 +80,18 @@ class Strings {
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
 
-    static get WidgetEditor_Text_Widget_MinValue() { return 'Min.'; }
+    static get WidgetEditor_Number_Widget_MinValue() { return 'Min.'; }
+    static get WidgetEditor_Number_Widget_MinValueValidationMessage() { return 'Validation message'; }
+    static get WidgetEditor_Number_Widget_MaxValue() { return 'Max.'; }
+    static get WidgetEditor_Number_Widget_MaxValueValidationMessage() { return 'Validation message'; }
+    static get WidgetEditor_Number_Widget_ValueRequiredMessage() { return 'Validation message'; }
+
     static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
-    static get WidgetEditor_Text_Widget_MaxValue() { return 'Max.'; }
+    static get WidgetEditor_Text_Widget_MinLengthValidationMessage() { return 'Validation message'; }
+    static get WidgetEditor_Text_Widget_MaxLengthValidationMessage() { return 'Validation message'; }
     static get WidgetEditor_Text_Widget_MaxLength() { return 'Max. length'; }
-    
+    static get WidgetEditor_Text_Widget_ValueRequiredMessage() { return 'Validation message'; }
+
     // flyter
     static get Flyter_CancelButtonText() { return 'Cancel'; }
     static get Flyter_OkButtonText() { return 'Accept'; }

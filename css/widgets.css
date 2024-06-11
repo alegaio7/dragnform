@@ -19,6 +19,10 @@
 .widget-designer button:hover {
   background-color: #ddd;
 }
+.widget-designer button:disabled {
+  background-color: #ccc;
+  color: #888;
+}
 .widget-designer .widget-toolbar [data-render-mode] {
   display: none;
 }
@@ -55,6 +59,7 @@
   border-radius: 0.25rem;
   padding: 0.5rem;
   margin-bottom: 1rem;
+  font-weight: 300;
 }
 .widget-toolbar .widget-toolbar-group {
   border: 1px solid #eee;
@@ -74,7 +79,6 @@
 
 .widget-container, .widget-toolbar {
   font-family: "Poppins";
-  font-weight: 300;
   font-size: 16px;
   margin-right: auto;
   margin-left: auto;
@@ -86,6 +90,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
+  font-weight: 400;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   height: calc(100vh - 150px);
@@ -363,6 +368,20 @@
   text-decoration: none;
 }
 
+.label-input-container {
+  display: table;
+}
+.label-input-container label, .label-input-container input {
+  display: table-cell;
+}
+.label-input-container label {
+  width: 1%;
+  min-width: 11rem;
+}
+.label-input-container input {
+  width: 99%;
+}
+
 .widget-dialog-section {
   border: 1px solid #ccc;
   border-radius: 0.25rem;
@@ -376,6 +395,8 @@
   white-space: nowrap;
   overflow: hidden;
   vertical-align: middle;
+  margin-bottom: 0.25rem;
+  width: 100%;
 }
 .widget-dialog-section .widget-dialog-subsection.w-2 {
   width: calc(16.66% - 0.0833333333rem - 1px);

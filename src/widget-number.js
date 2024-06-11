@@ -7,19 +7,19 @@ class WidgetNumber extends WidgetInputBase {
 
         this._min = 0;
         this._max = 0;
-        this.minValidationMessage = "";
-        this.maxValidationMessage = "";
+        this.minValueValidationMessage = "";
+        this.maxValueValidationMessage = "";
 
         var v = this._findValidation("min");
         if (v) {
             this._min = typeof v.value === "number" ? v.value : null;
-            this.minValidationMessage = v.message;
+            this.minValueValidationMessage = v.message;
         }
 
         v = this._findValidation("max");
         if (v) {
             this._max = typeof v.value === "number" ? v.value : null;
-            this.maxValidationMessage = v.message;
+            this.maxValueValidationMessage = v.message;
         }
     }
 
@@ -38,9 +38,9 @@ class WidgetNumber extends WidgetInputBase {
     exportJson() {
         var json = super.exportJson();
         var localProps = {validations: [
-            { type: "min", value: this.min, message: this.minValidationMessage },
-            { type: "max", value: this.max, message: this.maxValidationMessage },
-            { type: "required", value: this.required, message: this.requiredValidationMessage },
+            { type: "min", value: this.min, message: this.minValueValidationMessage },
+            { type: "max", value: this.max, message: this.maxValueValidationMessage },
+            { type: "required", value: this.required, message: this.valueRequiredValidationMessage },
         ]};
         if (!isNaN(this.value) && this.value !== null && this.value !== undefined)
             localProps.value = this.value;
@@ -53,8 +53,11 @@ class WidgetNumber extends WidgetInputBase {
 
         props.push(
             { name: "min", type: "number", elementId: "txtWidgetPropMinValue", value: this.min },
+            { name: "minValueValidationMessage", type: "string", elementId: "txtWidgetPropMinValueValidationMessage", value: this.minValueValidationMessage },
             { name: "max", type: "number", elementId: "txtWidgetPropMaxValue", value: this.max },
+            { name: "maxValueValidationMessage", type: "string", elementId: "txtWidgetPropMaxValueValidationMessage", value: this.maxValueValidationMessage },
             { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
+            { name: "valueRequiredValidationMessage", type: "string", elementId: "txtWidgetPropRequiredValidationMessage", value: this.valueRequiredValidationMessage }
         );
         return props;
     }
@@ -64,8 +67,11 @@ class WidgetNumber extends WidgetInputBase {
         var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         var replacements = this._getCommonEditorPropertyReplacements();
 
-        replacements.labelMinValue = Strings.WidgetEditor_Text_Widget_MinValue;
-        replacements.labelMaxValue = Strings.WidgetEditor_Text_Widget_MaxValue;
+        replacements.labelMinValue = Strings.WidgetEditor_Number_Widget_MinValue;
+        replacements.labelMinValueValidationMessage = Strings.WidgetEditor_Number_Widget_MinValueValidationMessage;
+        replacements.labelMaxValue = Strings.WidgetEditor_Number_Widget_MaxValue;
+        replacements.labelMaxValueValidationMessage = Strings.WidgetEditor_Number_Widget_MaxValueValidationMessage;
+        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Number_Widget_ValueRequiredMessage;
 
         return {
             baseName: baseName,
@@ -116,7 +122,9 @@ class WidgetNumber extends WidgetInputBase {
             label: this.label,
             mark: this.requiredAttributeSettings.mark,
             max: this.max,
+            maxValueValidationMessage: this.maxValueValidationMessage,
             min: this.min,
+            minValueValidationMessage: this.minValueValidationMessage,
             mode: constants.WIDGET_MODE_DESIGN,
             labelClass: this.globalClasses.label ?? "",
             required: this.required,
@@ -159,9 +167,9 @@ class WidgetNumber extends WidgetInputBase {
             if (input.value) {
                 var n = parseInt(input.value, 10);
                 if (typeof this.min === "number" && n < this.min)
-                    r = { result: false, message: this.minValidationMessage };
+                    r = { result: false, message: this.minValueValidationMessage };
                 else if (typeof this.max === "number" && n > this.max)
-                    r = { result: false, message: this.maxValidationMessage };
+                    r = { result: false, message: this.maxValueValidationMessage };
             }
         }
 

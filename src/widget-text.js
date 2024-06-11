@@ -56,7 +56,7 @@ class WidgetText extends WidgetInputBase {
         var localProps = {validations: [
             { type: "minLength", value: this.minLength, message: this.minLengthValidationMessage },
             { type: "maxLength", value: this.maxLength, message: this.maxLengthValidationMessage },
-            { type: "required", value: this.required, message: this.requiredValidationMessage },
+            { type: "required", value: this.required, message: this.valueRequiredValidationMessage },
         ]};
 
         if (this.pattern)
@@ -72,8 +72,11 @@ class WidgetText extends WidgetInputBase {
 
         props.push(
             { name: "minLength", type: "number", elementId: "txtWidgetPropMinLength", value: this.minLength },
+            { name: "minLengthValidationMessage", type: "string", elementId: "txtWidgetPropMinLengthValidationMessage", value: this.minLengthValidationMessage },
             { name: "maxLength", type: "number", elementId: "txtWidgetPropMaxLength", value: this.maxLength },
+            { name: "maxLengthValidationMessage", type: "string", elementId: "txtWidgetPropMaxLengthValidationMessage", value: this.maxLengthValidationMessage },
             { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
+            { name: "valueRequiredValidationMessage", type: "string", elementId: "txtWidgetPropRequiredValidationMessage", value: this.valueRequiredValidationMessage }
         );
         return props;
     }
@@ -84,7 +87,10 @@ class WidgetText extends WidgetInputBase {
         var replacements = this._getCommonEditorPropertyReplacements();
 
         replacements.labelMinLength = Strings.WidgetEditor_Text_Widget_MinLength;
+        replacements.labelMinLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MinLengthValidationMessage;
         replacements.labelMaxLength = Strings.WidgetEditor_Text_Widget_MaxLength;
+        replacements.labelMaxLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MaxLengthValidationMessage;
+        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Text_Widget_ValueRequiredMessage;
 
         return {
             baseName: baseName,
@@ -140,7 +146,9 @@ class WidgetText extends WidgetInputBase {
             label: this.label,
             mark: this.requiredAttributeSettings.mark,
             maxLength: this.maxLength,
+            maxLengthValidationMessage: this.maxLengthValidationMessage,
             minLength: this.minLength,
+            minLengthValidationMessage: this.minLengthValidationMessage,
             mode: constants.WIDGET_MODE_DESIGN,
             labelClass: this.globalClasses.label ?? "",
             required: this.required,

@@ -339,6 +339,26 @@ export default class Widget {
     /// <summary>
     /// Registers a handler for the 'widget properties' button
     /// </summary>
+    registerDoubleClickHandler(handler, dettach) {
+        if (!this._el)
+            throw new Error('widget not rendered');
+        dettach = !!dettach;
+        if (!handler)
+            throw new Error('handler is required');
+        if (typeof handler !== 'function')
+            throw new Error('handler must be a function');
+        if (!dettach)
+            this._el.addEventListener('dblclick', async (e) => {
+                await handler(this, e);
+            });
+        else {
+            this._el.removeEventListener('dblclick', handler);
+        }
+    }
+
+    /// <summary>
+    /// Registers a handler for the 'widget properties' button
+    /// </summary>
     registerPropertiesButtonHandler(handler, dettach) {
         if (!this._el)
             throw new Error('widget not rendered');

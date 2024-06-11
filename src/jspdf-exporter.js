@@ -239,7 +239,6 @@ export default class jsPDFExporter {
             
             this._lastStateInfo = wf;
 
-            debugger
             console.log(`Rendering styled widget font:${wf.fontFamily}, size:${wf.fontSize}, style:${wf.fontStyle}, weight:${wf.fontWeight}, underline: ${wf.fontUnderline}`);
             this._setStyledText(wf, doc, parent);
 

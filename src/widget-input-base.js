@@ -13,11 +13,11 @@ class WidgetInputBase extends Widget {
 
         // check common validations
         this._required = false;
-        this.requiredValidationMessage = "";
+        this.valueRequiredValidationMessage = Strings.WidgetValidation_RequiredMessage;
         var v = this._findValidation("required");
         if (v) {
             this._required = !!v.value;
-            this.requiredValidationMessage = v.message ?? Strings.WidgetValidation_RequiredMessage;
+            this.valueRequiredValidationMessage = v.message ?? Strings.WidgetValidation_RequiredMessage;
         }
     }
 
@@ -92,7 +92,7 @@ class WidgetInputBase extends Widget {
             r = { result: false, message: `Widget ${this.id}: input control not found` };
         }
         else if (!input.value && this.required) {
-            r = { result: false, message: this.requiredValidationMessage };
+            r = { result: false, message: this.valueRequiredValidationMessage };
         }
 
         if (!r)

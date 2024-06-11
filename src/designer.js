@@ -32,6 +32,7 @@ export default class Designer {
             { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE },
             { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER },
             { action: 'change-render-mode', widgetType: null },
+            { action: 'validate-form', widgetType: null },
         ];
 
         var c = document.getElementById(options.containerId);
@@ -271,6 +272,12 @@ export default class Designer {
                 if (this._callbacks.onRenderModeChanged && this._callbacks.onRenderModeChanged.call(this, {intendedMode: newMode}, e) && e.defaultPrevented)
                     return;
                 this.renderMode = newMode;
+            } else if (am.action === "validate-form") {
+                if (this.renderMode !== constants.WIDGET_MODE_RUN)
+                    throw new Error('validate can only be called in run mode');
+                var r = this.validate({showErrors: true});
+                if (r.result)
+                    alert(Strings.Validation_Form_Valid);
             }
         }
     }
@@ -286,7 +293,7 @@ export default class Designer {
                 options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image
             );
             var renderModeGroup = options.toolbar.buttons && (
-                options.toolbar.buttons.renderCurrentMode
+                options.toolbar.buttons.renderCurrentMode && options.toolbar.buttons.renderValidateForm
             );
             // var layoutGroup = options.toolbar.buttons && (
             //     options.toolbar.buttons.spacer
@@ -337,6 +344,12 @@ export default class Designer {
                                 <span>${Strings.Toolbar_RenderModes_View_ButtonLabel}</span>
                             </span>                            
                         </button>`;
+
+                if (options.toolbar.buttons.renderValidateForm)
+                    html += `<button type="button" disabled data-action="validate-form" title="${Strings.Toolbar_RenderModes_ValidateForm_ButtonTitle}">
+                                <i class="${Icons.Toolbar_ValidateForm_Icon}"></i>
+                                <span>${Strings.Toolbar_RenderModes_ValidateForm_ButtonLabel}</span>
+                            </button>`;                        
                 html += `</div>`;
             }
 
@@ -398,5 +411,13 @@ export default class Designer {
 
     _updateUI() {
         this._designerEl.setAttribute('data-current-mode', this.renderMode);
+        var validateBtn = this._container.querySelector('[data-action="validate-form"]');
+        if (validateBtn)
+            validateBtn.disabled = this.renderMode === constants.WIDGET_MODE_RUN ? false : true;
+
+        var widgetButtons = this._container.querySelectorAll('[data-action^="add-"]');
+        widgetButtons.forEach(b => {
+            b.disabled = this.renderMode === constants.WIDGET_MODE_DESIGN ? false : true;
+        });
     }
 }

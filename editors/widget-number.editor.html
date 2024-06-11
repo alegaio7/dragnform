@@ -63,14 +63,32 @@
             <label for="txtWidgetPropMinValue">{{labelMinValue}}</label>
             <input type="number" id="txtWidgetPropMinValue" />
         </div>
+        <div class="widget-dialog-subsection">
+            <div class="label-input-container">
+                <label for="txtWidgetPropMinValueValidationMessage">{{labelMinValueValidationMessage}}</label>
+                <input type="text" id="txtWidgetPropMinValueValidationMessage" />
+            </div>
+        </div>         
         <div class="widget-dialog-subsection w-6">
             <label for="txtWidgetPropMaxValue">{{labelMaxValue}}</label>
             <input type="number" id="txtWidgetPropMaxValue" min="0" />
         </div>
-        <div>
+        <div class="widget-dialog-subsection">
+            <div class="label-input-container">
+                <label for="txtWidgetPropMaxValueValidationMessage">{{labelMaxValueValidationMessage}}</label>
+                <input type="text" id="txtWidgetPropMaxValueValidationMessage" />
+            </div>
+        </div>          
+        <div class="widget-dialog-subsection">
             <label for="chkWidgetPropRequired">{{labelRequired}}</label>
             <input type="checkbox" id="chkWidgetPropRequired" />
-        </div>    
+        </div>
+        <div class="widget-dialog-subsection">
+            <div class="label-input-container">
+                <label for="txtWidgetPropRequiredValidationMessage">{{labelValueRequiredValidationMessage}}</label>
+                <input type="text" id="txtWidgetPropRequiredValidationMessage" />
+            </div>
+        </div>          
     </div>
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">
