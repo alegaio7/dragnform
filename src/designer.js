@@ -196,6 +196,9 @@ export default class Designer {
             if (am.action === "new-form") {
                 if (this._callbacks.onNewForm && this._callbacks.onNewForm.call(this, e) && e.defaultPrevented)
                     return;
+                if (this.canvas.modified)
+                    if (!confirm(Strings.Designer_NewForm_Confirm))
+                        return;
                 this.clearCanvas();
             } else if (am.action === "export-json") {
                 var json = this.exportJson();
@@ -206,6 +209,7 @@ export default class Designer {
                 }
                 const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
                 this._downloadBlob(blob, 'form.json');
+                this._canvas.modified = false;
             } else if (am.action === "save-pdf") {
                 this.renderMode = constants.WIDGET_MODE_VIEW;
                 var features = this.extractFeatures();
@@ -277,7 +281,7 @@ export default class Designer {
                     throw new Error('validate can only be called in run mode');
                 var r = this.validate({showErrors: true});
                 if (r.result)
-                    alert(Strings.Validation_Form_Valid);
+                    alert(Strings.Designer_Validation_Form_Valid);
             }
         }
     }
@@ -406,7 +410,15 @@ export default class Designer {
 
         var el = this._container.querySelector('.widget-container');
         var editorsEl = this._container.querySelector('.widget-editors-container');
-        this._canvas = new Canvas(el, editorsEl, options.widgetRenderOptions, constants.WIDGET_MODE_DESIGN);
+        this._canvas = new Canvas({
+            widgetsContainerEl: el, 
+            widgetEditorsContainerEl: editorsEl, 
+            widgetRenderOptions: options.widgetRenderOptions, 
+            renderMode: constants.WIDGET_MODE_DESIGN,
+            onModified: (value) => {
+                this._updateUI();
+            }
+        });
     }
 
     _updateUI() {
@@ -419,5 +431,15 @@ export default class Designer {
         widgetButtons.forEach(b => {
             b.disabled = this.renderMode === constants.WIDGET_MODE_DESIGN ? false : true;
         });
+
+        if (this._canvas.modified) {
+            if (document.title.endsWith('*'))
+                return;
+            document.title += ' *';
+        }
+        else {
+            if (document.title.endsWith(' *'))
+                document.title = document.title.substring(0, document.title.length - 2);
+        }
     }
 }

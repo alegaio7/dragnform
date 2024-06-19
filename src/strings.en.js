@@ -2,6 +2,10 @@ class Strings {
     // canvas
     static get Canvas_NewForm_Name() { return "New form"; }
 
+    // Designer
+    static get Designer_Validation_Form_Valid () { return 'The form is valid!'; }
+    static get Designer_NewForm_Confirm () { return 'Your work is not saved. Do you want to start a new form?'; }
+
     // patter validation messages
     static get Pattern_Validation_AlphaOnly() { return 'Only letters and spaces are allowed'; }
     static get Pattern_Validation_AlphaAccentsOnly() { return 'Only letters, spaces and accents are allowed'; }
@@ -45,9 +49,6 @@ class Strings {
     static get Toolbar_File_GroupTitle() { return 'File'; }
     static get Toolbar_Layout_GroupTitle() { return 'Layout'; }
     static get Toolbar_RenderMode_GroupTitle () { return 'Current mode'; }
-
-    // Validation
-    static get Validation_Form_Valid () { return 'The form is valid!'; }
 
     // widgets
     static get WidgetPropertiesButtonTitle() { return 'Widget properties'; }

@@ -82,7 +82,7 @@ class WidgetInputBase extends Widget {
 
             var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
             if (viewModeValue)
-                viewModeValue.innerHTML = this.value;
+                viewModeValue.innerHTML = this.value ? this.value : "&nbsp;";   // render nbsp so to keep the height of the element
         }
     }
 

@@ -19,20 +19,30 @@ import mustache from 'mustache';
 import Widget from './widget-base.js';
 
 export default class Canvas {
-    constructor(widgetsContainerEl, widgetEditorsContainerEl, widgetRenderOptions, renderMode) {
+    constructor(options) {
+        if (!options)
+            throw new Error('options are required');
+
+        if (!options.widgetsContainerEl)
+            throw new Error('options.widgetsContainerEl is required');
+        if (!options.widgetEditorsContainerEl)
+            throw new Error('options.widgetEditorsContainerEl is required');
+
         this._domParser = new DOMParser();
         this._featureExtractor = null;
 
-        this._renderMode = renderMode ?? constants.WIDGET_MODE_DESIGN;
+        this._renderMode = options.renderMode ?? constants.WIDGET_MODE_DESIGN;
         if (constants.validModes.indexOf(this._renderMode) === -1)
             throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
     
-        this._widgetRenderOptions = widgetRenderOptions ?? {};
-        this._container = widgetsContainerEl; 
+        this._widgetRenderOptions = options.widgetRenderOptions ?? {};
+        this._container = options.widgetsContainerEl; 
         this._editingWidgetInfo = null;
-        this._editorsContainer = widgetEditorsContainerEl;
+        this._editorsContainer = options.widgetEditorsContainerEl;
         this._editorTemplates = new Map();
-        
+        this._modified = false;
+        this._onModifiedCallback = options.onModified ?? null;
+
         this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
         this._rememberedProperties.set("autoHeight", false);
         this._rememberedProperties.set("columns", 12);
@@ -70,6 +80,7 @@ export default class Canvas {
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
         this._widgets.push(w);
+        this.modified = true;
         await this._renderSingleWidget(w, this._domParser);
         this._setupSortable();
         return w;
@@ -84,6 +95,7 @@ export default class Canvas {
             this._widgets.forEach(w => w.removeFromDom());
         this._widgets = [];
         this._container.innerHTML = '';
+        this.modified = false;
     }
 
     /// <summary>
@@ -208,11 +220,22 @@ export default class Canvas {
         return this._widgets.find(w => w.id === id);
     }
 
+    get modified() {
+        return this._modified;
+    }
+
+    set modified(value) {
+        this._modified = value;
+        if (this._onModifiedCallback)
+            this._onModifiedCallback(value);
+    }
+
     removeWidget(id) {
         var w = this.findWidget(id);
         if (w) {
             this._removeWidgetInternal(w);
             this._setupSortable();
+            this.modified = true;
         }
     }
 
@@ -224,6 +247,7 @@ export default class Canvas {
         this._parseJson(json);
         await this._renderWidgets();
         this._setupSortable();
+        this.modified = false;
     }
 
     get renderMode() {
@@ -530,6 +554,7 @@ export default class Canvas {
             });
         }
         widgetInfo.widget.batchUpdating = false;
+        this.modified = true;
         // widgetInfo.widget.refresh(); // not needed since setting batchUpdating = false; will trigger a refresh
         modal.close();
     }
