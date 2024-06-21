@@ -111,6 +111,7 @@
 }
 .widget {
   min-height: 55px;
+  overflow: hidden;
 }
 .widget[data-mode=design] {
   border: 1px dashed #ccc;

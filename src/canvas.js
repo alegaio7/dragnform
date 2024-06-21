@@ -475,7 +475,7 @@ export default class Canvas {
         if (editorProps) {
             editorProps.forEach(p => {
                 if (p.elementId) {
-                    var el = document.getElementById(p.elementId);
+                    let el = document.getElementById(p.elementId);
                     if (el) {
                         if (p.readonly)
                             el.innerHTML = p.value;
@@ -488,7 +488,7 @@ export default class Canvas {
                     }
                 } else if (p.elementIds) { // used for properties that are bound to multiple elements like radio buttons
                     p.elementIds.forEach(eId => {
-                        var el = document.getElementById(eId);
+                        let el = document.getElementById(eId);
                         if (el) {
                             if (el.value === p.value)
                                 el.checked = true;
@@ -513,6 +513,12 @@ export default class Canvas {
         var cancelButton = this._editorsContainer.querySelector('[data-action="cancel"]');
         if (cancelButton)
             cancelButton.onclick = function() {
+                // restore widget props as they were before editing
+                if (editorProps) {
+                    editorProps.forEach(p => {
+                        sender[p.name] = p.value;
+                    });
+                }
                 modal.close();
             }.bind(this);
     

@@ -54,6 +54,21 @@ class WidgetCheckbox extends Widget {
         return json;
     }
 
+    refresh() {
+        if (!this._el || this._batchUpdating)
+            return;
+        super.refresh();
+        var style = this._buildSectionsStyleAttribute();
+        var sections = this._el.querySelectorAll(`[data-show-when]`);
+        if (sections && sections.length) {
+            sections.forEach(s => {
+                var label = s.querySelector(".widget-checkbox-label [data-part='label']");
+                if (label)
+                    label.setAttribute("style", style);
+            });
+        }
+    }
+
     _renderDOM(container, parser, html) {
         super._renderDOM(container, parser, html);
         super.refresh();

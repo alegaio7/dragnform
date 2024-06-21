@@ -185,7 +185,8 @@ $widget-toolbar-padding: 0.5rem;
 // widgets
 .widget {
     min-height: $widget-min-height;
-
+    overflow: hidden;
+    
     &[data-mode="design"] {
         border: 1px dashed $widget-border-design-color;
     }
