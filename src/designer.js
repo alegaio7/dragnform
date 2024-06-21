@@ -26,8 +26,9 @@ export default class Designer {
             { action: 'export-json', widgetType: null},
             { action: 'save-pdf', widgetType: null},
             { action: 'add-label', widgetType: constants.WIDGET_TYPE_LABEL },
-            { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
+            { action: 'add-input-checkbox', widgetType: constants.WIDGET_TYPE_CHECKBOX },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
+            { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
             { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE },
             { action: 'add-spacer', widgetType: constants.WIDGET_TYPE_SPACER },
@@ -117,6 +118,20 @@ export default class Designer {
     /// Private methods
     /// ********************************************************************************************************************
 
+    _createCanvas(widgetRenderOptions) {
+        var el = this._container.querySelector('.widget-container');
+        var editorsEl = this._container.querySelector('.widget-editors-container');
+        this._canvas = new Canvas({
+            widgetsContainerEl: el, 
+            widgetEditorsContainerEl: editorsEl, 
+            widgetRenderOptions: widgetRenderOptions, 
+            renderMode: constants.WIDGET_MODE_DESIGN,
+            onModified: (value) => {
+                this._updateUI();
+            }
+        });
+    }
+
     _downloadBlob(blob, filename) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -146,9 +161,13 @@ export default class Designer {
                 renderRemove: true,
                 renderTips: true,
                 globalClasses: {
+                    button: "widget-button",
+                    checkbox: "widget-checkbox",
+                    checkboxLabel: "widget-checkbox-label",
                     label: 'widget-label',
+                    input: 'widget-input',
+                    valueControl: 'widget-value',
                     widget: 'widget',
-                    input: 'widget-input'
                 },
                 requiredAttributeSettings: {
                     position: constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE,
@@ -199,7 +218,9 @@ export default class Designer {
                 if (this.canvas.modified)
                     if (!confirm(Strings.Designer_NewForm_Confirm))
                         return;
-                this.clearCanvas();
+                this._options = this._getDefaultOptions();
+                this._canvas.clearCanvas();
+                this._createCanvas(this._options.widgetRenderOptions);
             } else if (am.action === "export-json") {
                 var json = this.exportJson();
                 if (this._callbacks.onExportToJson) {
@@ -294,7 +315,7 @@ export default class Designer {
             );
             var widgetsGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer || 
-                options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image
+                options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image || options.toolbar.button.checkbox
             );
             var renderModeGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.renderCurrentMode && options.toolbar.buttons.renderValidateForm
@@ -372,8 +393,13 @@ export default class Designer {
                             </button>`;
                 if (options.toolbar.buttons.numberField)
                     html += `<button type="button" data-action="add-input-number" title="${Strings.Toolbar_AddNumberInputWidget_ButtonTitle}">
-                                <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
-                                <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
+                            <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
+                            <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
+                            </button>`;                            
+                if (options.toolbar.buttons.checkbox)
+                    html += `<button type="button" data-action="add-input-checkbox" title="${Strings.Toolbar_AddCheckboxInputWidget_ButtonTitle}">
+                            <i class="${Icons.Toolbar_AddCheckboxInputWidget_Icon}"></i>
+                            <span>${Strings.Toolbar_AddCheckboxInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.button)
                     html += `<button type="button" data-action="add-button" title="${Strings.Toolbar_AddButtonWidget_ButtonTitle}">
@@ -408,17 +434,7 @@ export default class Designer {
             });
         });
 
-        var el = this._container.querySelector('.widget-container');
-        var editorsEl = this._container.querySelector('.widget-editors-container');
-        this._canvas = new Canvas({
-            widgetsContainerEl: el, 
-            widgetEditorsContainerEl: editorsEl, 
-            widgetRenderOptions: options.widgetRenderOptions, 
-            renderMode: constants.WIDGET_MODE_DESIGN,
-            onModified: (value) => {
-                this._updateUI();
-            }
-        });
+        this._createCanvas(options.widgetRenderOptions);
     }
 
     _updateUI() {

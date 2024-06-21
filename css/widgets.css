@@ -142,23 +142,36 @@
 .widget[data-mode=view] [data-show-when=design], .widget[data-mode=view] [data-show-when=run] {
   display: none;
 }
-.widget button {
+.widget .widget-button {
   cursor: pointer;
 }
-.widget input, .widget button {
+.widget .widget-input, .widget .widget-button {
   width: 100%;
   min-height: 1.75rem;
   font-family: inherit;
 }
-.widget.has-grip input, .widget.has-grip label, .widget.has-grip button {
+.widget.has-grip .widget-input, .widget.has-grip .widget-label, .widget.has-grip .widget-button {
   display: inline-block;
   width: 100%;
+}
+.widget .widget-checkbox-label {
+  width: unset;
+}
+.widget .widget-checkbox {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 .widget[data-type=button] {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding-top: 15px;
+}
+.widget.flow-row [data-show-when] {
+  flex-flow: row;
+}
+.widget.flow-row [data-show-when] .widget-value {
+  width: unset;
 }
 .widget[data-type=label] {
   display: flex;
@@ -288,6 +301,34 @@
 
 .widget-v-align-end {
   justify-content: end;
+}
+
+.widget.flow-row .widget-h-align-start {
+  justify-content: start;
+}
+.widget.flow-row .widget-h-align-start .widget-label {
+  text-align: left;
+}
+.widget.flow-row .widget-h-align-center {
+  justify-content: center;
+}
+.widget.flow-row .widget-h-align-center .widget-label {
+  text-align: center;
+}
+.widget.flow-row .widget-h-align-end {
+  justify-content: end;
+}
+.widget.flow-row .widget-h-align-end .widget-label {
+  text-align: right;
+}
+.widget.flow-row .widget-v-align-start {
+  align-items: start;
+}
+.widget.flow-row .widget-v-align-center {
+  align-items: center;
+}
+.widget.flow-row .widget-v-align-end {
+  align-items: end;
 }
 
 [class*=widget-col-] {

@@ -10,6 +10,7 @@ $flyter-input-focus-boder-color: $default-accent-color;
 
 $font-family: "Poppins";
 
+$widget-checkbox-width: 1.75rem;
 $widget-controls-min-height: 1.75rem;
 $widget-default-padding: 15px;
 $widget-error: #f00;
@@ -227,22 +228,31 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    button {
+    .widget-button {
         cursor: pointer;
     }
 
-    input, button {
+    .widget-input, .widget-button {
         width: 100%;
         min-height: $widget-controls-min-height;
         font-family: inherit;
     }
 
     &.has-grip {
-        input, label, button {
+        .widget-input, .widget-label, .widget-button {
             display: inline-block;
             //width: calc(100% - $widget-grip-width);
             width: 100%;
         }
+    }
+
+    .widget-checkbox-label {
+        width: unset;
+    }
+
+    .widget-checkbox {
+        width: $widget-checkbox-width;
+        height: $widget-controls-min-height;
     }
 
     &[data-type="button"] {
@@ -250,6 +260,14 @@ $widget-toolbar-padding: 0.5rem;
         flex-direction: column;
         justify-content: center;
         padding-top: $widget-default-padding;
+    }
+
+    &.flow-row [data-show-when] {
+        flex-flow: row;
+
+        .widget-value {
+            width: unset;
+        }
     }
 
     &[data-type="label"] {
@@ -405,6 +423,43 @@ $widget-toolbar-padding: 0.5rem;
     justify-content: end;
 }
 
+.widget.flow-row {
+    .widget-h-align-start {
+        justify-content: start;
+    
+        .widget-label {
+            text-align: left;
+        }
+    }
+    
+    .widget-h-align-center {
+        justify-content: center;
+    
+        .widget-label {
+            text-align: center;
+        }
+    }
+    
+    .widget-h-align-end {
+        justify-content: end;
+    
+        .widget-label {
+            text-align: right;
+        }
+    }
+    
+    .widget-v-align-start {
+        align-items: start;
+    }
+    
+    .widget-v-align-center {
+        align-items: center;
+    }
+    
+    .widget-v-align-end {
+        align-items: end;
+    }
+}
 
 // columns
 [class*="widget-col-"] {

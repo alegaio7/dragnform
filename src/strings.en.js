@@ -30,6 +30,8 @@ class Strings {
 
     static get Toolbar_AddLabelWidget_ButtonLabel() { return 'Label'; }
     static get Toolbar_AddLabelWidget_ButtonTitle() { return 'Add label'; }    
+    static get Toolbar_AddCheckboxInputWidget_ButtonLabel() { return 'Checkbox'; }
+    static get Toolbar_AddCheckboxInputWidget_ButtonTitle() { return 'Add checkbox'; }
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }

@@ -42,20 +42,20 @@ class WidgetLabel extends Widget {
         var labelIdRun = `lbl_run_${this.id}`;
         var labelIdView = `lbl_view_${this.id}`;
 
-        // this.globalClasses.label is a generic class applies to all labels
+        // this.globalClasses.inputLabel is a generic class applies to all labels
         // this.labelClass is a class specific to this label instance
-        var labelClass = this.globalClasses.label ?? ""
+        var labelClass = this.globalClasses.inputLabel ?? ""
         if (this.labelClass) 
             labelClass += (labelClass === "" ? "" : " ") + `${this.labelClass}`;
 
         var replacements = {
             colClass: "widget-col-" + this.columns,
             id: this.id,
+            label: this.label,
             labelClass: labelClass,
             labelIdDesign: labelIdDesign,
             labelIdRun: labelIdRun,
             labelIdView: labelIdView,
-            label: this.label,
             mode: constants.WIDGET_MODE_DESIGN,
             name: this.name,
             showGrip: this.widgetRenderOptions.renderGrip,

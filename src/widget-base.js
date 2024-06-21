@@ -16,6 +16,7 @@ export default class Widget {
 
         var validTypes = [
             constants.WIDGET_TYPE_BUTTON,
+            constants.WIDGET_TYPE_CHECKBOX,
             constants.WIDGET_TYPE_IMAGE,
             constants.WIDGET_TYPE_LABEL,
             constants.WIDGET_TYPE_NUMBER,

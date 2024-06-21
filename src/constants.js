@@ -38,6 +38,7 @@ export const WIDGET_MODE_VIEW = 'view';         // mode for rendering widget inp
 export const validModes = [WIDGET_MODE_DESIGN, WIDGET_MODE_RUN, WIDGET_MODE_VIEW];
 
 export const WIDGET_TYPE_BUTTON = 'button';
+export const WIDGET_TYPE_CHECKBOX = 'checkbox';
 export const WIDGET_TYPE_IMAGE = 'image';
 export const WIDGET_TYPE_LABEL = 'label';
 export const WIDGET_TYPE_NUMBER = 'number';
@@ -46,9 +47,10 @@ export const WIDGET_TYPE_TEXT = 'text';
 
 export const WIDGET_PDF_OBJECT_BOX = 'box';
 // export const WIDGET_PDF_OBJECT_LABEL = 'label';
+export const WIDGET_PDF_OBJECT_CHECKBOX = 'checkbox';
+export const WIDGET_PDF_OBJECT_IMAGE = 'image';
 export const WIDGET_PDF_OBJECT_SIMPLE_TEXT = 'simpletext';
 export const WIDGET_PDF_OBJECT_STYLED_TEXT = 'styledtext';
-export const WIDGET_PDF_OBJECT_IMAGE = 'image';
 
 export const WIDGET_TYPE_NUMBER_MAX = 1_000_000;
 export const WIDGET_TYPE_TEXT_MAX_LENGTH = 500;

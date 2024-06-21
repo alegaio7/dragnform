@@ -214,7 +214,8 @@ export default class jsPDFExporter {
         var fn = parseInt(wf.fontSize, 10);
         if (!fn)
             fn = constants.DEFAULT_PDF_FONT_SIZE;
-        fn *= this._hRatio * this.options.cssToPdfScaling;
+        //fn *= this._hRatio * this.options.cssToPdfScaling;
+        fn *= this.options.cssToPdfScaling;
         return {name: ff, style: fs, size: fn, weight: fw, color: wf.color, underline: wf.fontUnderline };
     }
 
@@ -246,6 +247,8 @@ export default class jsPDFExporter {
             this._renderSimpleText(wf, doc, parent);
         } else if (wf.type === constants.WIDGET_PDF_OBJECT_IMAGE) {
             this._renderImage(wf, doc, parent);
+        } else if (wf.type === constants.WIDGET_PDF_OBJECT_CHECKBOX) {
+            this._renderCheckbox(wf, doc, parent);
         }
 
         if (wf.children && wf.children.length) {
@@ -270,10 +273,28 @@ export default class jsPDFExporter {
         var r = this._adjustRect(wf);
         var y = r.y + r.height;
         doc.text(wf.text, r.x, y);
+        //doc.rect(r.x, r.y, r.width, r.height);
         if (fi.underline) {
             const textWidth = doc.getTextWidth(wf.text);
             doc.line(r.x, r.y + r.height, r.x + textWidth, r.y + r.height);
         }
+    }
+
+    _renderCheckbox(w, doc, parent) {
+        var r = this._adjustRect(w);
+        doc.rect(r.x, r.y, r.width, r.height);
+        if (w.checked) {
+            doc.line(r.x, r.y, r.x + r.width, r.y + r.height);
+            doc.line(r.x, r.y + r.height, r.x + r.width, r.y);
+        }
+        // var checkBox = new jspdf.AcroFormCheckBox();
+        // checkBox.fieldName = w.fieldName;
+        // checkBox.Rect = [r.x, r.y, r.height, r.width];
+        // checkBox.value = w.checked ? 'On' : 'Off';
+        // checkBox.appearanceState = checkBox.value;
+        // checkBox.hasAppearanceStream = false;
+        // checkBox.readOnly = true;
+        // doc.addField(checkBox);
     }
 
     _renderImage(w, doc, parent) {

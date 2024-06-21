@@ -1,5 +1,6 @@
 import * as constants from './constants.js';
 import WidgetButton from './widget-button.js';
+import WidgetCheckbox from './widget-checkbox.js';
 import WidgetImage from './widget-image.js';
 import WidgetNumber from './widget-number.js';
 import WidgetSpacer from './widget-spacer.js';
@@ -123,6 +124,9 @@ export default class Canvas {
             case constants.WIDGET_TYPE_BUTTON:
                 w = new WidgetButton(o);
                 break;
+            case constants.WIDGET_TYPE_CHECKBOX:
+                w = new WidgetCheckbox(o);
+                break;                
             case constants.WIDGET_TYPE_LABEL:
                 w = new WidgetLabel(o);
                 break;
@@ -396,6 +400,8 @@ export default class Canvas {
     /// Shows the properties editor for a widget. Editor template data is cached, once per widget type.
     /// </summary>
     async _showWidgetProperties(sender, e) {
+        if (this.renderMode !== constants.WIDGET_MODE_DESIGN)
+            return;
         var editorData, editorHtml, editorProps;
         if (this._editorTemplates.has(sender.type)) {
             editorData = this._editorTemplates.get(sender.type);

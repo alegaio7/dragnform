@@ -17,7 +17,7 @@
 			{{/showRequiredMarkAfter}}
 			>{{mark}}</span>
 		</label>
-		<input type="text" id="{{inputIdDesign}}" {{inputClass}}
+		<input type="text" id="{{inputIdDesign}}" class="{{inputClass}}"
 			{{#hasMinLength}}
             minlength="{{minLength}}"
 			{{/hasMinLength}}
@@ -55,7 +55,7 @@
 			{{/showRequiredMarkAfter}}
 			>{{mark}}</span>
 		</label>
-		<input type="text" id="{{inputIdRun}}" {{inputClass}}
+		<input type="text" id="{{inputIdRun}}" class="{{inputClass}}"
 			{{#hasMinLength}}
             minlength="{{minLength}}"
 			{{/hasMinLength}}
@@ -81,6 +81,6 @@
 		<label class="{{labelClass}}">
 			<span data-part="label">{{label}}</span>
 		</label>
-		<span data-part="value" class="{{spanClass}}">{{value}}</span>		
+		<span data-part="value" class="{{valueControlClass}}">{{value}}</span>		
 	</div>
 </div>

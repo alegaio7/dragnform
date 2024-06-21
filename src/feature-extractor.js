@@ -121,6 +121,12 @@ export default class FeatureExtractor {
             Object.assign(json, this._getBorderProperties(cs));
             Object.assign(json, this._getFontProperties(cs));
             json.data = node.src;
+        } else if (node.tagName === 'INPUT' && node.type === 'checkbox') {
+            json.type = constants.WIDGET_PDF_OBJECT_CHECKBOX;
+            Object.assign(json, this._getBorderProperties(cs));
+            Object.assign(json, this._getFontProperties(cs));
+            json.checked = node.checked;
+            json.fieldName = node.name ? node.name : node.id;
         } else
             json = null; // unsupported node type
 

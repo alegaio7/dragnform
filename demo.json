@@ -5,9 +5,11 @@
     "widgetRenderOptions": {
         "globalClasses": {
             "button": "btn",
+            "checkbox": "widget-checkbox",
+            "checkboxLabel": "widget-checkbox-label",
             "input": "form-control",
-            "label": "widget-label",
-            "span": "widget-value",
+            "inputLabel": "widget-label",
+            "valueControl": "widget-value",
             "widget": "form-group"
         },
         "requiredAttributeSettings": {

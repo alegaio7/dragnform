@@ -1,0 +1,51 @@
+<div id="{{id}}" class="{{widgetClass}} {{colClass}} flow-row" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
+	<div data-show-when="design" class="widget-h-align-start widget-v-align-center">
+		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		{{#showRemove}}
+		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		{{/showRemove}}
+        <input type="checkbox" class="{{checkboxClass}}" 
+            id={{checkboxIdDesign}} 
+            {{#hasName}}
+            name="{{name}}" 
+            {{/hasName}}
+            >
+        </input>
+		<label class="{{labelClass}}" for="{{checkboxIdDesign}}">
+			<span data-part="label">{{label}}</span>
+		</label>
+        {{#showGrip}}
+		<div class="widget-grip"></div>
+		{{/showGrip}}
+		{{#hasTip}}
+		<div class="widget-tip"></div>
+		{{/hasTip}}        
+	</div>
+	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
+        <input type="checkbox" class="{{checkboxClass}}" 
+            id={{checkboxIdRun}} 
+            {{#hasName}}
+            name="{{name}}"
+            {{/hasName}}
+            >
+        </input>
+		<label class="{{labelClass}}" for="{{checkboxIdRun}}">
+			<span data-part="label">{{label}}</span>
+		</label>
+		{{#hasTip}}
+		<div class="widget-tip"></div>
+		{{/hasTip}}        
+	</div>
+	<div data-show-when="view" class="widget-h-align-start widget-v-align-center">
+        <input type="checkbox" disabled class="{{checkboxClass}}" 
+            id={{checkboxIdView}}
+			{{#isChecked}}
+			checked
+			{{/isChecked}}
+            >
+        </input>
+		<label class="{{labelClass}}" for="{{checkboxIdView}}">
+			<span data-part="label">{{label}}</span>
+		</label>
+	</div>
+</div>
