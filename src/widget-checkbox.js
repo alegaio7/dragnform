@@ -62,7 +62,7 @@ class WidgetCheckbox extends Widget {
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {
-                var label = s.querySelector(".widget-checkbox-label [data-part='label']");
+                var label = s.querySelector(".widget-radio-label [data-part='label']");
                 if (label)
                     label.setAttribute("style", style);
             });
@@ -75,12 +75,12 @@ class WidgetCheckbox extends Widget {
         this._updateContols();
 
         var _t = this;
-        var checkboxes = this._el.querySelectorAll("input[type='checkbox']"); // inputs for design mode and run mode.
+        var checkboxes = this._el.querySelectorAll("input[type='radio']"); // inputs for design mode and run mode.
         
         if (checkboxes)
             checkboxes.forEach(input => {
                 input.addEventListener("change", function(e) {
-                    _t.value = e.currentTarget.checked;
+                    _t.value = e.currentTarget.value;
                 });
             });
     }
@@ -88,16 +88,14 @@ class WidgetCheckbox extends Widget {
     _updateContols() {
         // _el can be null if element was not rendered yet
         if (this._el) {
-            var inputs = this._el.querySelectorAll("input[type='checkbox']");
+            var inputs = this._el.querySelectorAll("input[type='radio']");
             if (inputs && inputs.length) {
                 inputs.forEach(input => {
-                    input.checked = this.value;
+                    if (input.value === this.value) {
+                        input.checked = true;
+                    }
                 });
             }
-
-            var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
-            if (viewModeValue)
-                viewModeValue.innerHTML = this.value ? "[X]" : "[  ]";
         }
     }
 }

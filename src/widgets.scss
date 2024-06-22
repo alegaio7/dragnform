@@ -10,8 +10,8 @@ $flyter-input-focus-boder-color: $default-accent-color;
 
 $font-family: "Poppins";
 
-$widget-checkbox-width: 1.75rem;
-$widget-controls-min-height: 1.75rem;
+$widget-checkbox-width: 1.5rem;
+$widget-controls-min-height: 1.5rem;
 $widget-default-padding: 15px;
 $widget-error: #f00;
 $widget-border-design-color: #ccc;
@@ -34,6 +34,7 @@ $widget-modal-padding: 1rem;
 $widget-modal-title-padding: 0.5rem;
 $widget-properties-button-color: #333;
 $widget-properties-button-width: 1rem;
+$widger-radio-button-height: 2rem;
 $widget-remove-button-color: #f00;
 $widget-remove-button-width: 1rem;
 $widget-tip-color: #888;
@@ -186,7 +187,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget {
     min-height: $widget-min-height;
     overflow: hidden;
-    
+
     &[data-mode="design"] {
         border: 1px dashed $widget-border-design-color;
     }
@@ -247,13 +248,25 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    .widget-checkbox-label {
+    .widget-checkbox-label, .widget-radio-label {
         width: unset;
     }
 
-    .widget-checkbox {
+    .widget-checkbox, .widget-radio {
         width: $widget-checkbox-width;
         height: $widget-controls-min-height;
+        margin: 0 0.5rem 0 0;
+    }
+
+    .widget-radio-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: $widger-radio-button-height;
+    }
+
+    .widget-radio {
+        //vertical-align: bottom;
     }
 
     &[data-type="button"] {

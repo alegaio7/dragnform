@@ -1,0 +1,63 @@
+<div id="{{id}}" class="{{widgetClass}} {{colClass}} flow-row" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
+	<div data-show-when="design" class="widget-h-align-start widget-v-align-center">
+		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		{{#showRemove}}
+		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		{{/showRemove}}
+        <div data-part="radio-container">
+            <div class="widget-radio-group" data-first-value="1">
+                <input type="radio" class="{{radioClass}}" 
+                    id={{radioIdDesign}} 
+                    {{#hasName}}
+                    name="{{name}}" 
+                    {{/hasName}}
+                    >
+                </input>
+                <label class="{{labelClass}}" for="{{radioIdDesign}}">
+                    <span data-part="radio-label">{{label}}</span>
+                </label>
+            </div>
+        </div>
+        {{#showGrip}}
+		<div class="widget-grip"></div>
+		{{/showGrip}}
+		{{#hasTip}}
+		<div class="widget-tip"></div>
+		{{/hasTip}}        
+	</div>
+	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
+        <div data-part="radio-container">
+            <div class="widget-radio-group" data-first-value="1">
+                <input type="radio" class="{{radioClass}}" 
+                    id={{radioIdRun}} 
+                    {{#hasName}}
+                    name="{{name}}"
+                    {{/hasName}}
+                    >
+                </input>
+                <label class="{{labelClass}}" for="{{radioIdRun}}">
+                    <span data-part="radio-label">{{label}}</span>
+                </label>
+            </div>
+        </div>
+		{{#hasTip}}
+		<div class="widget-tip"></div>
+		{{/hasTip}}        
+	</div>
+	<div data-show-when="view" class="widget-h-align-start widget-v-align-center">
+        <div data-part="radio-container">
+            <div class="widget-radio-group" data-first-value="1">
+                <input type="radio" disabled class="{{radioClass}}" 
+                    id={{radioIdView}}
+                    {{#isChecked}}
+                    checked
+                    {{/isChecked}}
+                    >
+                </input>
+                <label class="{{labelClass}}" for="{{radioIdView}}">
+                    <span data-part="radio-label">{{label}}</span>
+                </label>
+            </div>
+        </div>
+	</div>
+</div>

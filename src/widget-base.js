@@ -20,6 +20,7 @@ export default class Widget {
             constants.WIDGET_TYPE_IMAGE,
             constants.WIDGET_TYPE_LABEL,
             constants.WIDGET_TYPE_NUMBER,
+            constants.WIDGET_TYPE_RADIO,
             constants.WIDGET_TYPE_SPACER,
             constants.WIDGET_TYPE_TEXT];
 

@@ -9,6 +9,8 @@
             "checkboxLabel": "widget-checkbox-label",
             "input": "form-control",
             "inputLabel": "widget-label",
+            "radio": "widget-radio",
+            "radioLabel": "widget-radio-label",
             "valueControl": "widget-value",
             "widget": "form-group"
         },

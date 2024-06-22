@@ -34,6 +34,8 @@ class Strings {
     static get Toolbar_AddCheckboxInputWidget_ButtonTitle() { return 'Add checkbox'; }
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
+    static get Toolbar_AddRadioInputWidget_ButtonLabel() { return 'Radio'; }
+    static get Toolbar_AddRadioInputWidget_ButtonTitle() { return 'Add radio options'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }
     static get Toolbar_AddSpacerWidget_ButtonTitle() { return 'Add spacer'; }
     static get Toolbar_AddTextInputWidget_ButtonLabel() { return 'Text'; }
@@ -58,6 +60,9 @@ class Strings {
     static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
     static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
     static get WidgetValidation_RequiredMessage() {return 'A value for this field is required'; }
+
+    static get Widget_Radio_Option1() { return 'Option 1'; }
+    static get Widget_Radio_Option2() { return 'Option 2'; }
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }

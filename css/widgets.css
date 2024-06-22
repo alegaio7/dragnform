@@ -148,19 +148,26 @@
 }
 .widget .widget-input, .widget .widget-button {
   width: 100%;
-  min-height: 1.75rem;
+  min-height: 1.5rem;
   font-family: inherit;
 }
 .widget.has-grip .widget-input, .widget.has-grip .widget-label, .widget.has-grip .widget-button {
   display: inline-block;
   width: 100%;
 }
-.widget .widget-checkbox-label {
+.widget .widget-checkbox-label, .widget .widget-radio-label {
   width: unset;
 }
-.widget .widget-checkbox {
-  width: 1.75rem;
-  height: 1.75rem;
+.widget .widget-checkbox, .widget .widget-radio {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 0.5rem 0 0;
+}
+.widget .widget-radio-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 2rem;
 }
 .widget[data-type=button] {
   display: flex;
@@ -523,7 +530,7 @@
   box-sizing: inherit;
 }
 .widget-properties-editor input, .widget-properties-editor button {
-  min-height: 1.75rem;
+  min-height: 1.5rem;
   font-family: inherit;
   font-size: 16px;
 }

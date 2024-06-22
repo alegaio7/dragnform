@@ -27,6 +27,7 @@ export default class Designer {
             { action: 'save-pdf', widgetType: null},
             { action: 'add-label', widgetType: constants.WIDGET_TYPE_LABEL },
             { action: 'add-input-checkbox', widgetType: constants.WIDGET_TYPE_CHECKBOX },
+            { action: 'add-input-radio', widgetType: constants.WIDGET_TYPE_RADIO },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
             { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
@@ -166,6 +167,8 @@ export default class Designer {
                     checkboxLabel: "widget-checkbox-label",
                     label: 'widget-label',
                     input: 'widget-input',
+                    radio: "widget-radio",
+                    radioLabel: "widget-radio-label",
                     valueControl: 'widget-value',
                     widget: 'widget',
                 },
@@ -315,7 +318,8 @@ export default class Designer {
             );
             var widgetsGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer || 
-                options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image || options.toolbar.button.checkbox
+                options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image || 
+                options.toolbar.button.checkbox || options.toolbar.buttons.radio
             );
             var renderModeGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.renderCurrentMode && options.toolbar.buttons.renderValidateForm
@@ -400,6 +404,11 @@ export default class Designer {
                     html += `<button type="button" data-action="add-input-checkbox" title="${Strings.Toolbar_AddCheckboxInputWidget_ButtonTitle}">
                             <i class="${Icons.Toolbar_AddCheckboxInputWidget_Icon}"></i>
                             <span>${Strings.Toolbar_AddCheckboxInputWidget_ButtonLabel}</span>
+                            </button>`;
+                if (options.toolbar.buttons.radio)
+                    html += `<button type="button" data-action="add-input-radio" title="${Strings.Toolbar_AddRadioInputWidget_ButtonTitle}">
+                            <i class="${Icons.Toolbar_AddRadioInputWidget_Icon}"></i>
+                            <span>${Strings.Toolbar_AddRadioInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.button)
                     html += `<button type="button" data-action="add-button" title="${Strings.Toolbar_AddButtonWidget_ButtonTitle}">

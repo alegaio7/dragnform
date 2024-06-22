@@ -2,10 +2,11 @@ import * as constants from './constants.js';
 import WidgetButton from './widget-button.js';
 import WidgetCheckbox from './widget-checkbox.js';
 import WidgetImage from './widget-image.js';
+import WidgetLabel from './widget-label.js';
 import WidgetNumber from './widget-number.js';
+import WidgetRadio from './widget-radio.js';
 import WidgetSpacer from './widget-spacer.js';
 import WidgetText from './widget-text.js';
-import WidgetLabel from './widget-label.js';
 import FeatureExtractor from './feature-extractor.js';
 import Sortable, { create } from 'sortablejs';
 import flyter, {
@@ -127,21 +128,24 @@ export default class Canvas {
             case constants.WIDGET_TYPE_CHECKBOX:
                 w = new WidgetCheckbox(o);
                 break;                
-            case constants.WIDGET_TYPE_LABEL:
-                w = new WidgetLabel(o);
-                break;
             case constants.WIDGET_TYPE_IMAGE:
                 w = new WidgetImage(o);
+                break;
+            case constants.WIDGET_TYPE_LABEL:
+                w = new WidgetLabel(o);
                 break;
             case constants.WIDGET_TYPE_NUMBER:
                 w = new WidgetNumber(o);
                 break;
-            case constants.WIDGET_TYPE_TEXT:
-                w = new WidgetText(o);
-                break;
+            case constants.WIDGET_TYPE_RADIO:
+                w = new WidgetRadio(o);
+                break                
             case constants.WIDGET_TYPE_SPACER:
                 w = new WidgetSpacer(o);
                 break
+            case constants.WIDGET_TYPE_TEXT:
+                w = new WidgetText(o);
+                break;
             default:
                 throw new Error(`widget type ${o.type} not found.`);
         }
