@@ -87,13 +87,13 @@ class Strings {
     static get WidgetEditor_Common_Required() { return 'Required'; }
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
+    static get WidgetEditor_Common_Widget_ValueRequiredMessage() { return 'Validation message'; }
 
     static get WidgetEditor_Number_Widget_MinValue() { return 'Min.'; }
     static get WidgetEditor_Number_Widget_MinValueValidationMessage() { return 'Validation message'; }
     static get WidgetEditor_Number_Widget_MaxValue() { return 'Max.'; }
     static get WidgetEditor_Number_Widget_MaxValueValidationMessage() { return 'Validation message'; }
-    static get WidgetEditor_Number_Widget_ValueRequiredMessage() { return 'Validation message'; }
-
+    
     static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
     static get WidgetEditor_Text_Widget_MinLengthValidationMessage() { return 'Validation message'; }
     static get WidgetEditor_Text_Widget_MaxLengthValidationMessage() { return 'Validation message'; }

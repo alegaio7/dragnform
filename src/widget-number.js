@@ -71,7 +71,7 @@ class WidgetNumber extends WidgetInputBase {
         replacements.labelMinValueValidationMessage = Strings.WidgetEditor_Number_Widget_MinValueValidationMessage;
         replacements.labelMaxValue = Strings.WidgetEditor_Number_Widget_MaxValue;
         replacements.labelMaxValueValidationMessage = Strings.WidgetEditor_Number_Widget_MaxValueValidationMessage;
-        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Number_Widget_ValueRequiredMessage;
+        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
 
         return {
             baseName: baseName,

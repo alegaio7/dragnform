@@ -194,7 +194,9 @@ $widget-toolbar-padding: 0.5rem;
 
     > [data-show-when] {
         width: 100%;
-        height: 100%;
+        // height: 100%; // commented because it interferes with auto-height
+        height: inherit;
+        min-height: 4rem;
         flex-direction: column;
     }
 
@@ -258,6 +260,13 @@ $widget-toolbar-padding: 0.5rem;
         margin: 0 0.5rem 0 0;
     }
 
+    //vertical-align: bottom;
+    [data-part="radio-container"] {
+        display: flex;
+        flex-flow: column;
+        width: 100%;
+    }
+
     .widget-radio-group {
         display: flex;
         flex-direction: row;
@@ -265,23 +274,11 @@ $widget-toolbar-padding: 0.5rem;
         height: $widger-radio-button-height;
     }
 
-    .widget-radio {
-        //vertical-align: bottom;
-    }
-
     &[data-type="button"] {
         display: flex;
         flex-direction: column;
         justify-content: center;
         padding-top: $widget-default-padding;
-    }
-
-    &.flow-row [data-show-when] {
-        flex-flow: row;
-
-        .widget-value {
-            width: unset;
-        }
     }
 
     &[data-type="label"] {
@@ -303,12 +300,33 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
+    &[data-type="checkbox"] {
+        &.flow-row [data-show-when] {
+            flex-flow: row;
+    
+            .widget-value {
+                width: unset;
+            }
+        }
+    }
+
     &[data-type="image"] {
         overflow: hidden;
         img {
             // width: 100%;
             height: auto;
             display: block;
+        }
+    }
+
+    &[data-type="radio"] {
+        &.flow-row [data-part="radio-container"] {
+            flex-direction: row;
+            align-items: center;
+
+            .widget-radio-group:not(:first-child) {
+                margin-left: 1.5rem;
+            }
         }
     }
 
@@ -678,14 +696,14 @@ $widget-section-padding: 0.25rem;
     > *, *::before, *::after {
         box-sizing: inherit;
     }
-    font-family: inherit;
-    padding: $widget-modal-padding;
-    width: clamp(10rem, 100%, 35rem);
-    box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
     border: 1px solid $widget-modal-border-color;
     border-radius: $widget-designer-radius;
+    box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
     font-family: $font-family;
     max-height: calc(100vh - 10rem);
+    opacity: 0.3;
+    padding: $widget-modal-padding;
+    width: clamp(10rem, 100%, 35rem);
 
     input, button {
         min-height: $widget-controls-min-height;
@@ -709,8 +727,12 @@ $widget-section-padding: 0.25rem;
         margin: 0 0 0.5rem 0;
     }
 
+    &:hover {
+        opacity: 1;
+    }
     &::backdrop {
-        background-color: $widget-modal-backdrop-color;
+        // background-color: $widget-modal-backdrop-color;
+        display: none;  // set to none to allow for hover-on-dialog opacity change effect
     }
 
     .widget-properties-editor-header {

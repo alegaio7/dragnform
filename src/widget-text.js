@@ -90,7 +90,7 @@ class WidgetText extends WidgetInputBase {
         replacements.labelMinLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MinLengthValidationMessage;
         replacements.labelMaxLength = Strings.WidgetEditor_Text_Widget_MaxLength;
         replacements.labelMaxLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MaxLengthValidationMessage;
-        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Text_Widget_ValueRequiredMessage;
+        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
 
         return {
             baseName: baseName,

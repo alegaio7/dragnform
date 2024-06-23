@@ -53,17 +53,50 @@ class WidgetRadio extends Widget {
         return json;
     }    
 
+    getEditorProperties() {
+        var props = super.getEditorProperties();
+
+        props.push(
+            { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
+            { name: "valueRequiredValidationMessage", type: "string", elementId: "txtWidgetPropRequiredValidationMessage", value: this.valueRequiredValidationMessage }
+        );
+        return props;
+    }
+
+    async getPropertiesEditorTemplate() {
+        var baseName = "widget-radio";
+        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
+        var replacements = this._getCommonEditorPropertyReplacements();
+
+        replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
+
+        return {
+            baseName: baseName,
+            handlingClassName: "WidgetRadioPropertiesEditor",
+            replacements: replacements,
+            template: html
+        };
+    }
+
     refresh() {
         if (!this._el || this._batchUpdating)
             return;
         super.refresh();
         var style = this._buildSectionsStyleAttribute();
+        var radioItemsStyle = this._buildRadioItemsStyle();
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {
-                var label = s.querySelector(".widget-checkbox-label [data-part='label']");
+                var label = s.querySelector(".widget-label [data-part='label']");
                 if (label)
                     label.setAttribute("style", style);
+
+                var radioItems = s.querySelectorAll(".widget-radio-label");
+                if (radioItems && radioItems.length) {
+                    radioItems.forEach(r => {
+                        r.setAttribute("style", radioItemsStyle);
+                    });
+                }
             });
         }
     }
@@ -81,13 +114,13 @@ class WidgetRadio extends Widget {
             hasTip: this.widgetRenderOptions.renderTips && this.tip,
             hasValue: this.value ? true : false,
             id: this.id,
-            isChecked: this.value,
             label: this.label,
-            labelClass: this.globalClasses.radioLabel ?? "",
+            labelClass: this.globalClasses.inputLabel ?? "",
             mode: constants.WIDGET_MODE_DESIGN,
             radioClass: this.globalClasses.radio ?? "",
             radioIdDesign: radioIdDesign,
             radioIdRun: radioIdRun,
+            radioLabelClass: this.globalClasses.radioLabel ?? "",
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
             style: this._buildOuterStyleAttribute(),
@@ -115,6 +148,31 @@ class WidgetRadio extends Widget {
         if (!valueOk)
             throw new Error(`Invalid value '${value}' for radio widget.`);
         this.refresh();
+    }
+
+    validate(validationOptions) {
+        this.clearError();
+        var input = this._el.querySelector(`[data-show-when="run"] input:checked`);
+
+        var r;
+        if (!input && this.required) {
+            r = { result: false, message: this.valueRequiredValidationMessage };
+
+            if (validationOptions && validationOptions.showErrors)
+                this.setError(r);
+        }
+
+        if (!r)
+            r = { result: true };
+
+        return r;
+    }
+
+    _buildRadioItemsStyle() {
+        var style = "";
+        if (this.fontSize)
+            style += `font-size: ${this.fontSize}px;`;
+        return style;
     }
 
     _checkOptions(value) {

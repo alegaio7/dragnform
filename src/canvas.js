@@ -46,7 +46,7 @@ export default class Canvas {
         this._onModifiedCallback = options.onModified ?? null;
 
         this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
-        this._rememberedProperties.set("autoHeight", false);
+        this._rememberedProperties.set("autoHeight", true);
         this._rememberedProperties.set("columns", 12);
         this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
         this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);

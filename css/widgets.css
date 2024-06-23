@@ -118,7 +118,8 @@
 }
 .widget > [data-show-when] {
   width: 100%;
-  height: 100%;
+  height: inherit;
+  min-height: 4rem;
   flex-direction: column;
 }
 .widget[data-mode=design] [data-show-when=design] {
@@ -163,6 +164,11 @@
   height: 1.5rem;
   margin: 0 0.5rem 0 0;
 }
+.widget [data-part=radio-container] {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
 .widget .widget-radio-group {
   display: flex;
   flex-direction: row;
@@ -174,12 +180,6 @@
   flex-direction: column;
   justify-content: center;
   padding-top: 15px;
-}
-.widget.flow-row [data-show-when] {
-  flex-flow: row;
-}
-.widget.flow-row [data-show-when] .widget-value {
-  width: unset;
 }
 .widget[data-type=label] {
   display: flex;
@@ -194,12 +194,25 @@
   font-size: inherit;
   font-weight: inherit;
 }
+.widget[data-type=checkbox].flow-row [data-show-when] {
+  flex-flow: row;
+}
+.widget[data-type=checkbox].flow-row [data-show-when] .widget-value {
+  width: unset;
+}
 .widget[data-type=image] {
   overflow: hidden;
 }
 .widget[data-type=image] img {
   height: auto;
   display: block;
+}
+.widget[data-type=radio].flow-row [data-part=radio-container] {
+  flex-direction: row;
+  align-items: center;
+}
+.widget[data-type=radio].flow-row [data-part=radio-container] .widget-radio-group:not(:first-child) {
+  margin-left: 1.5rem;
 }
 .widget[data-type=spacer] {
   min-height: 3rem;
@@ -517,14 +530,14 @@
 
 .widget-properties-editor {
   box-sizing: border-box;
-  font-family: inherit;
-  padding: 1rem;
-  width: clamp(10rem, 100%, 35rem);
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   border: 1px solid #888;
   border-radius: 0.25rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   font-family: "Poppins";
   max-height: calc(100vh - 10rem);
+  opacity: 0.3;
+  padding: 1rem;
+  width: clamp(10rem, 100%, 35rem);
 }
 .widget-properties-editor > *, .widget-properties-editor *::before, .widget-properties-editor *::after {
   box-sizing: inherit;
@@ -546,8 +559,11 @@
 .widget-properties-editor > * {
   margin: 0 0 0.5rem 0;
 }
+.widget-properties-editor:hover {
+  opacity: 1;
+}
 .widget-properties-editor::backdrop {
-  background-color: rgba(0, 0, 0, 0.2);
+  display: none;
 }
 .widget-properties-editor .widget-properties-editor-header {
   height: 2rem;
