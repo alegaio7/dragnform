@@ -249,6 +249,8 @@ export default class jsPDFExporter {
             this._renderImage(wf, doc, parent);
         } else if (wf.type === constants.WIDGET_PDF_OBJECT_CHECKBOX) {
             this._renderCheckbox(wf, doc, parent);
+        } else if (wf.type === constants.WIDGET_PDF_OBJECT_RADIO) {
+            this._renderRadio(wf, doc, parent);
         }
 
         if (wf.children && wf.children.length) {
@@ -295,6 +297,14 @@ export default class jsPDFExporter {
         // checkBox.hasAppearanceStream = false;
         // checkBox.readOnly = true;
         // doc.addField(checkBox);
+    }
+
+    _renderRadio(w, doc, parent) {
+        var r = this._adjustRect(w);
+        doc.circle(r.x + r.width / 2, r.y + r.height / 2, r.width / 2);
+        if (w.checked) {
+            doc.circle(r.x + r.width / 2, r.y + r.height / 2, r.width / 2 - 2, 'F');    // fill circle
+        }
     }
 
     _renderImage(w, doc, parent) {

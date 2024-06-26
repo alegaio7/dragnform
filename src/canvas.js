@@ -465,6 +465,9 @@ export default class Canvas {
                             onVerticalAlignmentChanged: function(dlg, value) {
                                 sender.verticalAlignment = value;
                             },
+                            onHorizontalDispositionChanged: function(dlg, value) {
+                                sender.horizontalDisposition = value;
+                            }
                         },
                         dialogContainer: this._editorsContainer
                     };

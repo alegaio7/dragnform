@@ -50,6 +50,7 @@ export const WIDGET_PDF_OBJECT_BOX = 'box';
 // export const WIDGET_PDF_OBJECT_LABEL = 'label';
 export const WIDGET_PDF_OBJECT_CHECKBOX = 'checkbox';
 export const WIDGET_PDF_OBJECT_IMAGE = 'image';
+export const WIDGET_PDF_OBJECT_RADIO = 'radio';
 export const WIDGET_PDF_OBJECT_SIMPLE_TEXT = 'simpletext';
 export const WIDGET_PDF_OBJECT_STYLED_TEXT = 'styledtext';
 

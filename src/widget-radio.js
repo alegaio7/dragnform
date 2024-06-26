@@ -17,6 +17,8 @@ class WidgetRadio extends Widget {
         ];
         this._checkOptions(this._radioOptions);
 
+        this._horizontalDisposition = fragment.horizontalDisposition ?? false;
+
         this._required = false;
         this.valueRequiredValidationMessage = Strings.WidgetValidation_RequiredMessage;
         var v = this._findValidation("required");
@@ -26,6 +28,12 @@ class WidgetRadio extends Widget {
         }
     }
     
+    get horizontalDisposition() { return this._horizontalDisposition; }
+    set horizontalDisposition(value) {
+        this._horizontalDisposition = value;
+        this.refresh();
+    }
+
     get name() { return this._name; }
     set name(value) {
         this._name = value;
@@ -48,6 +56,7 @@ class WidgetRadio extends Widget {
     exportJson() {
         var json = super.exportJson();
         var localProps = {};
+        localProps.horizontalDisposition = this.horizontalDisposition;
         localProps.value = this.value ?? false;
         Object.assign(json, localProps);
         return json;
@@ -57,6 +66,7 @@ class WidgetRadio extends Widget {
         var props = super.getEditorProperties();
 
         props.push(
+            { name: "horizontalDisposition", type: "boolean", elementId: "chkWidgetPropRadioHorizontal", value: this.horizontalDisposition },
             { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
             { name: "valueRequiredValidationMessage", type: "string", elementId: "txtWidgetPropRequiredValidationMessage", value: this.valueRequiredValidationMessage }
         );
@@ -68,6 +78,7 @@ class WidgetRadio extends Widget {
         var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         var replacements = this._getCommonEditorPropertyReplacements();
 
+        replacements.labelRadioHorizontal = Strings.WidgetEditor_Radio_Widget_Horizontal;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
 
         return {
@@ -82,6 +93,10 @@ class WidgetRadio extends Widget {
         if (!this._el || this._batchUpdating)
             return;
         super.refresh();
+        if (this.horizontalDisposition)
+            this._el.classList.add("flow-row");
+        else
+            this._el.classList.remove("flow-row");
         var style = this._buildSectionsStyleAttribute();
         var radioItemsStyle = this._buildRadioItemsStyle();
         var sections = this._el.querySelectorAll(`[data-show-when]`);
@@ -96,6 +111,30 @@ class WidgetRadio extends Widget {
                     radioItems.forEach(r => {
                         r.setAttribute("style", radioItemsStyle);
                     });
+                }
+
+                var radiocont = s.querySelector(`[data-part="radio-container"]`);
+                if (radiocont) {
+                    radiocont.classList.remove("widget-h-align-start");
+                    radiocont.classList.remove("widget-h-align-center");
+                    radiocont.classList.remove("widget-h-align-end");
+                    radiocont.classList.remove("widget-v-align-start");
+                    radiocont.classList.remove("widget-v-align-center");
+                    radiocont.classList.remove("widget-v-align-end");
+
+                    if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP)
+                        radiocont.classList.add("widget-v-align-start");
+                    else if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER)
+                        radiocont.classList.add("widget-v-align-center");
+                    else if (this.verticalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM)
+                        radiocont.classList.add("widget-v-align-end");
+    
+                    if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT)
+                        radiocont.classList.add("widget-h-align-start");
+                    else if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER)
+                        radiocont.classList.add("widget-h-align-center");
+                    else if (this.horizontalAlignment === constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT)
+                        radiocont.classList.add("widget-h-align-end");
                 }
             });
         }

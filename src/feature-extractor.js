@@ -127,6 +127,12 @@ export default class FeatureExtractor {
             Object.assign(json, this._getFontProperties(cs));
             json.checked = node.checked;
             json.fieldName = node.name ? node.name : node.id;
+        } else if (node.tagName === 'INPUT' && node.type === 'radio') {
+            json.type = constants.WIDGET_PDF_OBJECT_RADIO;
+            Object.assign(json, this._getBorderProperties(cs));
+            Object.assign(json, this._getFontProperties(cs));
+            json.checked = node.checked;
+            json.fieldName = node.name ? node.name : node.id;
         } else
             json = null; // unsupported node type
 

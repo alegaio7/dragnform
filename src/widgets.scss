@@ -322,7 +322,7 @@ $widget-toolbar-padding: 0.5rem;
     &[data-type="radio"] {
         &.flow-row [data-part="radio-container"] {
             flex-direction: row;
-            align-items: center;
+            //align-items: center;
 
             .widget-radio-group:not(:first-child) {
                 margin-left: 1.5rem;
