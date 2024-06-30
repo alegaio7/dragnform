@@ -19,16 +19,8 @@ class WidgetImage extends Widget {
     }
 
     async getPropertiesEditorTemplate() {
-        var baseName = "widget-image";
-        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
-        var replacements = this._getCommonEditorPropertyReplacements();
-
-        return {
-            baseName: baseName,
-            handlingClassName: "WidgetImagePropertiesEditor",
-            replacements: replacements,
-            template: html
-        };
+        var props = await this._getPropertiesEditorTemplateCore("widget-image", "WidgetImagePropertiesEditor");
+        return props;
     }
 
     refresh() {

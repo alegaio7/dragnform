@@ -74,19 +74,13 @@ class WidgetRadio extends Widget {
     }
 
     async getPropertiesEditorTemplate() {
-        var baseName = "widget-radio";
-        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
-        var replacements = this._getCommonEditorPropertyReplacements();
+        var props = await this._getPropertiesEditorTemplateCore("widget-radio", "WidgetRadioPropertiesEditor");
+        var replacements = props.replacements;
 
         replacements.labelRadioHorizontal = Strings.WidgetEditor_Radio_Widget_Horizontal;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
 
-        return {
-            baseName: baseName,
-            handlingClassName: "WidgetRadioPropertiesEditor",
-            replacements: replacements,
-            template: html
-        };
+        return props;
     }
 
     refresh() {
@@ -102,7 +96,7 @@ class WidgetRadio extends Widget {
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {
-                var label = s.querySelector(".widget-label [data-part='label']");
+                var label = s.querySelector("[data-part='label']");
                 if (label)
                     label.setAttribute("style", style);
 
@@ -150,7 +144,7 @@ class WidgetRadio extends Widget {
         var replacements = {
             colClass: "widget-col-" + this.columns,
             hasName: this.name ? true : false,
-            hasTip: this.widgetRenderOptions.renderTips && this.tip,
+            hasTip: this.widgetRenderOptions.renderTips,
             hasValue: this.value ? true : false,
             id: this.id,
             label: this.label,

@@ -320,6 +320,10 @@ $widget-toolbar-padding: 0.5rem;
     }
 
     &[data-type="radio"] {
+        &.flow-row [data-show-when] {
+            flex-flow: row;
+        }
+
         &.flow-row [data-part="radio-container"] {
             flex-direction: row;
             //align-items: center;
@@ -701,9 +705,10 @@ $widget-section-padding: 0.25rem;
     box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
     font-family: $font-family;
     max-height: calc(100vh - 10rem);
-    opacity: 0.3;
+    opacity: 0.15;
     padding: $widget-modal-padding;
     width: clamp(10rem, 100%, 35rem);
+    transition: opacity 0.3s ease-in-out;
 
     input, button {
         min-height: $widget-controls-min-height;

@@ -17,16 +17,8 @@ class WidgetSpacer extends Widget {
     }
 
     async getPropertiesEditorTemplate() {
-        var baseName = "widget-spacer";
-        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
-        var replacements = this._getCommonEditorPropertyReplacements();
-
-        return {
-            baseName: baseName,
-            handlingClassName: "WidgetSpacerPropertiesEditor",
-            replacements: replacements,
-            template: html
-        };
+        var props = await this._getPropertiesEditorTemplateCore("widget-spacer", "WidgetSpacerPropertiesEditor");
+        return props;
     }
 
     async render(container, parser) {

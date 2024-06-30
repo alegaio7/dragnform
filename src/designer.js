@@ -56,7 +56,7 @@ export default class Designer {
 
             this._options.widgetRenderOptions.renderGrip = options.widgetRenderOptions.renderGrip !== true ? false : true;
             this._options.widgetRenderOptions.renderRemove = options.widgetRenderOptions.renderRemove !== true ? false : true;
-            this._options.widgetRenderOptions.renderTips = options.widgetRenderOptions.renderTips !== true ? false : true;
+            this._options.widgetRenderOptions.renderTips = options.widgetRenderOptions.renderTips !== false ? true : false;
         }
 
         this._setupDesigner(this._options);

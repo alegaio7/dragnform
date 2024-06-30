@@ -103,6 +103,17 @@ export default class WidgetCommonPropertiesEditor {
                 });
             });
         }
+
+        this.txtTip = document.getElementById('txtWidgetPropTip');
+        if (this.txtTip && this._callbacks.onTipChanged) {
+            this.txtTip.addEventListener('change', function() {
+                _t._callbacks.onTipChanged(_t, _t.txtTip.value);
+            });
+
+            this.txtTip.addEventListener('input', function() {
+                _t._callbacks.onTipChanged(_t, _t.txtTip.value);
+            });
+        }        
     }
 
     init() {

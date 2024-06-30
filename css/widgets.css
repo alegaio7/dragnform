@@ -207,6 +207,9 @@
   height: auto;
   display: block;
 }
+.widget[data-type=radio].flow-row [data-show-when] {
+  flex-flow: row;
+}
 .widget[data-type=radio].flow-row [data-part=radio-container] {
   flex-direction: row;
 }
@@ -534,9 +537,10 @@
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   font-family: "Poppins";
   max-height: calc(100vh - 10rem);
-  opacity: 0.3;
+  opacity: 0.15;
   padding: 1rem;
   width: clamp(10rem, 100%, 35rem);
+  transition: opacity 0.3s ease-in-out;
 }
 .widget-properties-editor > *, .widget-properties-editor *::before, .widget-properties-editor *::after {
   box-sizing: inherit;

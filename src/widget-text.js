@@ -82,9 +82,8 @@ class WidgetText extends WidgetInputBase {
     }
 
     async getPropertiesEditorTemplate() {
-        var baseName = "widget-text";
-        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
-        var replacements = this._getCommonEditorPropertyReplacements();
+        var props = await this._getPropertiesEditorTemplateCore("widget-text", "WidgetTextPropertiesEditor");
+        var replacements = props.replacements;
 
         replacements.labelMinLength = Strings.WidgetEditor_Text_Widget_MinLength;
         replacements.labelMinLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MinLengthValidationMessage;
@@ -92,12 +91,7 @@ class WidgetText extends WidgetInputBase {
         replacements.labelMaxLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MaxLengthValidationMessage;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
 
-        return {
-            baseName: baseName,
-            handlingClassName: "WidgetTextPropertiesEditor",
-            replacements: replacements,
-            template: html
-        };
+        return props;
     }
 
     refresh() {
@@ -137,7 +131,7 @@ class WidgetText extends WidgetInputBase {
             hasMaxLength: (typeof this.maxLength === "number" && this.maxLength >= 0),
             hasMinLength: (typeof this.minLength === "number" && this.minLength >= 0),
             hasName: this.name ? true : false,
-            hasTip: this.widgetRenderOptions.renderTips && this.tip,
+            hasTip: this.widgetRenderOptions.renderTips,
             hasValue: this.value ? true : false,
             id: this.id,
             inputClass: this.globalClasses.input ?? "",

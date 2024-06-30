@@ -63,9 +63,8 @@ class WidgetNumber extends WidgetInputBase {
     }
 
     async getPropertiesEditorTemplate() {
-        var baseName = "widget-number";
-        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
-        var replacements = this._getCommonEditorPropertyReplacements();
+        var props = await this._getPropertiesEditorTemplateCore("widget-number", "WidgetNumberPropertiesEditor");
+        var replacements = props.replacements;
 
         replacements.labelMinValue = Strings.WidgetEditor_Number_Widget_MinValue;
         replacements.labelMinValueValidationMessage = Strings.WidgetEditor_Number_Widget_MinValueValidationMessage;
@@ -73,12 +72,7 @@ class WidgetNumber extends WidgetInputBase {
         replacements.labelMaxValueValidationMessage = Strings.WidgetEditor_Number_Widget_MaxValueValidationMessage;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
 
-        return {
-            baseName: baseName,
-            handlingClassName: "WidgetNumberPropertiesEditor",
-            replacements: replacements,
-            template: html
-        };
+        return props;
     }
 
     refresh() {
@@ -113,7 +107,7 @@ class WidgetNumber extends WidgetInputBase {
             hasMax: (typeof this.min === 'number'),
             hasMin: (typeof this.max === 'number'),
             hasName: this.name ? true : false,
-            hasTip: this.widgetRenderOptions.renderTips && this.tip,
+            hasTip: this.widgetRenderOptions.renderTips,
             hasValue: this.value ? true : false,
             id: this.id,
             inputClass: this.globalClasses.input ?? "",

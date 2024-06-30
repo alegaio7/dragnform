@@ -85,6 +85,7 @@ class Strings {
     static get WidgetEditor_Common_HorizontalAlignment() { return 'Horizontal alignment';}
     static get WidgetEditor_Common_Label() { return 'Label'; }
     static get WidgetEditor_Common_Required() { return 'Required'; }
+    static get WidgetEditor_Common_Tip() { return 'Help text'; }
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
     static get WidgetEditor_Common_Widget_ValueRequiredMessage() { return 'Validation message'; }

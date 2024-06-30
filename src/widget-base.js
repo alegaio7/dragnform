@@ -85,7 +85,7 @@ export default class Widget {
 
         this.widgetRenderOptions = fragment.widgetRenderOptions ?? {};
 
-        this.tip = fragment.tip;
+        this._tip = fragment.tip ?? "";
 
         this.widgetClass = 'widget';
         if (fragment.globalClasses && fragment.globalClasses.widget)
@@ -178,6 +178,12 @@ export default class Widget {
         this.refresh();
      }
 
+     get tip() { return this._tip; }
+     set tip(value) { 
+        this._tip = value;
+        this.refresh();
+     }
+
     get validations() { return this._validations; }
     set validations(value) { this._validations = value; }
     
@@ -251,16 +257,20 @@ export default class Widget {
             { name: "horizontalAlignment", type: "multiple", elementIds: ["optAlignHLeft", "optAlignHCenter", "optAlignHRight"], value: this.horizontalAlignment },
             { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
             { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
+            { name: "tip", type: "string", elementId: "txtWidgetPropTip", value: this.tip },
             { name: "verticalAlignment", type: "multiple", elementIds: ["optAlignVTop", "optAlignVCenter", "optAlignVBottom"], value: this.verticalAlignment },
         ];
     }
 
     async getPropertiesEditorTemplate() {
-        var baseName = "widget-common";
+        return await this._getPropertiesEditorTemplateCore("widget-common", "WidgetCommonPropertiesEditor");
+    }
+
+    async _getPropertiesEditorTemplateCore(baseName, baseClass) {
         var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
         return {
             baseName: baseName,
-            handlingClassName: "WidgetCommonPropertiesEditor",
+            handlingClassName: baseClass,
             replacements: this._getCommonEditorPropertyReplacements(),
             template: html
         };
@@ -540,6 +550,7 @@ export default class Widget {
             labelRequired: Strings.WidgetEditor_Common_Required,
             labelVerticalAlignment: Strings.WidgetEditor_Common_VerticalAlignment,
             labelWidgetLabel: Strings.WidgetEditor_Common_Label,
+            labelWidgetTip: Strings.WidgetEditor_Common_Tip,
         };
     }
 

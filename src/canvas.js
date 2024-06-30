@@ -462,6 +462,9 @@ export default class Canvas {
                             onRequiredChanged: function(dlg, value) {
                                 sender.required = value;
                             },
+                            onTipChanged: function(dlg, value) {
+                                sender.tip = value;
+                            },
                             onVerticalAlignmentChanged: function(dlg, value) {
                                 sender.verticalAlignment = value;
                             },

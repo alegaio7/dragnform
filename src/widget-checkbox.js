@@ -19,7 +19,7 @@ class WidgetCheckbox extends Widget {
             checkboxIdRun: checkboxIdRun,
             colClass: "widget-col-" + this.columns,
             hasName: this.name ? true : false,
-            hasTip: this.widgetRenderOptions.renderTips && this.tip,
+            hasTip: this.widgetRenderOptions.renderTips,
             hasValue: this.value ? true : false,
             id: this.id,
             isChecked: this.value,
