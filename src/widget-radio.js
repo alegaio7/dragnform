@@ -107,7 +107,7 @@ class WidgetRadio extends Widget {
                     });
                 }
 
-                var radiocont = s.querySelector(`[data-part="radio-container"]`);
+                var radiocont = s.querySelector(`[data-part="widget-radio-sets-container"]`);
                 if (radiocont) {
                     radiocont.classList.remove("widget-h-align-start");
                     radiocont.classList.remove("widget-h-align-center");
@@ -132,6 +132,16 @@ class WidgetRadio extends Widget {
                 }
             });
         }
+
+        var beforeMarks = this._el.querySelectorAll("[data-part='required-mark'][data-position='before']");
+        var afterMarks = this._el.querySelectorAll("[data-part='required-mark'][data-position='after']");
+        if (this.required && this.requiredAttributeSettings && this.requiredAttributeSettings.mark) {
+            beforeMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE ? "inline" : "none");
+            afterMarks.forEach(m => m.style.display = this.requiredAttributeSettings.position === constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER ? "inline" : "none");
+        } else {
+            beforeMarks.forEach(m => m.style.display = "none");
+            afterMarks.forEach(m => m.style.display = "none");
+        }
     }
 
     async render(container, parser) {
@@ -149,6 +159,7 @@ class WidgetRadio extends Widget {
             id: this.id,
             label: this.label,
             labelClass: this.globalClasses.inputLabel ?? "",
+            mark: this.requiredAttributeSettings.mark,
             mode: constants.WIDGET_MODE_DESIGN,
             radioClass: this.globalClasses.radio ?? "",
             radioIdDesign: radioIdDesign,
@@ -156,6 +167,8 @@ class WidgetRadio extends Widget {
             radioLabelClass: this.globalClasses.radioLabel ?? "",
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
+            showRequiredMarkAfter: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_AFTER,
+            showRequiredMarkBefore: this.required && this.requiredAttributeSettings.mark && this.requiredAttributeSettings.position == constants.WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE,
             style: this._buildOuterStyleAttribute(),
             type: this.type,
             value: this.value,
@@ -223,20 +236,20 @@ class WidgetRadio extends Widget {
     _renderDOM(container, parser, html) {
         super._renderDOM(container, parser, html);
 
-        var radioContainerDesign = this._el.querySelector(`[data-show-when="design"] [data-part="radio-container"]`);
-        var radioContainerRun = this._el.querySelector(`[data-show-when="run"] [data-part="radio-container"]`);
-        var radioContainerView = this._el.querySelector(`[data-show-when="view"] [data-part="radio-container"]`);
+        var radioContainerDesign = this._el.querySelector(`[data-show-when="design"] [data-part="widget-radio-sets-container"]`);
+        var radioContainerRun = this._el.querySelector(`[data-show-when="run"] [data-part="widget-radio-sets-container"]`);
+        var radioContainerView = this._el.querySelector(`[data-show-when="view"] [data-part="widget-radio-sets-container"]`);
         var allSections = [radioContainerDesign, radioContainerRun, radioContainerView];
 
         var _t = this;
         allSections.forEach((s, sindex) => {
-            var radioOptions = s.querySelectorAll(`.widget-radio-group`);
+            var radioOptions = s.querySelectorAll(`[data-part="widget-radio-set"]`);
             var firstRadioNode;
             if (radioOptions && radioOptions.length) {
                 radioOptions.forEach(v => {
                     if (v.getAttribute("data-first-value") === "1")
                         firstRadioNode = v; // keep ref
-                    v.remove(); // remove all but the first value
+                    v.remove();
                 });
             }
             this._radioOptions.forEach((option, index) => {

@@ -1,8 +1,8 @@
 <div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
 	<div data-show-when="design" class="widget-h-align-start widget-v-align-center">
-		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		<div data-part="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
 		{{#showRemove}}
-		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		<div data-part="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
 		{{/showRemove}}
         <button type="button" class="{{buttonClass}}" 
             id={{buttonIdDesign}} 
@@ -15,7 +15,7 @@
             {{/hasLabel}}
         </button>
         {{#showGrip}}
-		<div class="widget-grip"></div>
+		<div data-part="widget-grip"></div>
 		{{/showGrip}}
 	</div>
 	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">

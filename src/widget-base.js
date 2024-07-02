@@ -277,7 +277,7 @@ export default class Widget {
     }
 
     setError(r) {
-        var error = this._el.querySelector('.widget-error');
+        var error = this._el.querySelector('[data-part="widget-error"]');
         if (error)
             error.innerHTML = r.message;
         this._el.classList.add('has-error');
@@ -319,7 +319,7 @@ export default class Widget {
         this._prevColClass = colClass;
         
         if (this.widgetRenderOptions.renderTips && this.tip) {
-            var tipCtls = this._el.querySelectorAll(`.widget-tip`);
+            var tipCtls = this._el.querySelectorAll(`[data-part="widget-tip"]`);
             if (tipCtls && tipCtls.length)
                 tipCtls.forEach(t => t.innerHTML = this.tip);
         }
@@ -381,7 +381,7 @@ export default class Widget {
             throw new Error('handler must be a function');
 
         if (!this._widgetPropertiesBtn) 
-            this._widgetPropertiesBtn = this._el.querySelector('.widget-properties');
+            this._widgetPropertiesBtn = this._el.querySelector('[data-part="widget-properties"]');
         if (!this._widgetPropertiesBtn)
             return;
         if (!dettach)
@@ -407,7 +407,7 @@ export default class Widget {
             throw new Error('handler must be a function');
 
         if (!this._removeWidgetBtn) 
-            this._removeWidgetBtn = this._el.querySelector('.widget-remove');
+            this._removeWidgetBtn = this._el.querySelector('[data-part="widget-remove"]');
         if (!this._removeWidgetBtn)
             return;
         if (!dettach)

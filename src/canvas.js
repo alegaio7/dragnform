@@ -391,7 +391,7 @@ export default class Canvas {
         if (Sortable)
             this._sortable = Sortable.create(this._container, {
                 animation: 150, 
-                handle: '.widget-grip',
+                handle: '[data-part="widget-grip"]',
                 onUpdate: function (evt) {
                     var w = this._widgets[evt.oldIndex];
                     this._widgets.splice(evt.oldIndex, 1);

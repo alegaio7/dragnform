@@ -245,7 +245,6 @@ $widget-toolbar-padding: 0.5rem;
     &.has-grip {
         .widget-input, .widget-label, .widget-button {
             display: inline-block;
-            //width: calc(100% - $widget-grip-width);
             width: 100%;
         }
     }
@@ -261,19 +260,6 @@ $widget-toolbar-padding: 0.5rem;
     }
 
     //vertical-align: bottom;
-    [data-part="radio-container"] {
-        display: flex;
-        flex-flow: column;
-        width: 100%;
-    }
-
-    .widget-radio-group {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        height: $widger-radio-button-height;
-    }
-
     &[data-type="button"] {
         display: flex;
         flex-direction: column;
@@ -290,13 +276,6 @@ $widget-toolbar-padding: 0.5rem;
             span, div {
                 text-decoration: inherit;
             }
-        }
-    }
-
-    &[data-type="text"] {
-        input {
-            font-size: inherit;
-            font-weight: inherit;
         }
     }
 
@@ -324,11 +303,24 @@ $widget-toolbar-padding: 0.5rem;
             flex-flow: row;
         }
 
-        &.flow-row [data-part="radio-container"] {
+        [data-part="widget-radio-sets-container"] {
+            display: flex;
+            flex-flow: column;
+            width: 100%;
+        }
+    
+        [data-part="widget-radio-set"] {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            height: $widger-radio-button-height;
+        }
+
+        &.flow-row [data-part="widget-radio-sets-container"] {
             flex-direction: row;
             //align-items: center;
 
-            .widget-radio-group:not(:first-child) {
+            [data-part="widget-radio-set"]:not(:first-child) {
                 margin-left: 1.5rem;
             }
         }
@@ -338,12 +330,19 @@ $widget-toolbar-padding: 0.5rem;
         min-height: 3rem;
     }
 
-    .widget-error {
+    &[data-type="text"] {
+        input {
+            font-size: inherit;
+            font-weight: inherit;
+        }
+    }
+
+    [data-part="widget-error"] {
         display: none;
     }
 
     &.has-error {
-        .widget-error {
+        [data-part="widget-error"] {
             display: block;
             color: $widget-error;
             font-size: 0.8rem;
@@ -351,7 +350,7 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-.widget-grip {
+[data-part="widget-grip"] {
     position: absolute;
     right: 0rem;
     top: 0rem;
@@ -368,7 +367,7 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-.widget-properties, .widget-remove {
+[data-part="widget-properties"], [data-part="widget-remove"] {
     position: absolute;
     z-index: 10;
 
@@ -383,7 +382,7 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-.widget-properties {
+[data-part="widget-properties"] {
     right: 1.5rem;
     top: 0.1rem;
     width: $widget-properties-button-width;
@@ -395,7 +394,7 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-.widget-remove {
+[data-part="widget-remove"] {
     right: 0.1rem;
     top: 0.1rem;
     width: $widget-remove-button-width;
@@ -412,7 +411,7 @@ $widget-toolbar-padding: 0.5rem;
     display: block;
 }
 
-.widget-tip {
+[data-part="widget-tip"] {
     font-size: 0.8rem;
     color: $widget-tip-color;
 }
@@ -459,7 +458,7 @@ $widget-toolbar-padding: 0.5rem;
     justify-content: end;
 }
 
-.widget.flow-row {
+.flow-row {
     .widget-h-align-start {
         justify-content: start;
     
@@ -566,7 +565,7 @@ $widget-toolbar-padding: 0.5rem;
 }
 
 // component styles
-.required-mark {
+[data-part="required-mark"] {
     font-weight: bold;
     text-decoration: none;
     font-size: 80%;

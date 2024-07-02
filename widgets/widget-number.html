@@ -1,17 +1,17 @@
 <div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
 	<div data-show-when="design" class="widget-h-align-start widget-v-align-center">
-		<div class="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		<div data-part="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
 		{{#showRemove}}
-		<div class="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		<div data-part="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
 		{{/showRemove}}
 		<label class="{{labelClass}}" for="{{inputIdDesign}}">
-			<span class="required-mark" data-position="before" 
+			<span data-part="required-mark" data-position="before" 
 			{{^showRequiredMarkBefore}}
 			style="display:none;"
 			{{/showRequiredMarkBefore}}
 			>{{mark}}</span>
 			<span data-part="label">{{label}}</span>
-			<span class="required-mark" data-position="after" 
+			<span data-part="required-mark" data-position="after" 
 			{{^showRequiredMarkAfter}}
 			style="display:none;"
 			{{/showRequiredMarkAfter}}
@@ -35,21 +35,21 @@
 			{{/hasName}}
             >
 		{{#showGrip}}
-		<div class="widget-grip"></div>
+		<div data-part="widget-grip"></div>
 		{{/showGrip}}
 		{{#hasTip}}
-		<div class="widget-tip"></div>
+		<div data-part="widget-tip"></div>
 		{{/hasTip}}
 	</div>
 	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
 		<label class="{{labelClass}}" for="{{inputIdRun}}">
-			<span class="required-mark" data-position="before" 
+			<span data-part="required-mark" data-position="before" 
 			{{^showRequiredMarkBefore}}
 			style="display:none;"
 			{{/showRequiredMarkBefore}}
 			>{{mark}}</span>
 			<span data-part="label">{{label}}</span>
-			<span class="required-mark" data-position="after" 
+			<span data-part="required-mark" data-position="after" 
 			{{^showRequiredMarkAfter}}
 			style="display:none;"
 			{{/showRequiredMarkAfter}}
@@ -73,9 +73,9 @@
             {{/hasName}}
             >
 		{{#hasTip}}
-		<div class="widget-tip"></div>
+		<div data-part="widget-tip"></div>
 		{{/hasTip}}
-		<div class="widget-error"></div>			
+		<div data-part="widget-error"></div>			
 	</div>
 	<div data-show-when="view" class="widget-h-align-start widget-v-align-center">
 		<label class="{{labelClass}}">
