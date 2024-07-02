@@ -537,7 +537,6 @@
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   font-family: "Poppins";
   max-height: calc(100vh - 10rem);
-  opacity: 0.15;
   padding: 1rem;
   width: clamp(10rem, 100%, 35rem);
   transition: opacity 0.3s ease-in-out;
@@ -561,9 +560,6 @@
 }
 .widget-properties-editor > * {
   margin: 0 0 0.5rem 0;
-}
-.widget-properties-editor:hover {
-  opacity: 1;
 }
 .widget-properties-editor::backdrop {
   display: none;

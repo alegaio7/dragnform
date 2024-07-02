@@ -61,8 +61,11 @@ class Strings {
     static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
     static get WidgetValidation_RequiredMessage() {return 'A value for this field is required'; }
 
-    static get Widget_Radio_Option1() { return 'Option 1'; }
-    static get Widget_Radio_Option2() { return 'Option 2'; }
+    static get Widget_Radio_Default_Option1() { return 'Option 1'; }
+    static get Widget_Radio_Default_Option2() { return 'Option 2'; }
+    static get Widget_Radio_Options_Label_Title() { return 'Title'; }
+    static get Widget_Radio_Options_Label_Value() { return 'Value'; }
+    static get Widget_Radio_Options_Title() { return 'Radio options'; }
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }

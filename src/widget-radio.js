@@ -12,12 +12,12 @@ class WidgetRadio extends Widget {
             this.requiredAttributeSettings.mark = "*";
 
         this._radioOptions = fragment.radioOptions ?? [
-            { key: 'Y', value: Strings.Widget_Radio_Option1 },
-            { key: 'N', value: Strings.Widget_Radio_Option2 },
+            { key: 'Y', value: Strings.Widget_Radio_Default_Option1 },
+            { key: 'N', value: Strings.Widget_Radio_Default_Option2 },
         ];
         this._checkOptions(this._radioOptions);
 
-        this._horizontalDisposition = fragment.horizontalDisposition ?? false;
+        this._horizontalDisposition = fragment.horizontalDisposition === false ? false : true;
 
         this._required = false;
         this.valueRequiredValidationMessage = Strings.WidgetValidation_RequiredMessage;
@@ -57,7 +57,8 @@ class WidgetRadio extends Widget {
         var json = super.exportJson();
         var localProps = {};
         localProps.horizontalDisposition = this.horizontalDisposition;
-        localProps.value = this.value ?? false;
+        localProps.radioOptions = this.radioOptions;
+        localProps.value = this.value;
         Object.assign(json, localProps);
         return json;
     }    
@@ -79,7 +80,13 @@ class WidgetRadio extends Widget {
 
         replacements.labelRadioHorizontal = Strings.WidgetEditor_Radio_Widget_Horizontal;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
-
+        replacements.labelRadioOptions = Strings.Widget_Radio_Options_Title;
+        replacements.radioOptionTitleLabel = Strings.Widget_Radio_Options_Label_Title;
+        replacements.radioOptionValueLabel = Strings.Widget_Radio_Options_Label_Value;
+        replacements.radioOptionTitle1 = this._radioOptions[0].value;
+        replacements.radioOptionValue1 = this._radioOptions[0].key;
+        replacements.radioOptionTitle2 = this._radioOptions[1].value;
+        replacements.radioOptionValue2 = this._radioOptions[1].key;
         return props;
     }
 
@@ -183,16 +190,20 @@ class WidgetRadio extends Widget {
 
     get value() { return super.value; }
     set value(value) {
-        var valueOk = false;
-        this._radioOptions.forEach(option => {
-            if (option.key === value) {
-                super.value = value;
-                valueOk = true;
-                return;
-            }
-        });
-        if (!valueOk)
-            throw new Error(`Invalid value '${value}' for radio widget.`);
+        if (value === null)
+            super.value = null;
+        else {
+            var valueOk = false;
+            this._radioOptions.forEach(option => {
+                if (option.key === value) {
+                    super.value = value;
+                    valueOk = true;
+                    return;
+                }
+            });
+            if (!valueOk)
+                throw new Error(`Invalid value '${value}' for radio widget.`);
+        }
         this.refresh();
     }
 
@@ -278,6 +289,7 @@ class WidgetRadio extends Widget {
             var inputs = this._el.querySelectorAll("input[type='radio']");
             if (inputs && inputs.length) {
                 inputs.forEach(input => {
+                    input.checked = false;
                     if (input.value === this.value)
                         input.checked = true;
                 });
