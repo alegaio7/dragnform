@@ -1,5 +1,6 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
+import Icons from './icons.js';
 
 class WidgetRadio extends Widget {
     constructor(fragment) {
@@ -78,6 +79,8 @@ class WidgetRadio extends Widget {
         var props = await this._getPropertiesEditorTemplateCore("widget-radio", "WidgetRadioPropertiesEditor");
         var replacements = props.replacements;
 
+        replacements.addIcon = Icons.WidgetEditorDialog_AddRadioOptionIcon;
+        replacements.addOptionButtonTitle = Strings.WidgetEditor_Radio_Add_Option_Button_Title;
         replacements.labelRadioHorizontal = Strings.WidgetEditor_Radio_Widget_Horizontal;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
         replacements.labelRadioOptions = Strings.Widget_Radio_Options_Title;
@@ -87,6 +90,8 @@ class WidgetRadio extends Widget {
         replacements.radioOptionValue1 = this._radioOptions[0].key;
         replacements.radioOptionTitle2 = this._radioOptions[1].value;
         replacements.radioOptionValue2 = this._radioOptions[1].key;
+        replacements.removeIcon = Icons.WidgetEditorDialog_RemoveRadioOptionIcon;
+        replacements.removeOptionButtonTitle = Strings.WidgetEditor_Radio_Remove_Option_Button_Title;
         return props;
     }
 

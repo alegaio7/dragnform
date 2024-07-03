@@ -586,12 +586,20 @@ $widget-toolbar-padding: 0.5rem;
     }
 
     label {
-        width: 1%;
-        min-width: 11rem;
+        min-width: 2rem;
+        & + input {
+            margin-left: 0.35rem;
+        }
+    }
+
+    &:has(label + input[type="text"]), &:has(label + input[type="number"]) {
+        label {
+            width: 1%;
+        }
     }
 
     input {
-        width: 99%;
+        width: calc(99% - 0.35rem);
     }
 }
 
@@ -623,9 +631,15 @@ $widget-section-padding: 0.25rem;
         &.w-4 {
             width: calc(33.33% - $widget-section-padding / 3 * 2 - 1px);
         }
+        &.w-5 {
+            width: calc(41.66% - $widget-section-padding / 2.4 * 2 - 1px);
+        }
         &.w-6 {
             width: calc(50% - $widget-section-padding / 2 * 2 - 1px);
         }
+        &.w-7 {
+            width: calc(58.33% - $widget-section-padding / 1.7142 * 2 - 1px);
+        }        
         &.w-8 {
             width: calc(66.66% - $widget-section-padding / 1.25 * 2 - 1px);
         }

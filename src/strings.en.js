@@ -99,6 +99,8 @@ class Strings {
     static get WidgetEditor_Number_Widget_MaxValueValidationMessage() { return 'Validation message'; }
     
     static get WidgetEditor_Radio_Widget_Horizontal() { return 'Horizontal disposition'; }
+    static get WidgetEditor_Radio_Add_Option_Button_Title() { return 'Add new option'; }
+    static get WidgetEditor_Radio_Remove_Option_Button_Title() { return 'Remove option'; }
 
     static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
     static get WidgetEditor_Text_Widget_MinLengthValidationMessage() { return 'Validation message'; }

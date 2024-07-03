@@ -16,4 +16,7 @@ export default class Icons {
     static get Toolbar_SavePdf_Icon() { return 'fa fa-regular fa-file-pdf'; }
     static get Toolbar_ValidateForm_Icon() { return 'fa fa-list-check'; }
     static get Toolbar_ViewMode_Icon() { return 'fa fa-regular fa-eye'; }
+
+    static get WidgetEditorDialog_AddRadioOptionIcon() { return 'fa fa-plus'; }
+    static get WidgetEditorDialog_RemoveRadioOptionIcon() { return 'fa fa-regular fa-trash-can'; }
 }

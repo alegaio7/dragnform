@@ -4,28 +4,34 @@
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection w-4">
-            <label for="txtWidgetPropColumns">{{labelColumns}}</label>
-            <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
+            <div class="label-input-container">
+                <label for="txtWidgetPropColumns">{{labelColumns}}</label>
+                <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
+            </div>
         </div>    
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection w-6">
-            <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
-            <input type="checkbox" id="chkWidgetPropAutoHeight" />
+            <div class="label-input-container">
+                <input type="checkbox" id="chkWidgetPropAutoHeight" />
+                <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
+            </div>
         </div>
         <div class="widget-dialog-subsection w-6">
-            <label for="txtWidgetPropHeight">{{labelHeight}}</label>
-            <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+            <div class="label-input-container">
+                <label for="txtWidgetPropHeight">{{labelHeight}}</label>
+                <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+            </div>
         </div>
     </div>
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelHorizontalAlignment}}</h6>
-        <label for="optAlignHLeft">{{labelAlignHLeft}}</label>
         <input type="radio" id="optAlignHLeft" value="left" name="halignment" />
-        <label for="optAlignHCenter">{{labelAlignHCenter}}</label>
+        <label for="optAlignHLeft">{{labelAlignHLeft}}</label>
         <input type="radio" id="optAlignHCenter" value="center" name="halignment"/>
-        <label for="optAlignHRight">{{labelAlignHRight}}</label>
+        <label for="optAlignHCenter">{{labelAlignHCenter}}</label>
         <input type="radio" id="optAlignHRight" value="right" name="halignment"/>
+        <label for="optAlignHRight">{{labelAlignHRight}}</label>
     </div>      
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">

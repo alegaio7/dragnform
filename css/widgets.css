@@ -439,11 +439,16 @@
   display: table-cell;
 }
 .label-input-container label {
+  min-width: 2rem;
+}
+.label-input-container label + input {
+  margin-left: 0.35rem;
+}
+.label-input-container:has(label + input[type=text]) label, .label-input-container:has(label + input[type=number]) label {
   width: 1%;
-  min-width: 11rem;
 }
 .label-input-container input {
-  width: 99%;
+  width: calc(99% - 0.35rem);
 }
 
 .widget-dialog-section {
@@ -471,8 +476,14 @@
 .widget-dialog-section .widget-dialog-subsection.w-4 {
   width: calc(33.33% - 0.1666666667rem - 1px);
 }
+.widget-dialog-section .widget-dialog-subsection.w-5 {
+  width: calc(41.66% - 0.2083333333rem - 1px);
+}
 .widget-dialog-section .widget-dialog-subsection.w-6 {
   width: calc(50% - 0.25rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-7 {
+  width: calc(58.33% - 0.2916812507rem - 1px);
 }
 .widget-dialog-section .widget-dialog-subsection.w-8 {
   width: calc(66.66% - 0.4rem - 1px);

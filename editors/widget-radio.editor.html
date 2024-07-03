@@ -4,64 +4,74 @@
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection w-8">
-            <label for="txtWidgetPropLabel">{{labelWidgetLabel}}</label>
-            <input type="text" id="txtWidgetPropLabel" />
+            <div class="label-input-container">
+                <label for="txtWidgetPropLabel">{{labelWidgetLabel}}</label>
+                <input type="text" id="txtWidgetPropLabel" />
+            </div>
         </div>
         <div class="widget-dialog-subsection w-4">
-            <label for="txtWidgetPropColumns">{{labelColumns}}</label>
-            <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
+            <div class="label-input-container">
+                <label for="txtWidgetPropColumns">{{labelColumns}}</label>
+                <input type="number" id="txtWidgetPropColumns" min="1" max="12" />
+            </div>
         </div>    
     </div>  
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelFontProperties}}</h6>
         <div class="widget-dialog-subsection w-6">
-            <label for="txtWidgetFontSize">{{labelFontSize}}</label>
-            <input type="number" id="txtWidgetFontSize" min="6" max="96" />
+            <div class="label-input-container">
+                <label for="txtWidgetFontSize">{{labelFontSize}}</label>
+                <input type="number" id="txtWidgetFontSize" min="6" max="96" />
+            </div>
         </div>
         <div class="widget-dialog-subsection w-6">
-            <label for="chkWidgetPropFontUnderline">{{labelFontUnderline}}</label>
             <input type="checkbox" id="chkWidgetPropFontUnderline" />
+            <label for="chkWidgetPropFontUnderline">{{labelFontUnderline}}</label>
         </div>
         <div>
-            <span>{{labelFontWeight}}:</span>
-            <label for="optFontWeightNormal">{{labelFontWeightNormal}}</label>
-            <input type="radio" id="optFontWeightNormal" value="normal" name="fontWeight" />
-            <label for="optFontWeightBold">{{labelFontWeightBold}}</label>
-            <input type="radio" id="optFontWeightBold" value="bold" name="fontWeight"/>
+            <h6 class="widget-dialog-section-title">{{labelFontWeight}}</h6>
+            <div class="widget-dialog-subsection">
+                <input type="radio" id="optFontWeightNormal" value="normal" name="fontWeight" />
+                <label for="optFontWeightNormal">{{labelFontWeightNormal}}</label>
+                <input type="radio" id="optFontWeightBold" value="bold" name="fontWeight"/>
+                <label for="optFontWeightBold">{{labelFontWeightBold}}</label>
+            </div>
         </div>
     </div>       
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection w-6">
-            <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
             <input type="checkbox" id="chkWidgetPropAutoHeight" />
+            <label for="chkWidgetPropAutoHeight">{{labelAutoHeight}}</label>
         </div>
         <div class="widget-dialog-subsection w-6">
-            <label for="txtWidgetPropHeight">{{labelHeight}}</label>
-            <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+            <div class="label-input-container">
+                <label for="txtWidgetPropHeight">{{labelHeight}}</label>
+                <input type="number" id="txtWidgetPropHeight" min="0" max="1000" />
+            </div>
         </div>
     </div>
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelHorizontalAlignment}}</h6>
-        <label for="optAlignHLeft">{{labelAlignHLeft}}</label>
         <input type="radio" id="optAlignHLeft" value="left" name="halignment" />
-        <label for="optAlignHCenter">{{labelAlignHCenter}}</label>
+        <label for="optAlignHLeft">{{labelAlignHLeft}}</label>
         <input type="radio" id="optAlignHCenter" value="center" name="halignment"/>
-        <label for="optAlignHRight">{{labelAlignHRight}}</label>
+        <label for="optAlignHCenter">{{labelAlignHCenter}}</label>
         <input type="radio" id="optAlignHRight" value="right" name="halignment"/>
+        <label for="optAlignHRight">{{labelAlignHRight}}</label>
     </div>      
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelVerticalAlignment}}</h6>
-        <label for="optAlignVTop">{{labelAlignVTop}}</label>
         <input type="radio" id="optAlignVTop" value="top" name="valignment" />
-        <label for="optAlignVCenter">{{labelAlignVCenter}}</label>
+        <label for="optAlignVTop">{{labelAlignVTop}}</label>
         <input type="radio" id="optAlignVCenter" value="center" name="valignment"/>
-        <label for="optAlignVBottom">{{labelAlignVBottom}}</label>
+        <label for="optAlignVCenter">{{labelAlignVCenter}}</label>
         <input type="radio" id="optAlignVBottom" value="bottom" name="valignment"/>
+        <label for="optAlignVBottom">{{labelAlignVBottom}}</label>
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection">
-            <label for="chkWidgetPropRequired">{{labelRequired}}</label>
             <input type="checkbox" id="chkWidgetPropRequired" />
+            <label for="chkWidgetPropRequired">{{labelRequired}}</label>
         </div>  
         <div class="widget-dialog-subsection">
             <div class="label-input-container">
@@ -72,8 +82,8 @@
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection">
-            <label for="chkWidgetPropRadioHorizontal">{{labelRadioHorizontal}}</label>
             <input type="checkbox" id="chkWidgetPropRadioHorizontal" />
+            <label for="chkWidgetPropRadioHorizontal">{{labelRadioHorizontal}}</label>
         </div>  
     </div>
     <div class="widget-dialog-section">
@@ -82,40 +92,55 @@
                 <label for="txtWidgetPropTip">{{labelWidgetTip}}</label>
                 <input type="text" id="txtWidgetPropTip" />
             </div>
-        </div>        
+        </div>
     </div>
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelRadioOptions}}</h6>
+        <div class="widget-dialog-subsection">
+            <button type="button" data-action="add" title="{{addOptionButtonTitle}}">
+                <i class="{{addIcon}}"></i>
+            </button>
+        </div>
         <script type="text/html" id="tplRadioOption">
 
         </script>
         <div class="widget-dialog-subsection" data-part="radio-options-container">
             <div class="widget-radio-option" data-index="1">
-                <div class="widget-dialog-subsection w-6">
+                <div class="widget-dialog-subsection w-7">
                     <div class="label-input-container">
                         <label for="txtRadioOptionTitle1">{{radioOptionTitleLabel}}</label>
                         <input type="text" id="txtRadioOptionTitle1" value="{{radioOptionTitle1}}" />
                     </div>
                 </div>
-                <div class="widget-dialog-subsection w-6">
+                <div class="widget-dialog-subsection w-4">
                     <div class="label-input-container">
                         <label for="txtRadioOptionValue1">{{radioOptionValueLabel}}</label>
                         <input type="text" id="txtRadioOptionValue1" value="{{radioOptionValue1}}" />
                     </div>
                 </div>
+                <div class="widget-dialog-subsection w-1">
+                    <button type="button" data-action="remove" title="{{removeOptionButtonTitle}}">
+                        <i class="{{removeIcon}}"></i>
+                    </button>
+                </div>
             </div>
             <div class="widget-radio-option" data-index="2">
-                <div class="widget-dialog-subsection w-6">
+                <div class="widget-dialog-subsection w-7">
                     <div class="label-input-container">
                         <label for="txtRadioOptionTitle2">{{radioOptionTitleLabel}}</label>
                         <input type="text" id="txtRadioOptionTitle2" value="{{radioOptionTitle2}}" />
                     </div>
                 </div>
-                <div class="widget-dialog-subsection w-6">
+                <div class="widget-dialog-subsection w-4">
                     <div class="label-input-container">
                         <label for="txtRadioOptionValue2">{{radioOptionValueLabel}}</label>
                         <input type="text" id="txtRadioOptionValue2" value="{{radioOptionValue2}}" />
                     </div>
+                </div>
+                <div class="widget-dialog-subsection w-1">
+                    <button type="button" data-action="remove" title="{{removeOptionButtonTitle}}">
+                        <i class="{{removeIcon}}"></i>
+                    </button>
                 </div>
             </div>            
         </div>
