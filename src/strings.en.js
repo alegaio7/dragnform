@@ -61,8 +61,8 @@ class Strings {
     static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
     static get WidgetValidation_RequiredMessage() {return 'A value for this field is required'; }
 
-    static get Widget_Radio_Default_Option1() { return 'Option 1'; }
-    static get Widget_Radio_Default_Option2() { return 'Option 2'; }
+    static get Widget_Radio_Default_Option1_Title() { return 'Option 1'; }
+    static get Widget_Radio_Default_Option2_Title() { return 'Option 2'; }
     static get Widget_Radio_Options_Label_Title() { return 'Title'; }
     static get Widget_Radio_Options_Label_Value() { return 'Value'; }
     static get Widget_Radio_Options_Title() { return 'Radio options'; }
@@ -101,6 +101,7 @@ class Strings {
     static get WidgetEditor_Radio_Widget_Horizontal() { return 'Horizontal disposition'; }
     static get WidgetEditor_Radio_Add_Option_Button_Title() { return 'Add new option'; }
     static get WidgetEditor_Radio_Remove_Option_Button_Title() { return 'Remove option'; }
+    static get WidgetEditor_Radio_Confirm_Remove_Option_Message() { return 'Are you sure you want to remove this option?'; }    
 
     static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
     static get WidgetEditor_Text_Widget_MinLengthValidationMessage() { return 'Validation message'; }

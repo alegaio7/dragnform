@@ -19,15 +19,15 @@
                 >{{mark}}</span>            
             </div>
             <div data-part="widget-radio-sets-container">
-                <div data-part="widget-radio-set" data-first-value="1">
+                <div data-part="widget-radio-set" data-initial="1">
                     <input type="radio" class="{{radioClass}}" 
                         id={{radioIdDesign}} 
                         {{#hasName}}
                         name="{{name}}" 
                         {{/hasName}}
                         />
-                    <label class="{{radioLabelClass}}" for="{{radioIdDesign}}">
-                        <span data-part="radio-label"></span>
+                    <label data-part="radio-item-title" class="{{radioLabelClass}}" for="{{radioIdDesign}}">
+                        <span data-part="radio-item-title-text"></span>
                     </label>
                 </div>
             </div>
@@ -55,15 +55,15 @@
                 >{{mark}}</span>            
             </div>
             <div data-part="widget-radio-sets-container">
-                <div data-part="widget-radio-set" data-first-value="1">
+                <div data-part="widget-radio-set" data-initial="1">
                     <input type="radio" class="{{radioClass}}" 
                         id={{radioIdRun}} 
                         {{#hasName}}
                         name="{{name}}"
                         {{/hasName}}
                         />
-                    <label class="{{radioLabelClass}}" for="{{radioIdRun}}">
-                        <span data-part="radio-label"></span>
+                    <label data-part="radio-item-title" class="{{radioLabelClass}}" for="{{radioIdRun}}">
+                        <span data-part="radio-item-title-text"></span>
                     </label>
                 </div>
             </div>
@@ -79,12 +79,12 @@
                 <span data-part="label">{{label}}</span>
             </div>
             <div data-part="widget-radio-sets-container">
-                <div data-part="widget-radio-set" data-first-value="1">
+                <div data-part="widget-radio-set" data-initial="1">
                     <input type="radio" disabled class="{{radioClass}}" 
                         id={{radioIdView}}
                         />
-                    <label class="{{radioLabelClass}}" for="{{radioIdView}}">
-                        <span data-part="radio-label"></span>
+                    <label data-part="radio-item-title" class="{{radioLabelClass}}" for="{{radioIdView}}">
+                        <span data-part="radio-item-title-text"></span>
                     </label>
                 </div>
             </div>            

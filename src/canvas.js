@@ -39,7 +39,6 @@ export default class Canvas {
     
         this._widgetRenderOptions = options.widgetRenderOptions ?? {};
         this._container = options.widgetsContainerEl; 
-        this._editingWidgetInfo = null;
         this._editorsContainer = options.widgetEditorsContainerEl;
         this._editorTemplates = new Map();
         this._modified = false;
@@ -406,7 +405,7 @@ export default class Canvas {
     async _showWidgetProperties(sender, e) {
         if (this.renderMode !== constants.WIDGET_MODE_DESIGN)
             return;
-        var editorData, editorHtml, editorProps;
+        var editorData, editorHtml;
         if (this._editorTemplates.has(sender.type)) {
             editorData = this._editorTemplates.get(sender.type);
             editorHtml = editorData.html;
@@ -423,6 +422,8 @@ export default class Canvas {
         }
 
         this._editorsContainer.innerHTML = editorHtml;
+        var _t = this;
+        var savedModified = this.modified;
 
         // check if the dialog has an associated script. If so, load it
         var propEditorWithScript = this._editorsContainer.querySelector(".widget-properties-editor[has-script]");
@@ -433,43 +434,79 @@ export default class Canvas {
 
             import(/* webpackIgnore: true */ scriptName).then(module => {
                 if (module && module.default) {
-                    var options = { 
+                    var options = {
+                        widget: sender,
                         callbacks: {
-                            onAutoHeightChanged: function(dlg, value) {
-                                sender.autoHeight = value;
+                            onAccept: function(dlg, changedProps) {
+                                _t.modified = true;
+                                if (changedProps) {
+                                    changedProps.forEach(p => {
+                                        if (_t._rememberedProperties.has(p.name))
+                                            _t._rememberedProperties.set(p.name, dlg.widget[p.name]); // don't use the element's .value since its string. use the parsed value instead
+                                    });
+                                }
+                                modal.close();
                             },
-                            onColumnsChanged: function(dlg, value) {
-                                sender.columns = value;
+                            onAutoHeightChanged: function(dlg, widget, value) {
+                                widget.autoHeight = value;
                             },
-                            onFontSizeChanged: function(dlg, value) {
-                                sender.fontSize = value;
+                            onCancel: function(dlg) {
+                                _t.modified = savedModified;
+                                modal.close();
                             },
-                            onFontUnderlineChanged: function(dlg, value) {
-                                sender.fontUnderline = value;
+                            onColumnsChanged: function(dlg, widget, value) {
+                                widget.columns = value;
+                            },
+                            onFontSizeChanged: function(dlg, widget, value) {
+                                widget.fontSize = value;
+                            },
+                            onFontUnderlineChanged: function(dlg, widget, value) {
+                                widget.fontUnderline = value;
                             },                            
-                            onFontWeightChanged: function(dlg, value) {
-                                sender.fontWeight = value;
+                            onFontWeightChanged: function(dlg, widget, value) {
+                                widget.fontWeight = value;
                             },                      
-                            onHeightChanged: function(dlg, value) {
-                                sender.height = value;
+                            onHeightChanged: function(dlg, widget, value) {
+                                widget.height = value;
                             },
-                            onHorizontalAlignmentChanged: function(dlg, value) {
-                                sender.horizontalAlignment = value;
+                            onHorizontalAlignmentChanged: function(dlg, widget, value) {
+                                widget.horizontalAlignment = value;
                             },
-                            onLabelChanged: function(dlg, value) {
-                                sender.label = value;
+                            onLabelChanged: function(dlg, widget, value) {
+                                widget.label = value;
                             },
-                            onRequiredChanged: function(dlg, value) {
-                                sender.required = value;
+                            onRadioOptionAdd: function(dlg, widget, value) {
+                                var ro = widget.radioOptions;
+                                ro.push(value);
+                                widget.radioOptions = ro;
+                                return ro[ro.length - 1];
                             },
-                            onTipChanged: function(dlg, value) {
-                                sender.tip = value;
+                            onRadioOptionRemove: function(dlg, widget, index) {
+                                var ro = widget.radioOptions;
+                                ro.splice(index, 1);
+                                widget.radioOptions = ro;
                             },
-                            onVerticalAlignmentChanged: function(dlg, value) {
-                                sender.verticalAlignment = value;
+                            onRadioOptionTitleChanged: function(dlg, widget, value, index) {
+                                var ro = widget.radioOptions;
+                                ro[index].title = value;
+                                widget.radioOptions = ro;
                             },
-                            onHorizontalDispositionChanged: function(dlg, value) {
-                                sender.horizontalDisposition = value;
+                            onRadioOptionValueChanged: function(dlg, widget, value, index) {
+                                var ro = widget.radioOptions;
+                                ro[index].value = value;
+                                widget.radioOptions = ro;
+                            },
+                            onRequiredChanged: function(dlg, widget, value) {
+                                widget.required = value;
+                            },
+                            onTipChanged: function(dlg, widget, value) {
+                                widget.tip = value;
+                            },
+                            onVerticalAlignmentChanged: function(dlg, widget, value) {
+                                widget.verticalAlignment = value;
+                            },
+                            onHorizontalDispositionChanged: function(dlg, widget, value) {
+                                widget.horizontalDisposition = value;
                             }
                         },
                         dialogContainer: this._editorsContainer
@@ -480,104 +517,7 @@ export default class Canvas {
             });
         }
 
-        // update modal control properties
-        editorProps = sender.getEditorProperties();
-        if (editorProps) {
-            editorProps.forEach(p => {
-                if (p.elementId) {
-                    let el = document.getElementById(p.elementId);
-                    if (el) {
-                        if (p.readonly)
-                            el.innerHTML = p.value;
-                        else {
-                            if (p.type === "boolean")
-                                el.checked = p.value;
-                            else if (p.type === "number" || p.type === "string")
-                                el.value = p.value;
-                        }
-                    }
-                } else if (p.elementIds) { // used for properties that are bound to multiple elements like radio buttons
-                    p.elementIds.forEach(eId => {
-                        let el = document.getElementById(eId);
-                        if (el) {
-                            if (el.value === p.value)
-                                el.checked = true;
-                            else
-                                el.checked = false;
-                        }
-                    });
-                }
-            });
-        }
-
-        // attach handlers to buttons
-        var _t = this;
         var modal = this._editorsContainer.querySelector('.widget-properties-editor');
-
-        var acceptButton = this._editorsContainer.querySelector('[data-action="accept"]');
-        if (acceptButton)
-            acceptButton.onclick = function() {
-                _t._updateWidgetPropertiesFromEditor(_t._editingWidgetInfo, modal);
-            }.bind(this);
-
-        var cancelButton = this._editorsContainer.querySelector('[data-action="cancel"]');
-        if (cancelButton)
-            cancelButton.onclick = function() {
-                // restore widget props as they were before editing
-                if (editorProps) {
-                    editorProps.forEach(p => {
-                        sender[p.name] = p.value;
-                    });
-                }
-                modal.close();
-            }.bind(this);
-    
-        this._editingWidgetInfo = {widget: sender, properties: editorProps};
         modal.showModal();
-    }
-
-    /// <summary>
-    /// Updates the widget properties from the editor modal
-    /// </summary>
-    _updateWidgetPropertiesFromEditor(widgetInfo, modal) {
-        widgetInfo.widget.batchUpdating = true;
-        if (widgetInfo.properties) {
-            widgetInfo.properties.forEach(p => {
-                if (p.elementId) {
-                    if (p.readonly)
-                        return;
-                    if (p.name in widgetInfo.widget) {
-                        var el = document.getElementById(p.elementId);
-                        if (el) {
-                            if (p.type === "boolean")
-                                widgetInfo.widget[p.name] = el.checked;
-                            else if (p.type === "number") {
-                                if (el.value === "" || isNaN(el.value))
-                                    widgetInfo.widget[p.name] = null;
-                                else
-                                    widgetInfo.widget[p.name] = parseInt(el.value, 10);
-                            }
-                            else
-                                widgetInfo.widget[p.name] = el.value;
-                            if (this._rememberedProperties.has(p.name))
-                                this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]); // don't use the element's value since its string. use the parsed value instead
-                        }
-                    }
-                } else if (p.elementIds) {
-                    p.elementIds.forEach(eId => { 
-                        var el = document.getElementById(eId);
-                        if (el && el.checked) {
-                            widgetInfo.widget[p.name] = el.value;
-                            if (this._rememberedProperties.has(p.name))
-                                this._rememberedProperties.set(p.name, widgetInfo.widget[p.name]);
-                        }
-                    });
-                }
-            });
-        }
-        widgetInfo.widget.batchUpdating = false;
-        this.modified = true;
-        // widgetInfo.widget.refresh(); // not needed since setting batchUpdating = false; will trigger a refresh
-        modal.close();
     }
 }

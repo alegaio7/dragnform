@@ -1,6 +1,7 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import Icons from './icons.js';
+import functions from './functions.js';
 
 class WidgetRadio extends Widget {
     constructor(fragment) {
@@ -12,9 +13,10 @@ class WidgetRadio extends Widget {
         if (!this.requiredAttributeSettings.mark)
             this.requiredAttributeSettings.mark = "*";
 
+        this._lastIndex = 0;
         this._radioOptions = fragment.radioOptions ?? [
-            { key: 'Y', value: Strings.Widget_Radio_Default_Option1 },
-            { key: 'N', value: Strings.Widget_Radio_Default_Option2 },
+            { title: Strings.Widget_Radio_Default_Option1_Title, value: 'Y' },
+            { title: Strings.Widget_Radio_Default_Option2_Title, value: 'N' },
         ];
         this._checkOptions(this._radioOptions);
 
@@ -45,6 +47,7 @@ class WidgetRadio extends Widget {
     set radioOptions(value) {
         this._checkOptions(value);
         this._radioOptions = value;
+        this._renderRadioOptionElements();
         this.refresh();
     }
 
@@ -86,10 +89,10 @@ class WidgetRadio extends Widget {
         replacements.labelRadioOptions = Strings.Widget_Radio_Options_Title;
         replacements.radioOptionTitleLabel = Strings.Widget_Radio_Options_Label_Title;
         replacements.radioOptionValueLabel = Strings.Widget_Radio_Options_Label_Value;
-        replacements.radioOptionTitle1 = this._radioOptions[0].value;
-        replacements.radioOptionValue1 = this._radioOptions[0].key;
-        replacements.radioOptionTitle2 = this._radioOptions[1].value;
-        replacements.radioOptionValue2 = this._radioOptions[1].key;
+        replacements.radioOptionTitle1 = this._radioOptions[0].title;
+        replacements.radioOptionValue1 = this._radioOptions[0].value;
+        replacements.radioOptionTitle2 = this._radioOptions[1].title;
+        replacements.radioOptionValue2 = this._radioOptions[1].value;
         replacements.removeIcon = Icons.WidgetEditorDialog_RemoveRadioOptionIcon;
         replacements.removeOptionButtonTitle = Strings.WidgetEditor_Radio_Remove_Option_Button_Title;
         return props;
@@ -112,11 +115,13 @@ class WidgetRadio extends Widget {
                 if (label)
                     label.setAttribute("style", style);
 
-                var radioItems = s.querySelectorAll(".widget-radio-label");
-                if (radioItems && radioItems.length) {
-                    radioItems.forEach(r => {
-                        r.setAttribute("style", radioItemsStyle);
-                    });
+                for (var i = 1; i <= this._radioOptions.length; i++) {
+                    var id = this._radioOptions[i - 1].id;
+                    var radioEl = s.querySelector(`[data-part="widget-radio-set"][data-id="${id}"]`);
+                    let titleCont = radioEl.querySelector(`[data-part="radio-item-title"]`);
+                    titleCont.setAttribute("style", radioItemsStyle);
+                    let title = radioEl.querySelector(`[data-part="radio-item-title-text"]`);
+                    title.innerHTML = this._radioOptions[i - 1].title;
                 }
 
                 var radiocont = s.querySelector(`[data-part="widget-radio-sets-container"]`);
@@ -200,7 +205,7 @@ class WidgetRadio extends Widget {
         else {
             var valueOk = false;
             this._radioOptions.forEach(option => {
-                if (option.key === value) {
+                if (option.value === value) {
                     super.value = value;
                     valueOk = true;
                     return;
@@ -243,10 +248,14 @@ class WidgetRadio extends Widget {
         if (value.length < 2)
             throw new Error("radioOptions must have at least two elements.");
         value.forEach((v, i) => {
-            if (v.hasOwnProperty("key") && v.hasOwnProperty("value"))
+            if (v.hasOwnProperty("title") && v.hasOwnProperty("value")) {
+                if (!v.hasOwnProperty("id"))
+                    v.id = functions.uuidv4();
                 return;
-            throw new Error(`radioOptions[${i}] must have 'key' and 'value' properties.`);
+            }
+            throw new Error(`radioOptions[${i}] must have 'title' and 'value' properties.`);
         });
+        this._lastIndex = value.length;
     }
 
     _renderDOM(container, parser, html) {
@@ -263,29 +272,76 @@ class WidgetRadio extends Widget {
             var firstRadioNode;
             if (radioOptions && radioOptions.length) {
                 radioOptions.forEach(v => {
-                    if (v.getAttribute("data-first-value") === "1")
+                    if (v.getAttribute("data-initial") === "1")
                         firstRadioNode = v; // keep ref
                     v.remove();
                 });
             }
+
             this._radioOptions.forEach((option, index) => {
-                let node = firstRadioNode.cloneNode(true);
-                if (index > 0)
-                    node.removeAttribute("data-first-value");
-                let input = node.querySelector(`input`);
-                input.id = _t.id + "_" + index;
-                input.value = option.key;
-                input.name = _t.name + "_" + sindex;
-                input.addEventListener("click", function(e) {
-                    _t.value = e.currentTarget.value;
-                });
-                node.querySelector('[data-part="radio-label"]').innerHTML = option.value;
+                let node = this._createNewRadioOptionEl(firstRadioNode, option);
+                if (index === 0)
+                    node.setAttribute("data-initial", "1");
                 s.appendChild(node);
             });
         });
 
         super.refresh();
         this._updateContols();
+    }
+
+    _createNewRadioOptionEl(modelNode, radioOptionItem) {
+        var _t = this;
+        var cloneEl = modelNode.cloneNode(true);
+        cloneEl.setAttribute('data-id', radioOptionItem.id);
+        let txtTitle = cloneEl.querySelector(`[data-part="radio-item-title-text"]`);
+        txtTitle.innerHTML = radioOptionItem.title;
+        let input = cloneEl.querySelector(`input`);
+        input.id = this.id + "_" + this._lastIndex;
+        input.value = radioOptionItem.value;
+        input.name = this.name + "_" + this._lastIndex;
+        input.addEventListener("click", function(e) {
+            _t.value = e.currentTarget.value;
+        });
+        this._lastIndex++;
+        return cloneEl;
+    }
+
+    _renderRadioOptionElements() {
+        var sections = this._el.querySelectorAll(`[data-show-when]`);
+        if (sections && sections.length) {
+            sections.forEach(s => {
+                // determine which options are new
+                var radioCont = s.querySelector('[data-part="widget-radio-sets-container"]');
+                var firstRadioNode = radioCont.querySelector(`[data-part="widget-radio-set"][data-initial="1"]`);
+                for (var i = 0; i < this._radioOptions.length; i++) {
+                    var roid = this._radioOptions[i].id;
+                    var ro = radioCont.querySelector(`[data-part="widget-radio-set"][data-id="${roid}"]`);
+                    if (!ro) {
+                        // create the element
+                        var node = this._createNewRadioOptionEl(firstRadioNode, this._radioOptions[i]);
+                        radioCont.appendChild(node);
+                    }
+                }
+
+                // remove the elements that are not in the new options
+                var radioOptions = radioCont.querySelectorAll(`[data-part="widget-radio-set"]`);
+                if (radioOptions && radioOptions.length) {
+                    radioOptions.forEach(v => {
+                        var id = v.getAttribute("data-id");
+                        var found = false;
+                        for (var i = 0; i < this._radioOptions.length; i++) {
+                            if (this._radioOptions[i].id === id) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found)
+                            v.remove();
+                    });
+                }
+            });
+        }
     }
 
     _updateContols() {
