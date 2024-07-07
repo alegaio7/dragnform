@@ -476,25 +476,34 @@ export default class Canvas {
                                 widget.label = value;
                             },
                             onRadioOptionAdd: function(dlg, widget, value) {
-                                var ro = widget.radioOptions;
-                                ro.push(value);
-                                widget.radioOptions = ro;
-                                return ro[ro.length - 1];
+                                var options = widget.radioOptions;
+                                options.push(value);
+                                widget.radioOptions = options;
+                                return options[options.length - 1];
                             },
-                            onRadioOptionRemove: function(dlg, widget, index) {
-                                var ro = widget.radioOptions;
-                                ro.splice(index, 1);
-                                widget.radioOptions = ro;
+                            onRadioOptionRemove: function(dlg, widget, id) {
+                                var options = widget.radioOptions;
+                                for (var i = 0; i < options.length; i++) {
+                                    if (options[i].id === id) {
+                                        options.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                                widget.radioOptions = options;
                             },
-                            onRadioOptionTitleChanged: function(dlg, widget, value, index) {
-                                var ro = widget.radioOptions;
-                                ro[index].title = value;
-                                widget.radioOptions = ro;
+                            onRadioOptionTitleChanged: function(dlg, widget, value, id) {
+                                var options = widget.radioOptions;
+                                var ro = options.find(r => r.id === id);
+                                if (ro)
+                                    ro.title = value;
+                                widget.radioOptions = options;
                             },
-                            onRadioOptionValueChanged: function(dlg, widget, value, index) {
-                                var ro = widget.radioOptions;
-                                ro[index].value = value;
-                                widget.radioOptions = ro;
+                            onRadioOptionValueChanged: function(dlg, widget, value, id) {
+                                var options = widget.radioOptions;
+                                var ro = options.find(r => r.id === id);
+                                if (ro)
+                                    ro.value = value;
+                                widget.radioOptions = options;
                             },
                             onRequiredChanged: function(dlg, widget, value) {
                                 widget.required = value;

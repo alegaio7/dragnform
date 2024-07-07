@@ -6,6 +6,8 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
 
         this._radioOptions = options.widget.radioOptions;
 
+        this._savedRadioOptions = [...options.widget.radioOptions];
+
         this.chkHorizontalDisposition = this._dialogContainer.querySelector('#chkWidgetPropRadioHorizontal');
         var _t = this;
         if (this.chkHorizontalDisposition && this._callbacks.onHorizontalDispositionChanged) {
@@ -40,11 +42,15 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
         var cloneEl = radioOptionModel.cloneNode(true);
         
         cloneEl.setAttribute('data-index', newIndex);
-        let txtTitle = cloneEl.querySelector(`#txtRadioOptionTitle1`);
+        cloneEl.setAttribute('data-id', "");
+        if (radioOption)
+            cloneEl.setAttribute('data-id', radioOption.id);
+
+        let txtTitle = cloneEl.querySelector(`[data-part="radio-title"]`);
         txtTitle.setAttribute('id', `txtRadioOptionTitle${newIndex}`);
         txtTitle.value = radioOption ? radioOption.title : '';
 
-        let txtValue = cloneEl.querySelector(`#txtRadioOptionValue1`);
+        let txtValue = cloneEl.querySelector(`[data-part="radio-value"]`);
         txtValue.setAttribute('id', `txtRadioOptionValue${newIndex}`);
         txtValue.value = radioOption ? radioOption.value : '';
 
@@ -57,25 +63,34 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
     }
     
     _attachHandlers(radioEl) {
-        var index = radioEl.getAttribute('data-index');
         radioEl.querySelector('[data-action="remove"]').addEventListener('click', e => {
             if (confirm(Strings.WidgetEditor_Radio_Confirm_Remove_Option_Message)) {
                 radioEl.remove();
+                let id = radioEl.getAttribute('data-id');
                 if (this._callbacks.onRadioOptionRemove)
-                    this._callbacks.onRadioOptionRemove(this, this.widget, index);
+                    this._callbacks.onRadioOptionRemove(this, this.widget, id);
             }
         });
         var evts = ['change', 'input'];
         for (var i = 0; i < evts.length; i++) {
-            radioEl.querySelector(`#txtRadioOptionTitle${index}`).addEventListener(evts[i], e => {
-                if (this._callbacks.onRadioOptionTitleChanged)
-                    this._callbacks.onRadioOptionTitleChanged(this, this.widget, e.target.value, index - 1);
+            radioEl.querySelector(`[data-part="radio-title"]`).addEventListener(evts[i], e => {
+                if (this._callbacks.onRadioOptionTitleChanged) {
+                    let id = radioEl.getAttribute('data-id');
+                    this._callbacks.onRadioOptionTitleChanged(this, this.widget, e.target.value, id);
+                }
             });
-            radioEl.querySelector(`#txtRadioOptionValue${index}`).addEventListener(evts[i], e => {
-                if (this._callbacks.onRadioOptionValueChanged)
-                    this._callbacks.onRadioOptionValueChanged(this, this.widget, e.target.value, index - 1);
+            radioEl.querySelector(`[data-part="radio-value"]`).addEventListener(evts[i], e => {
+                if (this._callbacks.onRadioOptionValueChanged) {
+                    let id = radioEl.getAttribute('data-id');
+                    this._callbacks.onRadioOptionValueChanged(this, this.widget, e.target.value, id);
+                }
             });
         }
+    }
+
+    _cancelDialogHandler() {
+        super._cancelDialogHandler();
+        this.widget.radioOptions = this._savedRadioOptions;
     }
 
     _setupRadioOptions() {
@@ -83,12 +98,16 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
         for (var i = 0; i < this._radioOptions.length; i++) {
             var index = i + 1;
             if (index <= 2) { // use existing DOM elements
+                var ro = this._radioOptions[i];
                 let radioEl = radioCont.querySelector(`.widget-radio-option[data-index="${index}"]`);
-                radioEl.setAttribute('data-id', this._radioOptions[i].id);
-                let txtTitle = radioEl.querySelector(`#txtRadioOptionTitle${index}`);
+                radioEl.setAttribute('data-id', ro.id);
+
+                let txtTitle = radioEl.querySelector(`[data-part="radio-title"]`);
                 txtTitle.value = this._radioOptions[i].title;
-                let txtValue = radioEl.querySelector(`#txtRadioOptionValue${index}`);
+
+                let txtValue = radioEl.querySelector(`[data-part="radio-value"]`);
                 txtValue.value = this._radioOptions[i].value;
+
                 let removeBtn = radioEl.querySelector('[data-action="remove"]');
                 removeBtn.setAttribute("style", "display: none");
                 this._attachHandlers(radioEl);

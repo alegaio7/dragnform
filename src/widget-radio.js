@@ -328,14 +328,15 @@ class WidgetRadio extends Widget {
                 var radioOptions = radioCont.querySelectorAll(`[data-part="widget-radio-set"]`);
                 if (radioOptions && radioOptions.length) {
                     radioOptions.forEach(v => {
-                        var id = v.getAttribute("data-id");
                         var found = false;
+                        var id = v.getAttribute("data-id");
                         for (var i = 0; i < this._radioOptions.length; i++) {
                             if (this._radioOptions[i].id === id) {
                                 found = true;
                                 break;
                             }
                         }
+
                         if (!found)
                             v.remove();
                     });

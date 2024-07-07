@@ -22,9 +22,9 @@ export default class WidgetCommonPropertiesEditor {
         this._dialogContainer = c;
 
         // setup dialog controls
-        var editorProps = options.widget.getEditorProperties();
-        if (editorProps) {
-            editorProps.forEach(p => {
+        this._editorProps = options.widget.getEditorProperties();
+        if (this._editorProps) {
+            this._editorProps.forEach(p => {
                 if (p.elementId) {
                     let el = document.getElementById(p.elementId);
                     if (el) {
@@ -59,22 +59,13 @@ export default class WidgetCommonPropertiesEditor {
         var acceptButton = this._dialogContainer.querySelector('[data-action="accept"]');
         if (acceptButton)
             acceptButton.onclick = function() {
-                var changedProps = _t._updateWidgetPropertiesFromControls();
-                if (this._callbacks.onAccept)
-                    _t._callbacks.onAccept(_t, changedProps);
+                _t._acceptDialogHandler();
             }.bind(this);
 
         var cancelButton = this._dialogContainer.querySelector('[data-action="cancel"]');
         if (cancelButton)
             cancelButton.onclick = function() {
-                // restore widget props as they were before editing
-                if (editorProps) {
-                    editorProps.forEach(p => {
-                        _t.widget[p.name] = p.value;
-                    });
-                }
-                if (this._callbacks.onCancel)
-                    _t._callbacks.onCancel(_t);
+                _t._cancelDialogHandler();
             }.bind(this);
 
         this.txtLabel = document.getElementById('txtWidgetPropLabel');
@@ -185,6 +176,23 @@ export default class WidgetCommonPropertiesEditor {
     // *******************************************************************************
     // Private methods
     // *******************************************************************************    
+    _acceptDialogHandler() {
+        var changedProps = this._updateWidgetPropertiesFromControls();
+        if (this._callbacks.onAccept)
+            this._callbacks.onAccept(this, changedProps);
+    }
+
+    _cancelDialogHandler() {
+        // restore widget props as they were before editing
+        if (this._editorProps) {
+            this._editorProps.forEach(p => {
+                this.widget[p.name] = p.value;
+            });
+        }
+        if (this._callbacks.onCancel)
+            this._callbacks.onCancel(this);
+    }
+    
     _updateControls() {
         var txtWidgetPropHeight = document.getElementById('txtWidgetPropHeight');
         txtWidgetPropHeight.disabled = this.chkAutoHeight.checked;
