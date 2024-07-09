@@ -82,7 +82,7 @@ class WidgetRadio extends Widget {
         var props = await this._getPropertiesEditorTemplateCore("widget-radio", "WidgetRadioPropertiesEditor");
         var replacements = props.replacements;
 
-        replacements.addIcon = Icons.WidgetEditorDialog_AddRadioOptionIcon;
+        replacements.addIcon = Icons.WidgetRadioEditorDialog_AddOptionIcon;
         replacements.addOptionButtonTitle = Strings.WidgetEditor_Radio_Add_Option_Button_Title;
         replacements.labelRadioHorizontal = Strings.WidgetEditor_Radio_Widget_Horizontal;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
@@ -93,7 +93,7 @@ class WidgetRadio extends Widget {
         replacements.radioOptionValue1 = this._radioOptions[0].value;
         replacements.radioOptionTitle2 = this._radioOptions[1].title;
         replacements.radioOptionValue2 = this._radioOptions[1].value;
-        replacements.removeIcon = Icons.WidgetEditorDialog_RemoveRadioOptionIcon;
+        replacements.removeIcon = Icons.WidgetRadioEditorDialog_RemoveOptionIcon;
         replacements.removeOptionButtonTitle = Strings.WidgetEditor_Radio_Remove_Option_Button_Title;
         return props;
     }
@@ -122,6 +122,8 @@ class WidgetRadio extends Widget {
                     titleCont.setAttribute("style", radioItemsStyle);
                     let title = radioEl.querySelector(`[data-part="radio-item-title-text"]`);
                     title.innerHTML = this._radioOptions[i - 1].title;
+                    let input = radioEl.querySelector(`input`);
+                    input.value = this._radioOptions[i - 1].value;
                 }
 
                 var radiocont = s.querySelector(`[data-part="widget-radio-sets-container"]`);

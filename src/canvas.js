@@ -6,6 +6,7 @@ import WidgetLabel from './widget-label.js';
 import WidgetNumber from './widget-number.js';
 import WidgetRadio from './widget-radio.js';
 import WidgetSpacer from './widget-spacer.js';
+import WidgetSelect from './widget-select.js';
 import WidgetText from './widget-text.js';
 import FeatureExtractor from './feature-extractor.js';
 import Sortable, { create } from 'sortablejs';
@@ -141,6 +142,9 @@ export default class Canvas {
                 break                
             case constants.WIDGET_TYPE_SPACER:
                 w = new WidgetSpacer(o);
+                break
+            case constants.WIDGET_TYPE_SELECT:
+                w = new WidgetSelect(o);
                 break
             case constants.WIDGET_TYPE_TEXT:
                 w = new WidgetText(o);
@@ -507,6 +511,36 @@ export default class Canvas {
                             },
                             onRequiredChanged: function(dlg, widget, value) {
                                 widget.required = value;
+                            },
+                            onSelectOptionAdd: function(dlg, widget, value) {
+                                var options = widget.selectOptions;
+                                options.push(value);
+                                widget.selectOptions = options;
+                                return options[options.length - 1];
+                            },
+                            onSelectOptionRemove: function(dlg, widget, id) {
+                                var options = widget.selectOptions;
+                                for (var i = 0; i < options.length; i++) {
+                                    if (options[i].id === id) {
+                                        options.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                                widget.selectOptions = options;
+                            },
+                            onSelectOptionTitleChanged: function(dlg, widget, value, id) {
+                                var options = widget.selectOptions;
+                                var ro = options.find(r => r.id === id);
+                                if (ro)
+                                    ro.title = value;
+                                widget.selectOptions = options;
+                            },
+                            onSelectOptionValueChanged: function(dlg, widget, value, id) {
+                                var options = widget.selectOptions;
+                                var ro = options.find(r => r.id === id);
+                                if (ro)
+                                    ro.value = value;
+                                widget.selectOptions = options;
                             },
                             onTipChanged: function(dlg, widget, value) {
                                 widget.tip = value;

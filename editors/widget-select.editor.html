@@ -82,12 +82,6 @@
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection">
-            <input type="checkbox" id="chkWidgetPropRadioHorizontal" />
-            <label for="chkWidgetPropRadioHorizontal">{{labelRadioHorizontal}}</label>
-        </div>  
-    </div>
-    <div class="widget-dialog-section">
-        <div class="widget-dialog-subsection">
             <div class="label-input-container">
                 <label for="txtWidgetPropTip">{{labelWidgetTip}}</label>
                 <input type="text" id="txtWidgetPropTip" />
@@ -95,24 +89,24 @@
         </div>
     </div>
     <div class="widget-dialog-section">
-        <h6 class="widget-dialog-section-title">{{labelRadioOptions}}</h6>
+        <h6 class="widget-dialog-section-title">{{labelSelectOptions}}</h6>
         <div class="widget-dialog-subsection">
             <button type="button" data-action="add" title="{{addOptionButtonTitle}}">
                 <i class="{{addIcon}}"></i>
             </button>
         </div>
-        <div class="widget-dialog-subsection" data-part="radio-options-container">
-            <div class="widget-radio-option" data-index="1">
+        <div class="widget-dialog-subsection" data-part="select-options-container">
+            <div class="widget-select-option" data-index="1">
                 <div class="widget-dialog-subsection w-7">
                     <div class="label-input-container">
-                        <label for="txtRadioOptionTitle1">{{radioOptionTitleLabel}}</label>
-                        <input data-part="radio-title" type="text" id="txtRadioOptionTitle1" value="{{radioOptionTitle1}}" />
+                        <label for="txtSelectOptionTitle1">{{selectOptionTitleLabel}}</label>
+                        <input data-part="option-title" type="text" id="txtSelectOptionTitle1" value="{{selectOptionTitle1}}" />
                     </div>
                 </div>
                 <div class="widget-dialog-subsection w-4">
                     <div class="label-input-container">
-                        <label for="txtRadioOptionValue1">{{radioOptionValueLabel}}</label>
-                        <input data-part="radio-value" type="text" id="txtRadioOptionValue1" value="{{radioOptionValue1}}" />
+                        <label for="txtSelectOptionValue1">{{selectOptionValueLabel}}</label>
+                        <input data-part="option-value" type="text" id="txtSelectOptionValue1" value="{{selectOptionValue1}}" />
                     </div>
                 </div>
                 <div class="widget-dialog-subsection w-1">
@@ -121,20 +115,20 @@
                     </button>
                 </div>
             </div>
-            <div class="widget-radio-option" data-index="2">
+            <div class="widget-select-option" data-index="2">
                 <div class="widget-dialog-subsection w-7">
                     <div class="label-input-container">
-                        <label for="txtRadioOptionTitle2">{{radioOptionTitleLabel}}</label>
-                        <input data-part="radio-title" type="text" id="txtRadioOptionTitle2" value="{{radioOptionTitle2}}" />
+                        <label for="txtSelectOptionTitle2">{{selectOptionTitleLabel}}</label>
+                        <input data-part="option-title" type="text" id="txtSelectOptionTitle2" value="{{selectOptionTitle2}}" />
                     </div>
                 </div>
                 <div class="widget-dialog-subsection w-4">
                     <div class="label-input-container">
-                        <label for="txtRadioOptionValue2">{{radioOptionValueLabel}}</label>
-                        <input data-part="radio-value" type="text" id="txtRadioOptionValue2" value="{{radioOptionValue2}}" />
+                        <label for="txtSelectOptionValue2">{{selectOptionValueLabel}}</label>
+                        <input data-part="option-value" type="text" id="txtSelectOptionValue2" value="{{selectOptionValue2}}" />
                     </div>
                 </div>
-                <div class="widget-dialog-subsection w-1">
+                <div class="widget-dialog-subsection w-2">
                     <button type="button" data-action="remove" title="{{removeOptionButtonTitle}}">
                         <i class="{{removeIcon}}"></i>
                     </button>

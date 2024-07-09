@@ -28,6 +28,7 @@ export default class Designer {
             { action: 'add-label', widgetType: constants.WIDGET_TYPE_LABEL },
             { action: 'add-input-checkbox', widgetType: constants.WIDGET_TYPE_CHECKBOX },
             { action: 'add-input-radio', widgetType: constants.WIDGET_TYPE_RADIO },
+            { action: 'add-input-select', widgetType: constants.WIDGET_TYPE_SELECT },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
             { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
@@ -169,6 +170,7 @@ export default class Designer {
                     input: "widget-input",
                     radio: "widget-radio",
                     radioLabel: "widget-radio-label",
+                    select: "widget-select",
                     valueControl: "widget-value",
                     widget: "widget",
                 },
@@ -319,7 +321,7 @@ export default class Designer {
             var widgetsGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer || 
                 options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image || 
-                options.toolbar.button.checkbox || options.toolbar.buttons.radio
+                options.toolbar.button.checkbox || options.toolbar.buttons.radio || options.toolbar.buttons.select
             );
             var renderModeGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.renderCurrentMode && options.toolbar.buttons.renderValidateForm
@@ -410,6 +412,11 @@ export default class Designer {
                             <i class="${Icons.Toolbar_AddRadioInputWidget_Icon}"></i>
                             <span>${Strings.Toolbar_AddRadioInputWidget_ButtonLabel}</span>
                             </button>`;
+                if (options.toolbar.buttons.select)
+                    html += `<button type="button" data-action="add-input-select" title="${Strings.Toolbar_AddSelectnputWidget_ButtonTitle}">
+                            <i class="${Icons.Toolbar_AddSelectWidget_Icon}"></i>
+                            <span>${Strings.Toolbar_AddSelectInputWidget_ButtonLabel}</span>
+                            </button>`;                            
                 if (options.toolbar.buttons.button)
                     html += `<button type="button" data-action="add-button" title="${Strings.Toolbar_AddButtonWidget_ButtonTitle}">
                             <i class="${Icons.Toolbar_AddButtonWidget_Icon}"></i>

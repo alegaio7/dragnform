@@ -90,6 +90,7 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
 
     _cancelDialogHandler() {
         super._cancelDialogHandler();
+        // restore radio options previously saved since they're an array (ref object)
         this.widget.radioOptions = this._savedRadioOptions;
     }
 

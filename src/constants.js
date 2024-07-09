@@ -43,6 +43,7 @@ export const WIDGET_TYPE_IMAGE = 'image';
 export const WIDGET_TYPE_LABEL = 'label';
 export const WIDGET_TYPE_NUMBER = 'number';
 export const WIDGET_TYPE_RADIO = 'radio';
+export const WIDGET_TYPE_SELECT = 'select';
 export const WIDGET_TYPE_SPACER = 'spacer';
 export const WIDGET_TYPE_TEXT = 'text';
 

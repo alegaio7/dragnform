@@ -164,6 +164,9 @@
   height: 1.5rem;
   margin: 0 0.5rem 0 0;
 }
+.widget .widget-select {
+  width: 100%;
+}
 .widget[data-type=button] {
   display: flex;
   flex-direction: column;

@@ -6,6 +6,7 @@ export default class Icons {
     static get Toolbar_AddLabelWidget_Icon() { return 'fa fa-tag'; }
     static get Toolbar_AddNumberInputWidget_Icon() { return 'fa fa-hashtag'; }
     static get Toolbar_AddRadioInputWidget_Icon() { return 'fa fa-circle-dot'; }
+    static get Toolbar_AddSelectWidget_Icon() { return 'fa fa-rectangle-list'; }
     static get Toolbar_AddSpacerWidget_Icon() { return 'fa fa-arrows-left-right-to-line'; }
     static get Toolbar_AddTextInputWidget_Icon() { return 'fa fa-font'; }
     static get Toolbar_DesignMode_Icon () { return 'fa fa-regular fa-pen-to-square'; }
@@ -17,6 +18,9 @@ export default class Icons {
     static get Toolbar_ValidateForm_Icon() { return 'fa fa-list-check'; }
     static get Toolbar_ViewMode_Icon() { return 'fa fa-regular fa-eye'; }
 
-    static get WidgetEditorDialog_AddRadioOptionIcon() { return 'fa fa-plus'; }
-    static get WidgetEditorDialog_RemoveRadioOptionIcon() { return 'fa fa-regular fa-trash-can'; }
+    static get WidgetRadioEditorDialog_AddOptionIcon() { return 'fa fa-plus'; }
+    static get WidgetRadioEditorDialog_RemoveOptionIcon() { return 'fa fa-regular fa-trash-can'; }
+
+    static get WidgetSelectEditorDialog_AddOptionIcon() { return 'fa fa-plus'; }
+    static get WidgetSelectEditorDialog_RemoveOptionIcon() { return 'fa fa-regular fa-trash-can'; }
 }

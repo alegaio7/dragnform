@@ -38,6 +38,8 @@ class Strings {
     static get Toolbar_AddRadioInputWidget_ButtonTitle() { return 'Add radio options'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }
     static get Toolbar_AddSpacerWidget_ButtonTitle() { return 'Add spacer'; }
+    static get Toolbar_AddSelectInputWidget_ButtonLabel() { return 'Select'; }
+    static get Toolbar_AddSelectnputWidget_ButtonTitle() { return 'Add dropdown selector'; }
     static get Toolbar_AddTextInputWidget_ButtonLabel() { return 'Text'; }
     static get Toolbar_AddTextInputWidget_ButtonTitle() { return 'Add text field'; }
     static get Toolbar_ExportJson_ButtonLabel() { return 'Export'; }
@@ -66,6 +68,10 @@ class Strings {
     static get Widget_Radio_Options_Label_Title() { return 'Title'; }
     static get Widget_Radio_Options_Label_Value() { return 'Value'; }
     static get Widget_Radio_Options_Title() { return 'Radio options'; }
+
+    static get Widget_Select_Options_Title() { return 'Select options'; }
+    static get Widget_Select_Options_Label_Title() { return 'Title'; }
+    static get Widget_Select_Options_Label_Value() { return 'Value'; }
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
@@ -101,7 +107,11 @@ class Strings {
     static get WidgetEditor_Radio_Widget_Horizontal() { return 'Horizontal disposition'; }
     static get WidgetEditor_Radio_Add_Option_Button_Title() { return 'Add new option'; }
     static get WidgetEditor_Radio_Remove_Option_Button_Title() { return 'Remove option'; }
-    static get WidgetEditor_Radio_Confirm_Remove_Option_Message() { return 'Are you sure you want to remove this option?'; }    
+    static get WidgetEditor_Radio_Confirm_Remove_Option_Message() { return 'Are you sure you want to remove this option?'; }
+
+    static get WidgetEditor_Select_Add_Option_Button_Title() { return 'Add new option'; }
+    static get WidgetEditor_Select_Remove_Option_Button_Title() { return 'Remove option'; }
+    static get WidgetEditor_Select_Confirm_Remove_Option_Message() { return 'Are you sure you want to remove this option?'; }
 
     static get WidgetEditor_Text_Widget_MinLength() { return 'Min. length'; }
     static get WidgetEditor_Text_Widget_MinLengthValidationMessage() { return 'Validation message'; }

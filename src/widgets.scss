@@ -259,6 +259,10 @@ $widget-toolbar-padding: 0.5rem;
         margin: 0 0.5rem 0 0;
     }
 
+    .widget-select {
+        width: 100%;
+    }
+
     //vertical-align: bottom;
     &[data-type="button"] {
         display: flex;

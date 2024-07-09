@@ -75,7 +75,7 @@ class WidgetCheckbox extends Widget {
         this._updateContols();
 
         var _t = this;
-        var checkboxes = this._el.querySelectorAll("input[type='radio']"); // inputs for design mode and run mode.
+        var checkboxes = this._el.querySelectorAll("input[type='checkbox']"); // inputs for design mode and run mode.
         
         if (checkboxes)
             checkboxes.forEach(input => {
@@ -88,7 +88,7 @@ class WidgetCheckbox extends Widget {
     _updateContols() {
         // _el can be null if element was not rendered yet
         if (this._el) {
-            var inputs = this._el.querySelectorAll("input[type='radio']");
+            var inputs = this._el.querySelectorAll("input[type='checkbox']");
             if (inputs && inputs.length) {
                 inputs.forEach(input => {
                     if (input.value === this.value) {
