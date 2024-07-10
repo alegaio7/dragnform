@@ -9,6 +9,9 @@
             {{#hasName}}
             name="{{name}}" 
             {{/hasName}}
+			{{#isChecked}}
+			checked
+			{{/isChecked}}
             />
 		<label class="{{labelClass}}" for="{{checkboxIdDesign}}">
 			<span data-part="label">{{label}}</span>
@@ -26,6 +29,9 @@
             {{#hasName}}
             name="{{name}}"
             {{/hasName}}
+			{{#isChecked}}
+			checked
+			{{/isChecked}}
             />
 		<label class="{{labelClass}}" for="{{checkboxIdRun}}">
 			<span data-part="label">{{label}}</span>

@@ -44,6 +44,7 @@ class WidgetCheckbox extends Widget {
     set value(value) {
         value = !!value;
         super.value = value;
+        this.refresh();
     }
 
     exportJson() {
@@ -80,7 +81,7 @@ class WidgetCheckbox extends Widget {
         if (checkboxes)
             checkboxes.forEach(input => {
                 input.addEventListener("change", function(e) {
-                    _t.value = e.currentTarget.value;
+                    _t.value = e.currentTarget.checked;
                 });
             });
     }
@@ -91,9 +92,7 @@ class WidgetCheckbox extends Widget {
             var inputs = this._el.querySelectorAll("input[type='checkbox']");
             if (inputs && inputs.length) {
                 inputs.forEach(input => {
-                    if (input.value === this.value) {
-                        input.checked = true;
-                    }
+                    input.checked = this.value;
                 });
             }
         }

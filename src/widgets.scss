@@ -191,6 +191,9 @@ $widget-toolbar-padding: 0.5rem;
     &[data-mode="design"] {
         border: 1px dashed $widget-border-design-color;
     }
+    &[data-mode="run"], &[data-mode="view"]  {
+        border: 1px solid #00000000; // invisible
+    }
 
     > [data-show-when] {
         width: 100%;
@@ -229,6 +232,9 @@ $widget-toolbar-padding: 0.5rem;
         }
         [data-show-when="design"], [data-show-when="run"] {
             display: none;
+        }
+        [data-part="value"] {
+            padding: 0.1rem 0.15rem; // to compensate spans for the additiona space given by input controls
         }
     }
 

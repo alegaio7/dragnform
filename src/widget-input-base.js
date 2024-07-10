@@ -44,7 +44,10 @@ class WidgetInputBase extends Widget {
                     input.setAttribute("style", inputStyle);
             });
         }
-
+        var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
+        if (viewModeValue)
+            viewModeValue.setAttribute("style", inputStyle);
+        
         var beforeMarks = this._el.querySelectorAll("[data-part='required-mark'][data-position='before']");
         var afterMarks = this._el.querySelectorAll("[data-part='required-mark'][data-position='after']");
         if (this.required && this.requiredAttributeSettings && this.requiredAttributeSettings.mark) {

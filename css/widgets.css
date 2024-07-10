@@ -116,6 +116,9 @@
 .widget[data-mode=design] {
   border: 1px dashed #ccc;
 }
+.widget[data-mode=run], .widget[data-mode=view] {
+  border: 1px solid rgba(0, 0, 0, 0);
+}
 .widget > [data-show-when] {
   width: 100%;
   height: inherit;
@@ -143,6 +146,9 @@
 }
 .widget[data-mode=view] [data-show-when=design], .widget[data-mode=view] [data-show-when=run] {
   display: none;
+}
+.widget[data-mode=view] [data-part=value] {
+  padding: 0.1rem 0.15rem;
 }
 .widget .widget-button {
   cursor: pointer;

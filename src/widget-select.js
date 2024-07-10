@@ -99,6 +99,10 @@ class WidgetSelect extends Widget {
             });
         }
 
+        var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
+        if (viewModeValue)
+            viewModeValue.setAttribute("style", selectStyle);
+
         var beforeMarks = this._el.querySelectorAll("[data-part='required-mark'][data-position='before']");
         var afterMarks = this._el.querySelectorAll("[data-part='required-mark'][data-position='after']");
         if (this.required && this.requiredAttributeSettings && this.requiredAttributeSettings.mark) {

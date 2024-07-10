@@ -171,6 +171,7 @@ export default class WidgetCommonPropertiesEditor {
             if (typeof firstInput.select === "function")
                 firstInput.select();
         }
+        this._updateControls();
     }
 
     // *******************************************************************************
