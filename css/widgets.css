@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 
-.widget-designer button, .widget-designer input {
+.widget-designer button, .widget-designer input, .widget-designer select {
   font-family: inherit;
   font-size: 16px;
 }

@@ -4,9 +4,9 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
     constructor(options) {
         super(options);
 
-        this._selectOptions = options.widget.selectOptions;
-
-        this._savedselectOptions = [...options.widget.selectOptions];
+        var options = options.widget.selectOptions ?? [];
+        this._selectOptions = options;
+        this._savedSelectOptions = [...options]; // make a copy
 
         this._setupSelectOptions();
         this._dialogContainer.querySelector('[data-action="add"]').addEventListener('click', e => {
@@ -38,11 +38,11 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
         if (selectOption)
             cloneEl.setAttribute('data-id', selectOption.id);
 
-        let txtTitle = cloneEl.querySelector(`[data-part="select-title"]`);
+        let txtTitle = cloneEl.querySelector(`[data-part="option-title"]`);
         txtTitle.setAttribute('id', `txtSelectOptionTitle${newIndex}`);
         txtTitle.value = selectOption ? selectOption.title : '';
 
-        let txtValue = cloneEl.querySelector(`[data-part="select-value"]`);
+        let txtValue = cloneEl.querySelector(`[data-part="option-value"]`);
         txtValue.setAttribute('id', `txtSelectOptionValue${newIndex}`);
         txtValue.value = selectOption ? selectOption.value : '';
 

@@ -13,7 +13,10 @@ class WidgetSelect extends Widget {
         if (!this.requiredAttributeSettings.mark)
             this.requiredAttributeSettings.mark = "*";
 
-        this._selectOptions = fragment.selectOptions ?? [];
+        this._selectOptions = fragment.selectOptions ?? [
+            { title: Strings.Widget_Select_Default_Option1_Title, value: '1' },
+            { title: Strings.Widget_Select_Default_Option2_Title, value: '2' },
+        ];
         this._checkOptions(this._selectOptions);
 
         this._required = false;
@@ -83,12 +86,16 @@ class WidgetSelect extends Widget {
             return;
         super.refresh();
         var style = this._buildSectionsStyleAttribute();
+        var selectStyle = this._buildSectionsStyleAttribute({includeFontWeight: false, includeFontUnderline: false});
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {
                 var label = s.querySelector("[data-part='label']");
                 if (label)
                     label.setAttribute("style", style);
+                var sel = s.querySelector("select");
+                if (sel)
+                    sel.setAttribute("style", selectStyle);
             });
         }
 
@@ -182,8 +189,6 @@ class WidgetSelect extends Widget {
     _checkOptions(value) {
         if (!Array.isArray(value))
             throw new Error("selectOptions must be an array of key-value.");
-        if (value.length < 2)
-            throw new Error("selectOptions must have at least two elements.");
         value.forEach((v, i) => {
             if (v.hasOwnProperty("title") && v.hasOwnProperty("value")) {
                 if (!v.hasOwnProperty("id"))
@@ -196,7 +201,8 @@ class WidgetSelect extends Widget {
 
     _renderDOM(container, parser, html) {
         super._renderDOM(container, parser, html);
-        super.refresh();
+        this._renderSelectOptionElements();
+        this.refresh();
         this._updateContols();
 
         var _t = this;
@@ -205,7 +211,6 @@ class WidgetSelect extends Widget {
         if (selects)
             selects.forEach(input => {
                 input.addEventListener("change", function(e) {
-                    debugger        // TODO ver si el value es el correcto
                     _t.value = e.currentTarget.value;
                 });
             });
@@ -235,6 +240,12 @@ class WidgetSelect extends Widget {
                 selects.forEach(s => {
                     s.value = this.value;
                 });
+            }
+
+            var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
+            if (viewModeValue) {
+                var selectedOption = this._selectOptions.find(o => o.value === this.value);
+                viewModeValue.innerHTML = selectedOption ? selectedOption.title : "&nbsp;";   // render nbsp so to keep the height of the element
             }
         }
     }

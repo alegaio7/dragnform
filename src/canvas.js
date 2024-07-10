@@ -50,6 +50,7 @@ export default class Canvas {
         this._rememberedProperties.set("columns", 12);
         this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
         this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
+        this._rememberedProperties.set("fontUnderline", false);
         this._rememberedProperties.set("height", constants.WIDGET_DEFAULT_HEIGHT);
         this._rememberedProperties.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
         this._rememberedProperties.set("required", false);
@@ -445,8 +446,8 @@ export default class Canvas {
                                 _t.modified = true;
                                 if (changedProps) {
                                     changedProps.forEach(p => {
-                                        if (_t._rememberedProperties.has(p.name))
-                                            _t._rememberedProperties.set(p.name, dlg.widget[p.name]); // don't use the element's .value since its string. use the parsed value instead
+                                        if (_t._rememberedProperties.has(p))
+                                            _t._rememberedProperties.set(p, dlg.widget[p]); // don't use the element's .value since its string. use the parsed value instead
                                     });
                                 }
                                 modal.close();

@@ -69,9 +69,11 @@ class Strings {
     static get Widget_Radio_Options_Label_Value() { return 'Value'; }
     static get Widget_Radio_Options_Title() { return 'Radio options'; }
 
-    static get Widget_Select_Options_Title() { return 'Select options'; }
+    static get Widget_Select_Default_Option1_Title() { return 'Option 1'; }
+    static get Widget_Select_Default_Option2_Title() { return 'Option 2'; }
     static get Widget_Select_Options_Label_Title() { return 'Title'; }
     static get Widget_Select_Options_Label_Value() { return 'Value'; }
+    static get Widget_Select_Options_Title() { return 'Select options'; }
 
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }

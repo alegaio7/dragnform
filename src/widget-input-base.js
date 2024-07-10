@@ -31,13 +31,17 @@ class WidgetInputBase extends Widget {
         if (!this._el || this._batchUpdating)
             return;
         super.refresh();
-        var style = this._buildSectionsStyleAttribute();
+        var labelStyle = this._buildSectionsStyleAttribute();
+        var inputStyle = this._buildSectionsStyleAttribute({includeFontWeight: false, includeFontUnderline: false});
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {
                 var label = s.querySelector("[data-part='label']");
                 if (label)
-                    label.setAttribute("style", style);
+                    label.setAttribute("style", labelStyle);
+                var input = s.querySelector("input");
+                if (input)
+                    input.setAttribute("style", inputStyle);
             });
         }
 

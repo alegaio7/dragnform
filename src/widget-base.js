@@ -362,7 +362,11 @@ export default class Widget {
             throw new Error('handler must be a function');
         if (!dettach)
             this._el.addEventListener('dblclick', async (e) => {
-                await handler(this, e);
+                if (e.target.classList.contains("widget") || 
+                    e.target.classList.contains("widget-label") ||
+                    e.target.hasAttribute("data-show-when")
+                )
+                    await handler(this, e);
             });
         else {
             this._el.removeEventListener('dblclick', handler);
@@ -507,13 +511,21 @@ export default class Widget {
         return false;
     }
 
-    _buildSectionsStyleAttribute() {
+    _buildSectionsStyleAttribute(options) {
+        if (!options)
+            options = {includeFontSize: true, includeFontWeight: true, includeFontUnderline: true};
+        if (options.includeFontSize !== false)
+            options.includeFontSize = true;
+        if (options.includeFontWeight !== false)
+            options.includeFontWeight = true;
+        if (options.includeFontUnderline !== false)
+            options.includeFontUnderline = true;
         var style = "";
-        if (this.fontSize)
+        if (options.includeFontSize && this.fontSize)
             style += `font-size: ${this.fontSize}px;`;
-        if (this.fontWeight)
+        if (options.includeFontWeight && this.fontWeight)
             style += `font-weight: ${this.fontWeight};`;
-        if (this.fontUnderline)
+        if (options.includeFontUnderline && this.fontUnderline)
             style += `text-decoration: underline;`;
         return style;
     }

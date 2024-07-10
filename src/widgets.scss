@@ -55,7 +55,7 @@ $widget-toolbar-padding: 0.5rem;
 
 // designer - toolbar
 .widget-designer {
-    button, input {
+    button, input, select {
         font-family: inherit;
         font-size: $default-font-size;
     }
