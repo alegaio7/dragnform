@@ -110,7 +110,7 @@
   }
 }
 .widget {
-  min-height: 55px;
+  min-height: 15px;
   overflow: hidden;
 }
 .widget[data-mode=design] {
@@ -122,7 +122,7 @@
 .widget > [data-show-when] {
   width: 100%;
   height: inherit;
-  min-height: 4rem;
+  min-height: 1rem;
   flex-direction: column;
 }
 .widget[data-mode=design] [data-show-when=design] {
@@ -148,7 +148,7 @@
   display: none;
 }
 .widget[data-mode=view] [data-part=value] {
-  padding: 0.1rem 0.15rem;
+  padding: 0.1rem 0;
 }
 .widget .widget-button {
   cursor: pointer;
@@ -530,6 +530,7 @@
   border-radius: 0.25rem;
   padding: 15px;
   background-color: #f4f4f4;
+  z-index: 100;
 }
 
 .flyter-buttons-container {

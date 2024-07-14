@@ -64,7 +64,6 @@ export default class Widget {
             this._fontWeight = fragment.fontWeight;
         
         this._inlineEditorChangingLabel = false; // used when updating label from inline editor instead of modal, to avoid modifiying the label and cause a flyter error
-        this._globalClasses = fragment.globalClasses ?? {};
         this._prevColClass = "widget-col-" + this.columns; // stores the previous colClass before a column change, to remove it from the classList
         this._renderMode = constants.WIDGET_MODE_DESIGN;
         this._validations = fragment.validations ?? [];
@@ -77,6 +76,7 @@ export default class Widget {
         this._autoHeight = fragment.autoHeight ?? false;
         this._height = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
         
+        this.globalClasses = fragment.globalClasses ?? {};
         this.id = fragment.id;
         this._inPlaceEditor = false;
         this._label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
@@ -141,9 +141,6 @@ export default class Widget {
             this.refresh();
         }
     }
-
-    get globalClasses() { return this._globalClasses; }
-    set globalClasses(value) { this._globalClasses = value; }
 
     get height() { return this._height; }
     set height(value) { 
@@ -227,6 +224,7 @@ export default class Widget {
             horizontalAlignment: this.horizontalAlignment,
             id: this.id, 
             label: this.label, 
+            tip: this.tip,
             type: this.type,
             verticalAlignment: this.verticalAlignment,
         };

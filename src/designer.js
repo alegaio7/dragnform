@@ -50,8 +50,6 @@ export default class Designer {
         this._options.toolbar.visible = options.toolbar.visible !== true ? false : true;
 
         if (options.widgetRenderOptions) {
-            if (options.widgetRenderOptions.globalClasses)
-                this._options.widgetRenderOptions.globalClasses = options.widgetRenderOptions.globalClasses;
             if (options.widgetRenderOptions.requiredAttributeSettings)
                 this._options.widgetRenderOptions.requiredAttributeSettings = options.widgetRenderOptions.requiredAttributeSettings;
 
@@ -166,8 +164,8 @@ export default class Designer {
                     button: "widget-button",
                     checkbox: "widget-checkbox",
                     checkboxLabel: "widget-checkbox-label",
-                    label: "widget-label",
                     input: "widget-input",
+                    inputLabel: "widget-label",
                     radio: "widget-radio",
                     radioLabel: "widget-radio-label",
                     select: "widget-select",

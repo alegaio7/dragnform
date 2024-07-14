@@ -34,7 +34,7 @@ export default class jsPDFExporter {
         if (!this.options.font.defaultFamily)
             this.options.font.defaultFamily = 'Poppins';
         if (!this.options.cssToPdfScaling)
-            this.options.cssToPdfScaling = constants.DEFAULT_PDF_DPI / constants.DEFAULT_SCREEN_DPI;
+            this.options.cssToPdfScaling = constants.DEFAULT_PDF_DPI / constants.DEFAULT_SCREEN_DPI * constants.DEFAULT_PDF_FONT_SCALING_ADJUSTMENT;
         if (!this.options.devicePixelScaling)
             this.options.devicePixelScaling = window.devicePixelRatio;  // TODO Implement this in the future
 

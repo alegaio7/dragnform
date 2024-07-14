@@ -85,7 +85,7 @@ class Strings {
     static get WidgetEditor_Common_Align_V_Top() { return 'Top'; }
     static get WidgetEditor_Common_AutoHeight() { return 'Auto height'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
-    static get WidgetEditor_Common_Columns() { return 'Columns'; }
+    static get WidgetEditor_Common_Columns() { return 'Width'; }
     static get WidgetEditor_Common_FontProperties() { return 'Font properties'; }
     static get WidgetEditor_Common_FontSize() { return 'Font size'; }
     static get WidgetEditor_Common_FontUnderline() { return 'Underline'; }

@@ -57,17 +57,11 @@ class WidgetButton extends Widget {
         var buttonIdDesign = `btn_design_${this.id}`;
         var buttonIdRun = `btn_run_${this.id}`;
 
-        // this.globalClasses.button is a generic class applies to all buttons
-        // this.buttonClass is a class specific to this button instance
-        var buttonClass = this.globalClasses.button ?? ""
-        if (this.buttonClass) 
-            buttonClass += (buttonClass === "" ? "" : " ") + `${this.buttonClass}`;
-
         var replacements = {
             colClass: "widget-col-" + this.columns,
             hasName: this.name ? true : false,
             id: this.id,
-            buttonClass: buttonClass,
+            buttonClass: this.globalClasses.button ?? "",
             buttonIdDesign: buttonIdDesign,
             buttonIdRun: buttonIdRun,
             hasLabel: this.label ? true : false,

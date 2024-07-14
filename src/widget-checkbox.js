@@ -49,7 +49,11 @@ class WidgetCheckbox extends Widget {
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = {};
+        var localProps = {
+            validations: [
+                { type: "required", value: this.required, message: this.valueRequiredValidationMessage }
+            ]
+        };
         localProps.value = this.value ?? false;
         Object.assign(json, localProps);
         return json;

@@ -1,6 +1,7 @@
 // pdf
 export const DEFAULT_PDF_DPI = 72;              // default PDF DPI
 export const DEFAULT_PDF_FONT_SIZE = 16;        // default PDF DPI
+export const DEFAULT_PDF_FONT_SCALING_ADJUSTMENT = 0.8;    // adjust this to fix font size as seen in screen vs in rendered PDF
 export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
 
 // html

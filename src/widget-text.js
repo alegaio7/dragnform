@@ -53,11 +53,13 @@ class WidgetText extends WidgetInputBase {
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = {validations: [
-            { type: "minLength", value: this.minLength, message: this.minLengthValidationMessage },
-            { type: "maxLength", value: this.maxLength, message: this.maxLengthValidationMessage },
-            { type: "required", value: this.required, message: this.valueRequiredValidationMessage },
-        ]};
+        var localProps = {
+            validations: [
+                { type: "minLength", value: this.minLength, message: this.minLengthValidationMessage },
+                { type: "maxLength", value: this.maxLength, message: this.maxLengthValidationMessage },
+                { type: "required", value: this.required, message: this.valueRequiredValidationMessage },
+            ]
+        };
 
         if (this.pattern)
             localProps.validations.push({ type: "pattern", value: this.pattern.name, message: this.pattern.message });

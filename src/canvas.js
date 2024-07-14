@@ -46,7 +46,7 @@ export default class Canvas {
         this._onModifiedCallback = options.onModified ?? null;
 
         this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
-        this._rememberedProperties.set("autoHeight", true);
+        this._rememberedProperties.set("autoHeight", false);
         this._rememberedProperties.set("columns", 12);
         this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
         this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
@@ -54,6 +54,7 @@ export default class Canvas {
         this._rememberedProperties.set("height", constants.WIDGET_DEFAULT_HEIGHT);
         this._rememberedProperties.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
         this._rememberedProperties.set("required", false);
+        this._rememberedProperties.set("validationMessage", "");
         this._rememberedProperties.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
 
         this._sourceJson = {
@@ -154,9 +155,7 @@ export default class Canvas {
                 throw new Error(`widget type ${o.type} not found.`);
         }
 
-        // if json does not specify any global classes, use the ones passed in the widgetRenderOptions
-        var globalClasses = o.globalClasses ? o.globalClasses : this._widgetRenderOptions.globalClasses;
-        w.globalClasses = globalClasses;
+        w.globalClasses = this._widgetRenderOptions.globalClasses;
 
         // idem with the required attribute settings
         var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._widgetRenderOptions.requiredAttributeSettings;
@@ -331,8 +330,6 @@ export default class Canvas {
 
         this._sourceJson = o;
         if (o.widgetRenderOptions) {
-            if (o.widgetRenderOptions.globalClasses)
-                this._widgetRenderOptions.globalClasses = o.widgetRenderOptions.globalClasses;
             if (o.widgetRenderOptions.requiredAttributeSettings)
                 this._widgetRenderOptions.requiredAttributeSettings = o.widgetRenderOptions.requiredAttributeSettings;
         }

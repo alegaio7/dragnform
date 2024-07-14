@@ -14,8 +14,8 @@ class WidgetSelect extends Widget {
             this.requiredAttributeSettings.mark = "*";
 
         this._selectOptions = fragment.selectOptions ?? [
-            { title: Strings.Widget_Select_Default_Option1_Title, value: '1' },
-            { title: Strings.Widget_Select_Default_Option2_Title, value: '2' },
+            { title: Strings.Widget_Select_Default_Option1_Title, value: Strings.Widget_Select_Default_Option1_Title },
+            { title: Strings.Widget_Select_Default_Option2_Title, value: Strings.Widget_Select_Default_Option2_Title },
         ];
         this._checkOptions(this._selectOptions);
 
@@ -50,7 +50,11 @@ class WidgetSelect extends Widget {
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = {};
+        var localProps = {
+            validations: [
+                { type: "required", value: this.required, message: this.valueRequiredValidationMessage }
+            ]
+        };
         localProps.selectOptions = this.selectOptions;
         localProps.value = this.value;
         Object.assign(json, localProps);

@@ -15,8 +15,8 @@ class WidgetRadio extends Widget {
 
         this._lastIndex = 0;
         this._radioOptions = fragment.radioOptions ?? [
-            { title: Strings.Widget_Radio_Default_Option1_Title, value: 'Y' },
-            { title: Strings.Widget_Radio_Default_Option2_Title, value: 'N' },
+            { title: Strings.Widget_Radio_Default_Option1_Title, value: Strings.Widget_Radio_Default_Option1_Title },
+            { title: Strings.Widget_Radio_Default_Option2_Title, value: Strings.Widget_Radio_Default_Option2_Title },
         ];
         this._checkOptions(this._radioOptions);
 
@@ -59,7 +59,11 @@ class WidgetRadio extends Widget {
 
     exportJson() {
         var json = super.exportJson();
-        var localProps = {};
+        var localProps = {
+            validations: [
+                { type: "required", value: this.required, message: this.valueRequiredValidationMessage }
+            ]
+        };
         localProps.horizontalDisposition = this.horizontalDisposition;
         localProps.radioOptions = this.radioOptions;
         localProps.value = this.value;
