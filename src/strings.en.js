@@ -95,6 +95,8 @@ class Strings {
     static get WidgetEditor_Common_Height() { return 'Height'; }
     static get WidgetEditor_Common_HorizontalAlignment() { return 'Horizontal alignment';}
     static get WidgetEditor_Common_Label() { return 'Label'; }
+    static get WidgetEditor_Common_MoveDownButtonTitle() { return 'Move down'; }
+    static get WidgetEditor_Common_MoveUpButtonTitle() { return 'Move up'; }
     static get WidgetEditor_Common_Required() { return 'Required'; }
     static get WidgetEditor_Common_Tip() { return 'Help text'; }
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
@@ -124,5 +126,4 @@ class Strings {
     // flyter
     static get Flyter_CancelButtonText() { return 'Cancel'; }
     static get Flyter_OkButtonText() { return 'Accept'; }
-
 }

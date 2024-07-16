@@ -74,13 +74,17 @@ class WidgetSelect extends Widget {
         var props = await this._getPropertiesEditorTemplateCore("widget-select", "WidgetSelectPropertiesEditor");
         var replacements = props.replacements;
 
-        replacements.addIcon = Icons.WidgetSelectEditorDialog_AddOptionIcon;
+        replacements.addIcon = Icons.WidgetCommonEditorDialog_AddOptionIcon;
         replacements.addOptionButtonTitle = Strings.WidgetEditor_Select_Add_Option_Button_Title;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
         replacements.labelSelectOptions = Strings.Widget_Select_Options_Title;
+        replacements.moveDownButtonTitle = Strings.WidgetEditor_Common_MoveDownButtonTitle;
+        replacements.moveDownIcon = Icons.WidgetCommonEditorDialog_MoveDownIcon;
+        replacements.moveUpButtonTitle = Strings.WidgetEditor_Common_MoveUpButtonTitle;
+        replacements.moveUpIcon = Icons.WidgetCommonEditorDialog_MoveUpIcon;
         replacements.selectOptionTitleLabel = Strings.Widget_Select_Options_Label_Title;
         replacements.selectOptionValueLabel = Strings.Widget_Select_Options_Label_Value;
-        replacements.removeIcon = Icons.WidgetSelectEditorDialog_RemoveOptionIcon;
+        replacements.removeIcon = Icons.WidgetCommonEditorDialog_RemoveOptionIcon;
         replacements.removeOptionButtonTitle = Strings.WidgetEditor_Select_Remove_Option_Button_Title;
         return props;
     }

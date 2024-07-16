@@ -103,7 +103,15 @@
         </div>
         <div class="widget-dialog-subsection" data-part="radio-options-container">
             <div class="widget-radio-option" data-index="1">
-                <div class="widget-dialog-subsection w-7">
+                <div class="widget-dialog-subsection w-2">
+                    <button type="button" disabled data-action="move-up" title="{{moveUpButtonTitle}}">
+                        <i class="{{moveUpIcon}}"></i>
+                    </button>
+                    <button type="button" data-action="move-down" title="{{moveDownButtonTitle}}">
+                        <i class="{{moveDownIcon}}"></i>
+                    </button>
+                </div>
+                <div class="widget-dialog-subsection w-5">
                     <div class="label-input-container">
                         <label for="txtRadioOptionTitle1">{{radioOptionTitleLabel}}</label>
                         <input data-part="radio-title" type="text" id="txtRadioOptionTitle1" value="{{radioOptionTitle1}}" />
@@ -122,7 +130,15 @@
                 </div>
             </div>
             <div class="widget-radio-option" data-index="2">
-                <div class="widget-dialog-subsection w-7">
+                <div class="widget-dialog-subsection w-2">
+                    <button type="button" data-action="move-up" title="{{moveUpButtonTitle}}">
+                        <i class="{{moveUpIcon}}"></i>
+                    </button>
+                    <button type="button" disabled data-action="move-down" title="{{moveDownButtonTitle}}">
+                        <i class="{{moveDownIcon}}"></i>
+                    </button>
+                </div>
+                <div class="widget-dialog-subsection w-5">
                     <div class="label-input-container">
                         <label for="txtRadioOptionTitle2">{{radioOptionTitleLabel}}</label>
                         <input data-part="radio-title" type="text" id="txtRadioOptionTitle2" value="{{radioOptionTitle2}}" />

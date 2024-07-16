@@ -9,7 +9,7 @@ import WidgetSpacer from './widget-spacer.js';
 import WidgetSelect from './widget-select.js';
 import WidgetText from './widget-text.js';
 import FeatureExtractor from './feature-extractor.js';
-import Sortable, { create } from 'sortablejs';
+import Sortable from 'sortablejs';
 import flyter, {
     withPopupRenderer,
     withInlineRenderer,
@@ -19,7 +19,6 @@ import flyter, {
     withRadioType,
   } from 'flyter';
 import mustache from 'mustache';
-import Widget from './widget-base.js';
 
 export default class Canvas {
     constructor(options) {
@@ -432,7 +431,7 @@ export default class Canvas {
         if (propEditorWithScript) {
             var scriptName = propEditorWithScript.getAttribute("has-script");
             if (!scriptName)
-                scriptName = "/editors/" + editorData.baseName + ".editor.js";
+                scriptName = "./editors/" + editorData.baseName + ".editor.js";
 
             import(/* webpackIgnore: true */ scriptName).then(module => {
                 if (module && module.default) {
@@ -477,21 +476,8 @@ export default class Canvas {
                             onLabelChanged: function(dlg, widget, value) {
                                 widget.label = value;
                             },
-                            onRadioOptionAdd: function(dlg, widget, value) {
-                                var options = widget.radioOptions;
-                                options.push(value);
-                                widget.radioOptions = options;
-                                return options[options.length - 1];
-                            },
-                            onRadioOptionRemove: function(dlg, widget, id) {
-                                var options = widget.radioOptions;
-                                for (var i = 0; i < options.length; i++) {
-                                    if (options[i].id === id) {
-                                        options.splice(i, 1);
-                                        break;
-                                    }
-                                }
-                                widget.radioOptions = options;
+                            onRadioOptionsChanged: function(dlg, widget, radioOptions) {
+                                widget.radioOptions = radioOptions;
                             },
                             onRadioOptionTitleChanged: function(dlg, widget, value, id) {
                                 var options = widget.radioOptions;
@@ -510,21 +496,8 @@ export default class Canvas {
                             onRequiredChanged: function(dlg, widget, value) {
                                 widget.required = value;
                             },
-                            onSelectOptionAdd: function(dlg, widget, value) {
-                                var options = widget.selectOptions;
-                                options.push(value);
-                                widget.selectOptions = options;
-                                return options[options.length - 1];
-                            },
-                            onSelectOptionRemove: function(dlg, widget, id) {
-                                var options = widget.selectOptions;
-                                for (var i = 0; i < options.length; i++) {
-                                    if (options[i].id === id) {
-                                        options.splice(i, 1);
-                                        break;
-                                    }
-                                }
-                                widget.selectOptions = options;
+                            onSelectOptionsChanged: function(dlg, widget, selectOptions) {
+                                widget.selectOptions = selectOptions;
                             },
                             onSelectOptionTitleChanged: function(dlg, widget, value, id) {
                                 var options = widget.selectOptions;

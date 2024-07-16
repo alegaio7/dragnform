@@ -1,5 +1,5 @@
+import functions from "../functions.js";
 import WidgetCommonPropertiesEditor from "./widget-common.editor.js";
-
 export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesEditor {
     constructor(options) {
         super(options);
@@ -17,12 +17,15 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
         }
 
         this._setupRadioOptions();
+        this._setupOrderButtons();
         this._dialogContainer.querySelector('[data-action="add"]').addEventListener('click', e => {
             var cloneEl = this._addRadioOption();
-            if (this._callbacks.onRadioOptionAdd) {
-                var ro = this._callbacks.onRadioOptionAdd(this, this.widget, {title: "", value: "" } );
-                cloneEl.setAttribute("data-id", ro.id);
-            }
+            var id = functions.uuidv4();
+            cloneEl.setAttribute('data-id', id);
+            this._radioOptions.push({id: id, title: "", value: ""});
+            this._setupOrderButtons();
+            if (this._callbacks.onRadioOptionsChanged)
+                this._callbacks.onRadioOptionsChanged(this, this.widget, this._radioOptions);
         });
     }
 
@@ -55,7 +58,7 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
         txtValue.value = radioOption ? radioOption.value : '';
 
         let removeBtn = cloneEl.querySelector('[data-action="remove"]');
-        removeBtn.removeAttribute("style");
+        removeBtn.classList.remove("widget-hide");
 
         radioCont.appendChild(cloneEl);
         this._attachHandlers(cloneEl);
@@ -67,8 +70,16 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
             if (confirm(Strings.WidgetEditor_Radio_Confirm_Remove_Option_Message)) {
                 radioEl.remove();
                 let id = radioEl.getAttribute('data-id');
-                if (this._callbacks.onRadioOptionRemove)
-                    this._callbacks.onRadioOptionRemove(this, this.widget, id);
+
+                for (var i = 0; i < this._radioOptions.length; i++) {
+                    if (this._radioOptions[i].id === id) {
+                        this._radioOptions.splice(i, 1);
+                        break;
+                    }
+                }
+
+                if (this._callbacks.onRadioOptionsChanged)
+                    this._callbacks.onRadioOptionsChanged(this, this.widget, this._radioOptions);
             }
         });
         var evts = ['change', 'input'];
@@ -76,22 +87,84 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
             radioEl.querySelector(`[data-part="radio-title"]`).addEventListener(evts[i], e => {
                 if (this._callbacks.onRadioOptionTitleChanged) {
                     let id = radioEl.getAttribute('data-id');
+                    let ro = this._radioOptions.find(ro => ro.id === id);
+                    ro.title = e.target.value;
                     this._callbacks.onRadioOptionTitleChanged(this, this.widget, e.target.value, id);
                 }
             });
             radioEl.querySelector(`[data-part="radio-value"]`).addEventListener(evts[i], e => {
                 if (this._callbacks.onRadioOptionValueChanged) {
                     let id = radioEl.getAttribute('data-id');
+                    let ro = this._radioOptions.find(ro => ro.id === id);
+                    ro.value = e.target.value;
                     this._callbacks.onRadioOptionValueChanged(this, this.widget, e.target.value, id);
                 }
             });
         }
+
+        radioEl.querySelector('[data-action="move-up"]').addEventListener('click', e => {
+            this._moveRadioOption(radioEl, -1);
+        });
+        radioEl.querySelector('[data-action="move-down"]').addEventListener('click', e => {
+            this._moveRadioOption(radioEl, 1);
+        });
     }
 
     _cancelDialogHandler() {
         super._cancelDialogHandler();
         // restore radio options previously saved since they're an array (ref object)
         this.widget.radioOptions = this._savedRadioOptions;
+    }
+
+    _moveRadioOption(radioEl, direction) {
+        var radioCont = this._dialogContainer.querySelector('[data-part="radio-options-container"]');
+        var radioOptions = radioCont.querySelectorAll('.widget-radio-option');
+        var index = parseInt(radioEl.getAttribute('data-index'));
+        var newIndex = index + direction;
+        if (newIndex < 1 || newIndex > radioOptions.length)
+            return;
+        
+        var refNode, modevNode;
+        var ro;
+        if (direction > 0) { // move down
+            refNode = radioEl;
+            modevNode = radioCont.querySelector(`.widget-radio-option[data-index="${newIndex}"]`);
+        }
+        else { // move up
+            refNode = radioCont.querySelector(`.widget-radio-option[data-index="${newIndex}"]`);
+            modevNode = radioEl;
+        }
+        
+        radioCont.insertBefore(modevNode, refNode);
+
+        ro = this._radioOptions[index - 1];
+        this._radioOptions[index - 1] = this._radioOptions[newIndex - 1];
+        this._radioOptions[newIndex - 1] = ro;
+        
+        this._setupOrderButtons();
+        if (this._callbacks.onRadioOptionsChanged) {
+            this._callbacks.onRadioOptionsChanged(this, this.widget, this._radioOptions);
+        }
+    }
+
+    _setupOrderButtons() {
+        var radioOptions = this._dialogContainer.querySelectorAll('[data-part="radio-options-container"] .widget-radio-option');
+        for (var i = 0; i < radioOptions.length; i++) {
+            var radioEl = radioOptions[i];
+            radioEl.setAttribute('data-index', i + 1);
+            var btnUp = radioEl.querySelector('[data-action="move-up"]');
+            var btnDown = radioEl.querySelector('[data-action="move-down"]');
+            btnUp.removeAttribute("disabled");
+            btnDown.removeAttribute("disabled");
+            let removeBtn = radioEl.querySelector('[data-action="remove"]');
+            removeBtn.classList.remove("widget-hide");
+            if (i == 0) 
+                btnUp.setAttribute("disabled", "disabled");
+            if (i == radioOptions.length - 1)
+                btnDown.setAttribute("disabled", "disabled");
+            if (i < 2)
+                removeBtn.classList.add("widget-hide");
+        }
     }
 
     _setupRadioOptions() {
@@ -110,17 +183,12 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
                 txtValue.value = this._radioOptions[i].value;
 
                 let removeBtn = radioEl.querySelector('[data-action="remove"]');
-                removeBtn.setAttribute("style", "display: none");
+                removeBtn.classList.add("widget-hide");
                 this._attachHandlers(radioEl);
             }
-            else
-            {
+            else {
                 this._addRadioOption(index, this._radioOptions[i]);
             }
         }
-    }
-
-    _updateControls() {
-        super._updateControls();
     }
 }

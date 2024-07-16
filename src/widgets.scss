@@ -53,6 +53,11 @@ $widget-toolbar-padding: 0.5rem;
     box-sizing: border-box;
 }
 
+// general use
+.widget-hide {
+    display: none;
+}
+
 // designer - toolbar
 .widget-designer {
     button, input, select {
@@ -631,6 +636,9 @@ $widget-section-padding: 0.25rem;
         margin-bottom: 0.25rem;
         width: 100%;
 
+        &.w-1 {
+            width: calc(8.33% - $widget-section-padding / 12 * 2 - 1px);
+        }
         &.w-2 {
             width: calc(16.66% - $widget-section-padding / 6 * 2 - 1px);
         }
@@ -652,6 +660,15 @@ $widget-section-padding: 0.25rem;
         &.w-8 {
             width: calc(66.66% - $widget-section-padding / 1.25 * 2 - 1px);
         }
+        &.w-9 {
+            width: calc(75% - $widget-section-padding / 1.11 * 2 - 1px);
+        }
+        &.w-10 {
+            width: calc(83.33% - $widget-section-padding / 1 * 2 - 1px);
+        }
+        &.w-11 {
+            width: calc(91.63% - $widget-section-padding / 0.909 * 2 - 1px);
+        }               
     }
 }
 

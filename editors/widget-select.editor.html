@@ -97,7 +97,15 @@
         </div>
         <div class="widget-dialog-subsection" data-part="select-options-container">
             <div class="widget-select-option" data-index="1">
-                <div class="widget-dialog-subsection w-7">
+                <div class="widget-dialog-subsection w-2">
+                    <button type="button" disabled data-action="move-up" title="{{moveUpButtonTitle}}">
+                        <i class="{{moveUpIcon}}"></i>
+                    </button>
+                    <button type="button" data-action="move-down" title="{{moveDownButtonTitle}}">
+                        <i class="{{moveDownIcon}}"></i>
+                    </button>
+                </div>                
+                <div class="widget-dialog-subsection w-5">
                     <div class="label-input-container">
                         <label for="txtSelectOptionTitle1">{{selectOptionTitleLabel}}</label>
                         <input data-part="option-title" type="text" id="txtSelectOptionTitle1" value="{{selectOptionTitle1}}" />
@@ -116,7 +124,15 @@
                 </div>
             </div>
             <div class="widget-select-option" data-index="2">
-                <div class="widget-dialog-subsection w-7">
+                <div class="widget-dialog-subsection w-2">
+                    <button type="button" disabled data-action="move-up" title="{{moveUpButtonTitle}}">
+                        <i class="{{moveUpIcon}}"></i>
+                    </button>
+                    <button type="button" data-action="move-down" title="{{moveDownButtonTitle}}">
+                        <i class="{{moveDownIcon}}"></i>
+                    </button>
+                </div>                
+                <div class="widget-dialog-subsection w-5">
                     <div class="label-input-container">
                         <label for="txtSelectOptionTitle2">{{selectOptionTitleLabel}}</label>
                         <input data-part="option-title" type="text" id="txtSelectOptionTitle2" value="{{selectOptionTitle2}}" />

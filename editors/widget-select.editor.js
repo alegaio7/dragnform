@@ -1,5 +1,5 @@
+import functions from "../functions.js";
 import WidgetCommonPropertiesEditor from "./widget-common.editor.js";
-
 export default class WidgetSelectPropertiesEditor extends WidgetCommonPropertiesEditor {
     constructor(options) {
         super(options);
@@ -9,12 +9,15 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
         this._savedSelectOptions = [...options]; // make a copy
 
         this._setupSelectOptions();
+        this._setupOrderButtons();
         this._dialogContainer.querySelector('[data-action="add"]').addEventListener('click', e => {
             var cloneEl = this._addSelectOption();
-            if (this._callbacks.onSelectOptionAdd) {
-                var ro = this._callbacks.onSelectOptionAdd(this, this.widget, {title: "", value: "" } );
-                cloneEl.setAttribute("data-id", ro.id);
-            }
+            var id = functions.uuidv4();
+            cloneEl.setAttribute('data-id', id);
+            this._selectOptions.push({id: id, title: "", value: ""});
+            this._setupOrderButtons();
+            if (this._callbacks.onSelectOptionsChanged)
+                var ro = this._callbacks.onSelectOptionsChanged(this, this.widget, this._selectOptions );
         });
     }
 
@@ -59,8 +62,16 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
             if (confirm(Strings.WidgetEditor_Select_Confirm_Remove_Option_Message)) {
                 optionEl.remove();
                 let id = optionEl.getAttribute('data-id');
-                if (this._callbacks.onSelectOptionRemove)
-                    this._callbacks.onSelectOptionRemove(this, this.widget, id);
+
+                for (var i = 0; i < this._selectOptions.length; i++) {
+                    if (this._selectOptions[i].id === id) {
+                        this._selectOptions.splice(i, 1);
+                        break;
+                    }
+                }
+
+                if (this._callbacks.onSelectOptionsChanged)
+                    this._callbacks.onSelectOptionsChanged(this, this.widget, this._selectOptions);
             }
         });
         var evts = ['change', 'input'];
@@ -78,12 +89,70 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
                 }
             });
         }
+
+        optionEl.querySelector('[data-action="move-up"]').addEventListener('click', e => {
+            this._moveSelectOption(optionEl, -1);
+        });
+        optionEl.querySelector('[data-action="move-down"]').addEventListener('click', e => {
+            this._moveSelectOption(optionEl, 1);
+        });
     }
 
     _cancelDialogHandler() {
         super._cancelDialogHandler();
-        // restore radio options previously saved since they're an array (ref object)
+        // restore select options previously saved since they're an array (ref object)
         this.widget.selectOptions = this._savedSelectOptions;
+    }
+
+    _moveSelectOption(optionEl, direction) {
+        var selectCont = this._dialogContainer.querySelector('[data-part="select-options-container"]');
+        var selectOptions = selectCont.querySelectorAll('.widget-select-option');
+        var index = parseInt(optionEl.getAttribute('data-index'));
+        var newIndex = index + direction;
+        if (newIndex < 1 || newIndex > selectOptions.length)
+            return;
+        
+        var refNode, modevNode;
+        var ro;
+        if (direction > 0) { // move down
+            refNode = optionEl;
+            modevNode = selectCont.querySelector(`.widget-select-option[data-index="${newIndex}"]`);
+        }
+        else { // move up
+            refNode = selectCont.querySelector(`.widget-select-option[data-index="${newIndex}"]`);
+            modevNode = optionEl;
+        }
+        
+        selectCont.insertBefore(modevNode, refNode);
+
+        ro = this._selectOptions[index - 1];
+        this._selectOptions[index - 1] = this._selectOptions[newIndex - 1];
+        this._selectOptions[newIndex - 1] = ro;
+        
+        this._setupOrderButtons();
+        if (this._callbacks.onSelectOptionsChanged) {
+            this._callbacks.onSelectOptionsChanged(this, this.widget, this._selectOptions);
+        }
+    }
+
+    _setupOrderButtons() {
+        var selectOptions = this._dialogContainer.querySelectorAll('[data-part="select-options-container"] .widget-select-option');
+        for (var i = 0; i < selectOptions.length; i++) {
+            var optionEl = selectOptions[i];
+            optionEl.setAttribute('data-index', i + 1);
+            var btnUp = optionEl.querySelector('[data-action="move-up"]');
+            var btnDown = optionEl.querySelector('[data-action="move-down"]');
+            btnUp.removeAttribute("disabled");
+            btnDown.removeAttribute("disabled");
+            let removeBtn = optionEl.querySelector('[data-action="remove"]');
+            removeBtn.classList.remove("widget-hide");
+            if (i == 0) 
+                btnUp.setAttribute("disabled", "disabled");
+            if (i == selectOptions.length - 1)
+                btnDown.setAttribute("disabled", "disabled");
+            if (i < 2)
+                removeBtn.classList.add("widget-hide");
+        }
     }
 
     _setupSelectOptions() {
@@ -110,9 +179,5 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
                 this._addSelectOption(index, this._selectOptions[i]);
             }
         }
-    }
-
-    _updateControls() {
-        super._updateControls();
     }
 }

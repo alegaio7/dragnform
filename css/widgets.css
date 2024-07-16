@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+.widget-hide {
+  display: none;
+}
+
 .widget-designer button, .widget-designer input, .widget-designer select {
   font-family: inherit;
   font-size: 16px;
@@ -476,6 +480,9 @@
   margin-bottom: 0.25rem;
   width: 100%;
 }
+.widget-dialog-section .widget-dialog-subsection.w-1 {
+  width: calc(8.33% - 0.0416666667rem - 1px);
+}
 .widget-dialog-section .widget-dialog-subsection.w-2 {
   width: calc(16.66% - 0.0833333333rem - 1px);
 }
@@ -496,6 +503,15 @@
 }
 .widget-dialog-section .widget-dialog-subsection.w-8 {
   width: calc(66.66% - 0.4rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-9 {
+  width: calc(75% - 0.4504504505rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-10 {
+  width: calc(83.33% - 0.5rem - 1px);
+}
+.widget-dialog-section .widget-dialog-subsection.w-11 {
+  width: calc(91.63% - 0.5500550055rem - 1px);
 }
 
 .widget-dialog-section-title {
