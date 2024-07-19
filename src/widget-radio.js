@@ -45,10 +45,13 @@ class WidgetRadio extends Widget {
 
     get radioOptions() { return this._radioOptions; }
     set radioOptions(value) {
+        var prevValue = this.value;
         this._checkOptions(value);
         this._radioOptions = value;
         this._renderRadioOptionElements();
         this.refresh();
+        if (prevValue)
+            this.value = prevValue;
     }
 
     get required() { return this._required; }
@@ -86,22 +89,22 @@ class WidgetRadio extends Widget {
         var props = await this._getPropertiesEditorTemplateCore("widget-radio", "WidgetRadioPropertiesEditor");
         var replacements = props.replacements;
 
-        replacements.addIcon = Icons.WidgetCommonEditorDialog_AddOptionIcon;
+        replacements.addIcon = Icons.WidgetEditor_Common_AddOptionIcon;
         replacements.addOptionButtonTitle = Strings.WidgetEditor_Radio_Add_Option_Button_Title;
         replacements.labelRadioHorizontal = Strings.WidgetEditor_Radio_Widget_Horizontal;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
         replacements.labelRadioOptions = Strings.Widget_Radio_Options_Title;
         replacements.moveDownButtonTitle = Strings.WidgetEditor_Common_MoveDownButtonTitle;
-        replacements.moveDownIcon = Icons.WidgetCommonEditorDialog_MoveDownIcon;
+        replacements.moveDownIcon = Icons.WidgetEditor_Common_MoveDownIcon;
         replacements.moveUpButtonTitle = Strings.WidgetEditor_Common_MoveUpButtonTitle;
-        replacements.moveUpIcon = Icons.WidgetCommonEditorDialog_MoveUpIcon;
+        replacements.moveUpIcon = Icons.WidgetEditor_Common_MoveUpIcon;
         replacements.radioOptionTitleLabel = Strings.Widget_Radio_Options_Label_Title;
         replacements.radioOptionValueLabel = Strings.Widget_Radio_Options_Label_Value;
         replacements.radioOptionTitle1 = this._radioOptions[0].title;
         replacements.radioOptionValue1 = this._radioOptions[0].value;
         replacements.radioOptionTitle2 = this._radioOptions[1].title;
         replacements.radioOptionValue2 = this._radioOptions[1].value;
-        replacements.removeIcon = Icons.WidgetCommonEditorDialog_RemoveOptionIcon;
+        replacements.removeIcon = Icons.WidgetEditor_Common_RemoveOptionIcon;
         replacements.removeOptionButtonTitle = Strings.WidgetEditor_Radio_Remove_Option_Button_Title;
         return props;
     }
@@ -222,7 +225,7 @@ class WidgetRadio extends Widget {
                 }
             });
             if (!valueOk)
-                throw new Error(`Invalid value '${value}' for radio widget.`);
+                return;
         }
         this.refresh();
     }

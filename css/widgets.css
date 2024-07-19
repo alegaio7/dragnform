@@ -519,6 +519,23 @@
   margin: 1rem 0 0 0;
 }
 
+.widget-select-option, .widget-radio-option {
+  min-height: 2.5rem;
+}
+
+.widget-dialog-hide-window {
+  float: right;
+  margin-top: 0.35rem;
+}
+
+.widget-properties-editor {
+  transition: opacity 0.5s ease-out;
+}
+
+.widget-properties-editor:has(.widget-dialog-hide-window:hover) {
+  opacity: 0.15;
+}
+
 [class^=flyter] {
   font-family: "Poppins";
 }

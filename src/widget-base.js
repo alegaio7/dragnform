@@ -3,6 +3,7 @@ import flyter from 'flyter';
 import { createPopper } from '@popperjs/core';
 import mustache from 'mustache';
 import functions from './functions.js';
+import Icons from './icons.js';
 
 export default class Widget {
     static _cachedTemplates = new Map();
@@ -562,6 +563,8 @@ export default class Widget {
             labelVerticalAlignment: Strings.WidgetEditor_Common_VerticalAlignment,
             labelWidgetLabel: Strings.WidgetEditor_Common_Label,
             labelWidgetTip: Strings.WidgetEditor_Common_Tip,
+            windowHideIconClass: Icons.WidgetEditor_Common_Window_Hide_Icon,
+            windowHideIconTitle: Strings.WidgetEditor_Common_Window_Hide_Icon_Title,
         };
     }
 

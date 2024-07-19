@@ -1,3 +1,5 @@
+// This class is not exported as a module since it must be loaded as an inline script in the HTML file
+// in order to provide localization for all resources
 class Strings {
     // canvas
     static get Canvas_NewForm_Name() { return "New form"; }
@@ -102,6 +104,7 @@ class Strings {
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
     static get WidgetEditor_Common_Widget_ValueRequiredMessage() { return 'Validation message'; }
+    static get WidgetEditor_Common_Window_Hide_Icon_Title() { return 'Hide window on hover'; }
 
     static get WidgetEditor_Number_Widget_MinValue() { return 'Min.'; }
     static get WidgetEditor_Number_Widget_MinValueValidationMessage() { return 'Validation message'; }

@@ -36,10 +36,13 @@ class WidgetSelect extends Widget {
 
     get selectOptions() { return this._selectOptions; }
     set selectOptions(value) {
+        var prevValue = this.value;
         this._checkOptions(value);
         this._selectOptions = value;
         this._renderSelectOptionElements();
         this.refresh();
+        if (prevValue)
+            this.value = prevValue;
     }
 
     get required() { return this._required; }
@@ -74,17 +77,17 @@ class WidgetSelect extends Widget {
         var props = await this._getPropertiesEditorTemplateCore("widget-select", "WidgetSelectPropertiesEditor");
         var replacements = props.replacements;
 
-        replacements.addIcon = Icons.WidgetCommonEditorDialog_AddOptionIcon;
+        replacements.addIcon = Icons.WidgetEditor_Common_AddOptionIcon;
         replacements.addOptionButtonTitle = Strings.WidgetEditor_Select_Add_Option_Button_Title;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
         replacements.labelSelectOptions = Strings.Widget_Select_Options_Title;
         replacements.moveDownButtonTitle = Strings.WidgetEditor_Common_MoveDownButtonTitle;
-        replacements.moveDownIcon = Icons.WidgetCommonEditorDialog_MoveDownIcon;
+        replacements.moveDownIcon = Icons.WidgetEditor_Common_MoveDownIcon;
         replacements.moveUpButtonTitle = Strings.WidgetEditor_Common_MoveUpButtonTitle;
-        replacements.moveUpIcon = Icons.WidgetCommonEditorDialog_MoveUpIcon;
+        replacements.moveUpIcon = Icons.WidgetEditor_Common_MoveUpIcon;
         replacements.selectOptionTitleLabel = Strings.Widget_Select_Options_Label_Title;
         replacements.selectOptionValueLabel = Strings.Widget_Select_Options_Label_Value;
-        replacements.removeIcon = Icons.WidgetCommonEditorDialog_RemoveOptionIcon;
+        replacements.removeIcon = Icons.WidgetEditor_Common_RemoveOptionIcon;
         replacements.removeOptionButtonTitle = Strings.WidgetEditor_Select_Remove_Option_Button_Title;
         return props;
     }
@@ -172,7 +175,7 @@ class WidgetSelect extends Widget {
                 }
             });
             if (!valueOk)
-                throw new Error(`Invalid value '${value}' for select widget.`);
+                return;
         }
         this.refresh();
     }
@@ -240,6 +243,7 @@ class WidgetSelect extends Widget {
                     optionEl.value = option.value;
                     s.appendChild(optionEl);
                 });
+                s.value = null;
             });
         }
     }

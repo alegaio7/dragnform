@@ -44,6 +44,7 @@ export default class Designer {
         this._container = c;
 
         this._options = this._getDefaultOptions();
+        this._options.liveEditsPreview = options.liveEditsPreview !== true ? false : true;
 
         if (options.toolbar)
             this._options.toolbar = options.toolbar;
@@ -118,14 +119,15 @@ export default class Designer {
     /// Private methods
     /// ********************************************************************************************************************
 
-    _createCanvas(widgetRenderOptions) {
+    _createCanvas(widgetRenderOptions, liveEditsPreview) {
         var el = this._container.querySelector('.widget-container');
         var editorsEl = this._container.querySelector('.widget-editors-container');
         this._canvas = new Canvas({
+            renderMode: constants.WIDGET_MODE_DESIGN,
+            liveEditsPreview: liveEditsPreview,
             widgetsContainerEl: el, 
             widgetEditorsContainerEl: editorsEl, 
             widgetRenderOptions: widgetRenderOptions, 
-            renderMode: constants.WIDGET_MODE_DESIGN,
             onModified: (value) => {
                 this._updateUI();
             }
@@ -151,6 +153,7 @@ export default class Designer {
 
     _getDefaultOptions() {
         return {
+            liveEditsPreview: false,
             nullValue: '(null)',
             toolbar: {
                 visible: true
@@ -223,7 +226,7 @@ export default class Designer {
                         return;
                 this._options = this._getDefaultOptions();
                 this._canvas.clearCanvas();
-                this._createCanvas(this._options.widgetRenderOptions);
+                this._createCanvas(this._options.widgetRenderOptions, this._options.liveEditsPreview);
             } else if (am.action === "export-json") {
                 var json = this.exportJson();
                 if (this._callbacks.onExportToJson) {
@@ -448,7 +451,7 @@ export default class Designer {
             });
         });
 
-        this._createCanvas(options.widgetRenderOptions);
+        this._createCanvas(options.widgetRenderOptions, options.liveEditsPreview);
     }
 
     _updateUI() {

@@ -37,12 +37,13 @@ export default class Canvas {
         if (constants.validModes.indexOf(this._renderMode) === -1)
             throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
     
-        this._widgetRenderOptions = options.widgetRenderOptions ?? {};
         this._container = options.widgetsContainerEl; 
         this._editorsContainer = options.widgetEditorsContainerEl;
         this._editorTemplates = new Map();
+        this.liveEditsPreview = options.liveEditsPreview ?? false;
         this._modified = false;
         this._onModifiedCallback = options.onModified ?? null;
+        this._widgetRenderOptions = options.widgetRenderOptions ?? {};
 
         this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
         this._rememberedProperties.set("autoHeight", false);
@@ -435,94 +436,100 @@ export default class Canvas {
 
             import(/* webpackIgnore: true */ scriptName).then(module => {
                 if (module && module.default) {
+                    var requiredCallbacks =  {
+                        onAccept: function(dlg, changedProps) {
+                            _t.modified = true;
+                            if (changedProps) {
+                                changedProps.forEach(p => {
+                                    if (_t._rememberedProperties.has(p))
+                                        _t._rememberedProperties.set(p, dlg.widget[p]); // don't use the element's .value since its string. use the parsed value instead
+                                });
+                            }
+                            modal.close();
+                        },
+                        onCancel: function(dlg) {
+                            _t.modified = savedModified;
+                            modal.close();
+                        },
+                    };
+
+                    var optionalCallbacks = {
+                        onAutoHeightChanged: function(dlg, widget, value) {
+                            widget.autoHeight = value;
+                        },
+
+                        onColumnsChanged: function(dlg, widget, value) {
+                            widget.columns = value;
+                        },
+                        onFontSizeChanged: function(dlg, widget, value) {
+                            widget.fontSize = value;
+                        },
+                        onFontUnderlineChanged: function(dlg, widget, value) {
+                            widget.fontUnderline = value;
+                        },                            
+                        onFontWeightChanged: function(dlg, widget, value) {
+                            widget.fontWeight = value;
+                        },                      
+                        onHeightChanged: function(dlg, widget, value) {
+                            widget.height = value;
+                        },
+                        onHorizontalAlignmentChanged: function(dlg, widget, value) {
+                            widget.horizontalAlignment = value;
+                        },
+                        onLabelChanged: function(dlg, widget, value) {
+                            widget.label = value;
+                        },
+                        onRadioOptionsChanged: function(dlg, widget, radioOptions) {
+                            widget.radioOptions = radioOptions;
+                        },
+                        onRadioOptionTitleChanged: function(dlg, widget, value, id) {
+                            var options = widget.radioOptions;
+                            var ro = options.find(r => r.id === id);
+                            if (ro)
+                                ro.title = value;
+                            widget.radioOptions = options;
+                        },
+                        onRadioOptionValueChanged: function(dlg, widget, value, id) {
+                            var options = widget.radioOptions;
+                            var ro = options.find(r => r.id === id);
+                            if (ro)
+                                ro.value = value;
+                            widget.radioOptions = options;
+                        },
+                        onRequiredChanged: function(dlg, widget, value) {
+                            widget.required = value;
+                        },
+                        onSelectOptionsChanged: function(dlg, widget, selectOptions) {
+                            widget.selectOptions = selectOptions;
+                        },
+                        onSelectOptionTitleChanged: function(dlg, widget, value, id) {
+                            var options = widget.selectOptions;
+                            var ro = options.find(r => r.id === id);
+                            if (ro)
+                                ro.title = value;
+                            widget.selectOptions = options;
+                        },
+                        onSelectOptionValueChanged: function(dlg, widget, value, id) {
+                            var options = widget.selectOptions;
+                            var ro = options.find(r => r.id === id);
+                            if (ro)
+                                ro.value = value;
+                            widget.selectOptions = options;
+                        },
+                        onTipChanged: function(dlg, widget, value) {
+                            widget.tip = value;
+                        },
+                        onVerticalAlignmentChanged: function(dlg, widget, value) {
+                            widget.verticalAlignment = value;
+                        },
+                        onHorizontalDispositionChanged: function(dlg, widget, value) {
+                            widget.horizontalDisposition = value;
+                        }
+                    };
+
                     var options = {
                         widget: sender,
-                        callbacks: {
-                            onAccept: function(dlg, changedProps) {
-                                _t.modified = true;
-                                if (changedProps) {
-                                    changedProps.forEach(p => {
-                                        if (_t._rememberedProperties.has(p))
-                                            _t._rememberedProperties.set(p, dlg.widget[p]); // don't use the element's .value since its string. use the parsed value instead
-                                    });
-                                }
-                                modal.close();
-                            },
-                            onAutoHeightChanged: function(dlg, widget, value) {
-                                widget.autoHeight = value;
-                            },
-                            onCancel: function(dlg) {
-                                _t.modified = savedModified;
-                                modal.close();
-                            },
-                            onColumnsChanged: function(dlg, widget, value) {
-                                widget.columns = value;
-                            },
-                            onFontSizeChanged: function(dlg, widget, value) {
-                                widget.fontSize = value;
-                            },
-                            onFontUnderlineChanged: function(dlg, widget, value) {
-                                widget.fontUnderline = value;
-                            },                            
-                            onFontWeightChanged: function(dlg, widget, value) {
-                                widget.fontWeight = value;
-                            },                      
-                            onHeightChanged: function(dlg, widget, value) {
-                                widget.height = value;
-                            },
-                            onHorizontalAlignmentChanged: function(dlg, widget, value) {
-                                widget.horizontalAlignment = value;
-                            },
-                            onLabelChanged: function(dlg, widget, value) {
-                                widget.label = value;
-                            },
-                            onRadioOptionsChanged: function(dlg, widget, radioOptions) {
-                                widget.radioOptions = radioOptions;
-                            },
-                            onRadioOptionTitleChanged: function(dlg, widget, value, id) {
-                                var options = widget.radioOptions;
-                                var ro = options.find(r => r.id === id);
-                                if (ro)
-                                    ro.title = value;
-                                widget.radioOptions = options;
-                            },
-                            onRadioOptionValueChanged: function(dlg, widget, value, id) {
-                                var options = widget.radioOptions;
-                                var ro = options.find(r => r.id === id);
-                                if (ro)
-                                    ro.value = value;
-                                widget.radioOptions = options;
-                            },
-                            onRequiredChanged: function(dlg, widget, value) {
-                                widget.required = value;
-                            },
-                            onSelectOptionsChanged: function(dlg, widget, selectOptions) {
-                                widget.selectOptions = selectOptions;
-                            },
-                            onSelectOptionTitleChanged: function(dlg, widget, value, id) {
-                                var options = widget.selectOptions;
-                                var ro = options.find(r => r.id === id);
-                                if (ro)
-                                    ro.title = value;
-                                widget.selectOptions = options;
-                            },
-                            onSelectOptionValueChanged: function(dlg, widget, value, id) {
-                                var options = widget.selectOptions;
-                                var ro = options.find(r => r.id === id);
-                                if (ro)
-                                    ro.value = value;
-                                widget.selectOptions = options;
-                            },
-                            onTipChanged: function(dlg, widget, value) {
-                                widget.tip = value;
-                            },
-                            onVerticalAlignmentChanged: function(dlg, widget, value) {
-                                widget.verticalAlignment = value;
-                            },
-                            onHorizontalDispositionChanged: function(dlg, widget, value) {
-                                widget.horizontalDisposition = value;
-                            }
-                        },
+                        callbacks: !this.liveEditsPreview ? requiredCallbacks : Object.assign(optionalCallbacks, requiredCallbacks),
                         dialogContainer: this._editorsContainer
                     };
                     var editor = new module.default(options);

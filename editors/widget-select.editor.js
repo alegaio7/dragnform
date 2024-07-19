@@ -5,7 +5,7 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
         super(options);
 
         var options = options.widget.selectOptions ?? [];
-        this._selectOptions = options;
+        this._selectOptions = [...options];
         this._savedSelectOptions = [...options]; // make a copy
 
         this._setupSelectOptions();
@@ -17,7 +17,10 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
             this._selectOptions.push({id: id, title: "", value: ""});
             this._setupOrderButtons();
             if (this._callbacks.onSelectOptionsChanged)
-                var ro = this._callbacks.onSelectOptionsChanged(this, this.widget, this._selectOptions );
+                this._callbacks.onSelectOptionsChanged(this, this.widget, this._selectOptions );
+            var inp = cloneEl.querySelector(`[data-part="option-title"]`);
+            if (inp)
+                inp.focus();
         });
     }
 
@@ -29,6 +32,11 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
     // *******************************************************************************
     // Private methods
     // *******************************************************************************
+    _acceptDialogHandler() {
+        this.widget.selectOptions = this._selectOptions;
+        super._acceptDialogHandler()
+    }
+
     _addSelectOption(newIndex, selectOption) {
         if (!newIndex)
             newIndex = this._selectOptions.length + 1;
@@ -74,19 +82,29 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
                     this._callbacks.onSelectOptionsChanged(this, this.widget, this._selectOptions);
             }
         });
+
+        optionEl.querySelector(`[data-part="option-title"]`).addEventListener("blur", e => {
+            // copy title to value if value is empty
+            var inpValue = optionEl.querySelector(`[data-part="option-value"]`);
+            if (inpValue && !inpValue.value)
+                inpValue.value = e.target.value;
+        });
+
         var evts = ['change', 'input'];
         for (var i = 0; i < evts.length; i++) {
             optionEl.querySelector(`[data-part="option-title"]`).addEventListener(evts[i], e => {
-                if (this._callbacks.onSelectOptionTitleChanged) {
-                    let id = optionEl.getAttribute('data-id');
+                let id = optionEl.getAttribute('data-id');
+                let so = this._selectOptions.find(ro => ro.id === id);
+                so.title = e.target.value;
+                if (this._callbacks.onSelectOptionTitleChanged)
                     this._callbacks.onSelectOptionTitleChanged(this, this.widget, e.target.value, id);
-                }
             });
             optionEl.querySelector(`[data-part="option-value"]`).addEventListener(evts[i], e => {
-                if (this._callbacks.onSelectOptionValueChanged) {
-                    let id = optionEl.getAttribute('data-id');
+                let id = optionEl.getAttribute('data-id');
+                let so = this._selectOptions.find(ro => ro.id === id);
+                so.value = e.target.value;
+                if (this._callbacks.onSelectOptionValueChanged)
                     this._callbacks.onSelectOptionValueChanged(this, this.widget, e.target.value, id);
-                }
             });
         }
 

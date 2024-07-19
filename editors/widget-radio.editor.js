@@ -4,8 +4,7 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
     constructor(options) {
         super(options);
 
-        this._radioOptions = options.widget.radioOptions;
-
+        this._radioOptions = [...options.widget.radioOptions];
         this._savedRadioOptions = [...options.widget.radioOptions];
 
         this.chkHorizontalDisposition = this._dialogContainer.querySelector('#chkWidgetPropRadioHorizontal');
@@ -26,6 +25,9 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
             this._setupOrderButtons();
             if (this._callbacks.onRadioOptionsChanged)
                 this._callbacks.onRadioOptionsChanged(this, this.widget, this._radioOptions);
+            var inp = cloneEl.querySelector(`[data-part="radio-title"]`);
+            if (inp)
+                inp.focus();
         });
     }
 
@@ -37,6 +39,11 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
     // *******************************************************************************
     // Private methods
     // *******************************************************************************
+    _acceptDialogHandler() {
+        this.widget.radioOptions = this._radioOptions;
+        super._acceptDialogHandler()
+    }
+
     _addRadioOption(newIndex, radioOption) {
         if (!newIndex)
             newIndex = this._radioOptions.length + 1;
@@ -82,23 +89,29 @@ export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesE
                     this._callbacks.onRadioOptionsChanged(this, this.widget, this._radioOptions);
             }
         });
+
+        radioEl.querySelector(`[data-part="radio-title"]`).addEventListener("blur", e => {
+            // copy title to value if value is empty
+            var inpValue = radioEl.querySelector(`[data-part="radio-value"]`);
+            if (inpValue && !inpValue.value)
+                inpValue.value = e.target.value;
+        });
+
         var evts = ['change', 'input'];
         for (var i = 0; i < evts.length; i++) {
             radioEl.querySelector(`[data-part="radio-title"]`).addEventListener(evts[i], e => {
-                if (this._callbacks.onRadioOptionTitleChanged) {
-                    let id = radioEl.getAttribute('data-id');
-                    let ro = this._radioOptions.find(ro => ro.id === id);
-                    ro.title = e.target.value;
+                let id = radioEl.getAttribute('data-id');
+                let ro = this._radioOptions.find(ro => ro.id === id);
+                ro.title = e.target.value;
+                if (this._callbacks.onRadioOptionTitleChanged)
                     this._callbacks.onRadioOptionTitleChanged(this, this.widget, e.target.value, id);
-                }
             });
             radioEl.querySelector(`[data-part="radio-value"]`).addEventListener(evts[i], e => {
-                if (this._callbacks.onRadioOptionValueChanged) {
-                    let id = radioEl.getAttribute('data-id');
-                    let ro = this._radioOptions.find(ro => ro.id === id);
-                    ro.value = e.target.value;
+                let id = radioEl.getAttribute('data-id');
+                let ro = this._radioOptions.find(ro => ro.id === id);
+                ro.value = e.target.value;
+                if (this._callbacks.onRadioOptionValueChanged)
                     this._callbacks.onRadioOptionValueChanged(this, this.widget, e.target.value, id);
-                }
             });
         }
 

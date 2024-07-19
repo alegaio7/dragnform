@@ -18,9 +18,9 @@ export default class Icons {
     static get Toolbar_ValidateForm_Icon() { return 'fa fa-list-check'; }
     static get Toolbar_ViewMode_Icon() { return 'fa fa-regular fa-eye'; }
 
-    static get WidgetCommonEditorDialog_AddOptionIcon() { return 'fa fa-plus'; }
-    static get WidgetCommonEditorDialog_MoveDownIcon() { return 'fa fa-angle-down'; }
-    static get WidgetCommonEditorDialog_MoveUpIcon() { return 'fa fa-angle-up'; }
-    static get WidgetCommonEditorDialog_RemoveOptionIcon() { return 'fa fa-regular fa-trash-can'; }
-
+    static get WidgetEditor_Common_AddOptionIcon() { return 'fa fa-plus'; }
+    static get WidgetEditor_Common_MoveDownIcon() { return 'fa fa-angle-down'; }
+    static get WidgetEditor_Common_MoveUpIcon() { return 'fa fa-angle-up'; }
+    static get WidgetEditor_Common_RemoveOptionIcon() { return 'fa fa-regular fa-trash-can'; }
+    static get WidgetEditor_Common_Window_Hide_Icon() { return 'fa fa-eye-slash'; }
 }

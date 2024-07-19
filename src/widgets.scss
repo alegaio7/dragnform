@@ -37,6 +37,7 @@ $widget-properties-button-width: 1rem;
 $widger-radio-button-height: 2rem;
 $widget-remove-button-color: #f00;
 $widget-remove-button-width: 1rem;
+$widget-section-padding: 0.25rem;
 $widget-tip-color: #888;
 $widget-toolbar-border-color: #ccc;
 $widget-toolbar-button-bg-color: #eee;
@@ -617,8 +618,6 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-
-$widget-section-padding: 0.25rem;
 .widget-dialog-section {
     border: 1px solid $widget-border-design-color;
     border-radius: $widget-designer-radius;
@@ -675,6 +674,23 @@ $widget-section-padding: 0.25rem;
 .widget-dialog-section-title {
     font-weight: bold;
     margin: 1rem 0 0 0;
+}
+
+.widget-select-option, .widget-radio-option {
+    min-height: 2.5rem;
+}
+
+.widget-dialog-hide-window {
+    float: right;
+    margin-top: 0.35rem;
+}
+
+.widget-properties-editor {
+    transition: opacity 0.5s ease-out;
+}
+
+.widget-properties-editor:has(.widget-dialog-hide-window:hover) {
+    opacity: 0.15;
 }
 
 // ******

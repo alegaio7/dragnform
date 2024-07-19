@@ -38,7 +38,6 @@ const config = {
             patterns: [
                 { from: 'editors', to: "editors" },
                 { from: 'widgets', to: "widgets" },
-                { from: 'demo.html', to: "demo.html" },
                 { from: 'src/functions.js', to: "functions.js" },
                 { from: 'src/strings.en.js', to: "strings.en.js" },
             ]
@@ -69,11 +68,8 @@ const config = {
 };
 
 module.exports = () => {
-    
     if (isProduction) {
         config.mode = 'production';
-        
-        
     } else {
         config.mode = 'development';
     }
