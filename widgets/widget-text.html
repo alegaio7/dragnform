@@ -4,7 +4,7 @@
 		{{#showRemove}}
 		<div data-part="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
 		{{/showRemove}}
-		<label class="{{labelClass}}" for="{{inputIdDesign}}">
+		<label class="{{labelClass}}" for="{{inputIdDesign}}" data-part="label-container">
 			<span data-part="required-mark" data-position="before" 
 			{{^showRequiredMarkBefore}}
 			style="display:none;"
@@ -17,7 +17,7 @@
 			{{/showRequiredMarkAfter}}
 			>{{mark}}</span>
 		</label>
-		<input type="text" id="{{inputIdDesign}}" class="{{inputClass}}"
+		<input type="text" id="{{inputIdDesign}}" class="{{inputClass}}" data-part="input"
 			{{#hasMinLength}}
             minlength="{{minLength}}"
 			{{/hasMinLength}}
@@ -42,7 +42,7 @@
 		{{/hasTip}}
 	</div>
 	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
-		<label class="{{labelClass}}" for="{{inputIdRun}}">
+		<label class="{{labelClass}}" for="{{inputIdRun}}" data-part="label-container">
 			<span data-part="required-mark" data-position="before" 
 			{{^showRequiredMarkBefore}}
 			style="display:none;"
@@ -55,7 +55,7 @@
 			{{/showRequiredMarkAfter}}
 			>{{mark}}</span>
 		</label>
-		<input type="text" id="{{inputIdRun}}" class="{{inputClass}}"
+		<input type="text" id="{{inputIdRun}}" class="{{inputClass}}" data-part="input"
 			{{#hasMinLength}}
             minlength="{{minLength}}"
 			{{/hasMinLength}}
@@ -78,7 +78,7 @@
 		<div data-part="widget-error"></div>
 	</div>
 	<div data-show-when="view" class="widget-h-align-start widget-v-align-center">
-		<label class="{{labelClass}}">
+		<label class="{{labelClass}}" data-part="label-container">
 			<span data-part="label">{{label}}</span>
 		</label>
 		<span data-part="value" class="{{valueControlClass}}">{{value}}</span>		

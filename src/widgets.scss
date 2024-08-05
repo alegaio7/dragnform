@@ -27,6 +27,7 @@ $widget-container-width-bp-2: 1600px;
 $widget-designer-radius: 0.25rem;
 $widget-grip-color: #888;
 $widget-grip-width: 0.8rem;
+$widget-input-height: 2rem;
 $widget-min-height: 15px;
 $widget-modal-backdrop-color: rgba(0, 0, 0, 0.2);
 $widget-modal-border-color: #888;
@@ -244,28 +245,41 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    .widget-button {
+    [data-part="button"] {
         cursor: pointer;
     }
 
-    .widget-input, .widget-button {
+    [data-part="input"], [data-part="button"] {
         width: 100%;
         min-height: $widget-controls-min-height;
         font-family: inherit;
+        margin-bottom: 2px;
     }
 
     &.has-grip {
-        .widget-input, .widget-label, .widget-button {
+        [data-part="input"], [data-part="label-container"], [data-part="button"] {
             display: inline-block;
             width: 100%;
         }
     }
 
-    .widget-checkbox-label, .widget-radio-label {
+    .widget-checkbox-group {
+        margin-bottom: 2px;
+
+        input[type="checkbox"] {
+            vertical-align: middle;
+        }
+    }
+
+    [data-part="checkbox-label-container"], [data-part="widget-radio-label"] {
         width: unset;
     }
 
-    .widget-checkbox, .widget-radio {
+    [data-part="checkbox-label-container"] {
+        vertical-align: middle;
+    }
+
+    [data-part="input-checkbox"], [data-part="input-radio"] {
         width: $widget-checkbox-width;
         height: $widget-controls-min-height;
         margin: 0 0.5rem 0 0;
@@ -346,10 +360,12 @@ $widget-toolbar-padding: 0.5rem;
         min-height: 3rem;
     }
 
-    &[data-type="text"] {
+    &[data-type="text"], &[data-type="number"] {
         input {
+            height: $widget-input-height;
             font-size: inherit;
             font-weight: inherit;
+            padding: 0;
         }
     }
 
@@ -422,7 +438,7 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-.widget-label {
+[data-part="label-container"] {
     display: block;
 }
 
@@ -431,16 +447,19 @@ $widget-toolbar-padding: 0.5rem;
     color: $widget-tip-color;
 }
 
-.widget-value {
+[data-part="value"] {
     width: 100%;
     display: block;
+    height: $widget-input-height;
+    border: 2px solid transparent;
+    margin-bottom: 2px;
 }
 
 // alignments
 .widget-h-align-start {
     align-items: start;
 
-    .widget-label {
+    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"] {
         text-align: left;
     }
 }
@@ -448,7 +467,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-h-align-center {
     align-items: center;
 
-    .widget-label {
+    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"] {
         text-align: center;
     }
 }
@@ -456,7 +475,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-h-align-end {
     align-items: end;
 
-    .widget-label {
+    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"] {
         text-align: right;
     }
 }
@@ -477,7 +496,7 @@ $widget-toolbar-padding: 0.5rem;
     .widget-h-align-start {
         justify-content: start;
     
-        .widget-label {
+        [data-part="label-container"], [data-part="widget-tip"] {
             text-align: left;
         }
     }
@@ -485,7 +504,7 @@ $widget-toolbar-padding: 0.5rem;
     .widget-h-align-center {
         justify-content: center;
     
-        .widget-label {
+        [data-part="label-container"], [data-part="widget-tip"] {
             text-align: center;
         }
     }
@@ -493,7 +512,7 @@ $widget-toolbar-padding: 0.5rem;
     .widget-h-align-end {
         justify-content: end;
     
-        .widget-label {
+        [data-part="label-container"], [data-part="widget-tip"] {
             text-align: right;
         }
     }

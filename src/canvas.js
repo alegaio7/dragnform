@@ -32,10 +32,10 @@ export default class Canvas {
 
         this._domParser = new DOMParser();
         this._featureExtractor = null;
-
+        
         this._renderMode = options.renderMode ?? constants.WIDGET_MODE_DESIGN;
         if (constants.validModes.indexOf(this._renderMode) === -1)
-            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
+            throw new Error(`Invalid designer render mode. Must be one of ${constants.validModes.join(', ')}`);
     
         this._container = options.widgetsContainerEl; 
         this._editorsContainer = options.widgetEditorsContainerEl;
@@ -45,17 +45,45 @@ export default class Canvas {
         this._onModifiedCallback = options.onModified ?? null;
         this._widgetRenderOptions = options.widgetRenderOptions ?? {};
 
-        this._rememberedProperties = new Map(); // keeps some settings of the last edited widget, to copy it to new widgets
-        this._rememberedProperties.set("autoHeight", false);
-        this._rememberedProperties.set("columns", 12);
-        this._rememberedProperties.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
-        this._rememberedProperties.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
-        this._rememberedProperties.set("fontUnderline", false);
-        this._rememberedProperties.set("height", constants.WIDGET_DEFAULT_HEIGHT);
-        this._rememberedProperties.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
-        this._rememberedProperties.set("required", false);
-        this._rememberedProperties.set("validationMessage", "");
-        this._rememberedProperties.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
+        // keeps some settings of the last edited widget, to copy it to new widgets
+        // this is a map of maps, where the key is the widget type and the value is a map of properties
+        this._rememberedProperties = new Map(); 
+        this._rememberedProperties.set(constants.WIDGET_TYPE_BUTTON, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_CHECKBOX, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_IMAGE, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_LABEL, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_NUMBER, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_RADIO, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_SPACER, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_SELECT, new Map());
+        this._rememberedProperties.set(constants.WIDGET_TYPE_TEXT, new Map());
+
+        var m = this._rememberedProperties.get(constants.WIDGET_TYPE_BUTTON);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_CHECKBOX);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_IMAGE);
+        this._setDefaultMapValues(m, ["horizontalAlignment", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_LABEL);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_NUMBER);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_RADIO);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_SPACER);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_SELECT);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+
+        m = this._rememberedProperties.get(constants.WIDGET_TYPE_TEXT);
+        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
 
         this._sourceJson = {
             name: Strings.Canvas_NewForm_Name,
@@ -71,18 +99,43 @@ export default class Canvas {
         // flyter inline editor setup END
     }
 
+    _setDefaultMapValues(m, additionalProps) {
+        m.set("autoHeight", false);
+        m.set("columns", 12);
+        m.set("height", constants.WIDGET_DEFAULT_HEIGHT);
+
+        if (additionalProps && additionalProps.indexOf("fontSize") >= 0)
+            m.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
+        if (additionalProps && additionalProps.indexOf("fontWeight") >= 0)
+            m.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
+        if (additionalProps && additionalProps.indexOf("fontUnderline") >= 0)
+            m.set("fontUnderline", false);
+        if (additionalProps && additionalProps.indexOf("horizontalAlignment") >= 0)
+            m.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
+        if (additionalProps && additionalProps.indexOf("required") >= 0)
+            m.set("required", false);
+        if (additionalProps && additionalProps.indexOf("valueRequiredValidationMessage") >= 0)
+            m.set("valueRequiredValidationMessage", "");
+        if (additionalProps && additionalProps.indexOf("verticalAlignment") >= 0)
+            m.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
+    }
+
     async addWidget(jsonObj) {
         if (!jsonObj)
             throw new Error('json object is required');
-
+        
         // patches the json object with the remembered properties
-        this._rememberedProperties.forEach((v, k) => {
-            jsonObj[k] = v;
-        });
+        var m = this._rememberedProperties.get(jsonObj.type);
+        if (m) {
+            m.forEach((v, k) => {
+                jsonObj[k] = v;
+            });
+        }
 
         var w = this.createWidget(jsonObj);
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
+
         this._widgets.push(w);
         this.modified = true;
         await this._renderSingleWidget(w, this._domParser);
@@ -269,7 +322,7 @@ export default class Canvas {
         if (value === this._renderMode)
             return;
         if (constants.validModes.indexOf(value) === -1)
-            throw new Error(`Invalid designer render mode. Must be one of ${contants.validModes.join(', ')}`);
+            throw new Error(`Invalid designer render mode. Must be one of ${constants.validModes.join(', ')}`);
         this._renderMode = value;
 
         // update widgets to show the new render mode
@@ -440,10 +493,13 @@ export default class Canvas {
                         onAccept: function(dlg, changedProps) {
                             _t.modified = true;
                             if (changedProps) {
-                                changedProps.forEach(p => {
-                                    if (_t._rememberedProperties.has(p))
-                                        _t._rememberedProperties.set(p, dlg.widget[p]); // don't use the element's .value since its string. use the parsed value instead
-                                });
+                                var m = _t._rememberedProperties.get(sender.type); // get the map of remembered props for the widget type
+                                if (m) {
+                                    changedProps.forEach(p => {
+                                        if (m.has(p))
+                                            m.set(p, dlg.widget[p]);
+                                    });
+                                }
                             }
                             modal.close();
                         },

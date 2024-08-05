@@ -59,6 +59,11 @@ class WidgetCheckbox extends Widget {
         return json;
     }
 
+    async getPropertiesEditorTemplate() {
+        var props = await this._getPropertiesEditorTemplateCore("widget-checkbox", "WidgetCheckboxPropertiesEditor");
+        return props;
+    }
+
     refresh() {
         if (!this._el || this._batchUpdating)
             return;

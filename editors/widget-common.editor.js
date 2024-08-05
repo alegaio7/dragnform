@@ -230,10 +230,6 @@ export default class WidgetCommonPropertiesEditor {
                         if (el && el.checked) {
                             this.widget[p.name] = el.value;
                             changedProps.push(p.name);
-                            /*
-                            if (this._rememberedProperties.has(p.name))
-                                this._rememberedProperties.set(p.name, this.widget[p.name]);
-                            */
                         }
                     });
                 }

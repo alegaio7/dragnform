@@ -222,7 +222,14 @@ export default class FeatureExtractor {
     // function that transforms a color text like rgb(0, 0, 0) to a hex color value
     _rgbToHex = (rgb) => {
         var matches = this._colorRegex.exec(rgb);
-        return "#" + this._componentToHex(parseInt(matches[1])) + this._componentToHex(parseInt(matches[2])) + this._componentToHex(parseInt(matches[3]));
+        if (matches) {
+            if (matches.length === 4)
+                return "#" + this._componentToHex(parseInt(matches[1])) + this._componentToHex(parseInt(matches[2])) + this._componentToHex(parseInt(matches[3]));
+            else if (matches.length === 5)
+                return "#" + this._componentToHex(parseInt(matches[1])) + this._componentToHex(parseInt(matches[2])) + this._componentToHex(parseInt(matches[3])) + this._componentToHex(parseInt(matches[4]));
+        }
+
+        return "#00000000";
     }
 
     _componentToHex = (c) => {

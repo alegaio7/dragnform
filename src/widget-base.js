@@ -318,10 +318,11 @@ export default class Widget {
         this._el.classList.add(colClass);
         this._prevColClass = colClass;
         
-        if (this.widgetRenderOptions.renderTips && this.tip) {
+        if (this.widgetRenderOptions.renderTips) {
             var tipCtls = this._el.querySelectorAll(`[data-part="widget-tip"]`);
+            var tip = this.tip ? this.tip : "";
             if (tipCtls && tipCtls.length)
-                tipCtls.forEach(t => t.innerHTML = this.tip);
+                tipCtls.forEach(t => t.innerHTML = tip);
         }
 
         // update style

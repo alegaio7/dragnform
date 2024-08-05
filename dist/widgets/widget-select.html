@@ -4,7 +4,7 @@
 		{{#showRemove}}
 		<div data-part="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
 		{{/showRemove}}
-		<label class="{{labelClass}}" for="{{selectIdDesign}}">
+		<label class="{{labelClass}}" for="{{selectIdDesign}}" data-part="label-container">
 			<span data-part="required-mark" data-position="before" 
 			{{^showRequiredMarkBefore}}
 			style="display:none;"
@@ -17,7 +17,7 @@
 			{{/showRequiredMarkAfter}}
 			>{{mark}}</span>
 		</label>
-		<select id="{{selectIdDesign}}" class="{{selectClass}}"
+		<select id="{{selectIdDesign}}" class="{{selectClass}}" data-part="input"
 			{{#required}}
             required
 			{{/required}}
@@ -29,12 +29,15 @@
 			{{/hasName}}
             >
 		</select>
+        {{#hasTip}}
+        <div data-part="widget-tip"></div>
+        {{/hasTip}}            
         {{#showGrip}}
 		<div data-part="widget-grip"></div>
 		{{/showGrip}}       
 	</div>
 	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
-		<label class="{{labelClass}}" for="{{selectIdRun}}">
+		<label class="{{labelClass}}" for="{{selectIdRun}}" data-part="label-container">
 			<span data-part="required-mark" data-position="before" 
 			{{^showRequiredMarkBefore}}
 			style="display:none;"
@@ -47,7 +50,7 @@
 			{{/showRequiredMarkAfter}}
 			>{{mark}}</span>
 		</label>
-		<select id="{{selectIdRun}}" class="{{selectClass}}"
+		<select id="{{selectIdRun}}" class="{{selectClass}}" data-part="input"
 			{{#required}}
             required
 			{{/required}}
@@ -65,7 +68,7 @@
         <div data-part="widget-error"></div>
 	</div>
 	<div data-show-when="view" class="widget-h-align-start widget-v-align-center">
-		<label class="{{labelClass}}">
+		<label class="{{labelClass}}" data-part="label-container">
 			<span data-part="label">{{label}}</span>
 		</label>
 		<span data-part="value" class="{{valueControlClass}}">{{value}}</span>		

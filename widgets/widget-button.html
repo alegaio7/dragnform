@@ -4,7 +4,7 @@
 		{{#showRemove}}
 		<div data-part="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
 		{{/showRemove}}
-        <button type="button" class="{{buttonClass}}" 
+        <button type="button" class="{{buttonClass}}" data-part="button" 
             id={{buttonIdDesign}} 
             {{#hasName}}
             name="{{name}}" 
@@ -19,7 +19,7 @@
 		{{/showGrip}}
 	</div>
 	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
-        <button type="button" class="{{buttonClass}}" 
+        <button type="button" class="{{buttonClass}}" data-part="button" 
             id={{buttonIdRun}} 
             {{#hasName}}
             name="{{name}}" 

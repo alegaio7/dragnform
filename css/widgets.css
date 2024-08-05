@@ -154,22 +154,32 @@
 .widget[data-mode=view] [data-part=value] {
   padding: 0.1rem 0;
 }
-.widget .widget-button {
+.widget [data-part=button] {
   cursor: pointer;
 }
-.widget .widget-input, .widget .widget-button {
+.widget [data-part=input], .widget [data-part=button] {
   width: 100%;
   min-height: 1.5rem;
   font-family: inherit;
+  margin-bottom: 2px;
 }
-.widget.has-grip .widget-input, .widget.has-grip .widget-label, .widget.has-grip .widget-button {
+.widget.has-grip [data-part=input], .widget.has-grip [data-part=label-container], .widget.has-grip [data-part=button] {
   display: inline-block;
   width: 100%;
 }
-.widget .widget-checkbox-label, .widget .widget-radio-label {
+.widget .widget-checkbox-group {
+  margin-bottom: 2px;
+}
+.widget .widget-checkbox-group input[type=checkbox] {
+  vertical-align: middle;
+}
+.widget [data-part=checkbox-label-container], .widget [data-part=widget-radio-label] {
   width: unset;
 }
-.widget .widget-checkbox, .widget .widget-radio {
+.widget [data-part=checkbox-label-container] {
+  vertical-align: middle;
+}
+.widget [data-part=input-checkbox], .widget [data-part=input-radio] {
   width: 1.5rem;
   height: 1.5rem;
   margin: 0 0.5rem 0 0;
@@ -228,9 +238,11 @@
 .widget[data-type=spacer] {
   min-height: 3rem;
 }
-.widget[data-type=text] input {
+.widget[data-type=text] input, .widget[data-type=number] input {
+  height: 2rem;
   font-size: inherit;
   font-weight: inherit;
+  padding: 0;
 }
 .widget [data-part=widget-error] {
   display: none;
@@ -292,7 +304,7 @@
   color: #f00;
 }
 
-.widget-label {
+[data-part=label-container] {
   display: block;
 }
 
@@ -301,29 +313,32 @@
   color: #888;
 }
 
-.widget-value {
+[data-part=value] {
   width: 100%;
   display: block;
+  height: 2rem;
+  border: 2px solid transparent;
+  margin-bottom: 2px;
 }
 
 .widget-h-align-start {
   align-items: start;
 }
-.widget-h-align-start .widget-label {
+.widget-h-align-start [data-part=label-container], .widget-h-align-start [data-part=input], .widget-h-align-start [data-part=value], .widget-h-align-start [data-part=widget-tip] {
   text-align: left;
 }
 
 .widget-h-align-center {
   align-items: center;
 }
-.widget-h-align-center .widget-label {
+.widget-h-align-center [data-part=label-container], .widget-h-align-center [data-part=input], .widget-h-align-center [data-part=value], .widget-h-align-center [data-part=widget-tip] {
   text-align: center;
 }
 
 .widget-h-align-end {
   align-items: end;
 }
-.widget-h-align-end .widget-label {
+.widget-h-align-end [data-part=label-container], .widget-h-align-end [data-part=input], .widget-h-align-end [data-part=value], .widget-h-align-end [data-part=widget-tip] {
   text-align: right;
 }
 
@@ -342,19 +357,19 @@
 .flow-row .widget-h-align-start {
   justify-content: start;
 }
-.flow-row .widget-h-align-start .widget-label {
+.flow-row .widget-h-align-start [data-part=label-container], .flow-row .widget-h-align-start [data-part=widget-tip] {
   text-align: left;
 }
 .flow-row .widget-h-align-center {
   justify-content: center;
 }
-.flow-row .widget-h-align-center .widget-label {
+.flow-row .widget-h-align-center [data-part=label-container], .flow-row .widget-h-align-center [data-part=widget-tip] {
   text-align: center;
 }
 .flow-row .widget-h-align-end {
   justify-content: end;
 }
-.flow-row .widget-h-align-end .widget-label {
+.flow-row .widget-h-align-end [data-part=label-container], .flow-row .widget-h-align-end [data-part=widget-tip] {
   text-align: right;
 }
 .flow-row .widget-v-align-start {

@@ -195,6 +195,16 @@ class WidgetText extends WidgetInputBase {
     // *******************************************************************************
     // Private methods
     // *******************************************************************************
+
+    _updateContols() {
+        super._updateContols();
+        // _el can be null if element was not rendered yet
+        if (this._el) {
+            var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
+            if (viewModeValue)
+                viewModeValue.innerHTML = this.value ? this.value : "&nbsp;";   // render nbsp so to keep the height of the element
+        }
+    }
 }
 
 export default WidgetText;

@@ -6,7 +6,7 @@ class WidgetNumber extends WidgetInputBase {
         super(constants.WIDGET_TYPE_NUMBER, fragment);
 
         this._min = 0;
-        this._max = 0;
+        this._max = 1000;
         this.minValueValidationMessage = "";
         this.maxValueValidationMessage = "";
 
@@ -170,6 +170,20 @@ class WidgetNumber extends WidgetInputBase {
         if (validateOptions && validateOptions.showErrors && !r.result)
             this.setError(r);
         return r;
+    }
+
+    // *******************************************************************************
+    // Private methods
+    // *******************************************************************************
+
+    _updateContols() {
+        super._updateContols();
+        // _el can be null if element was not rendered yet
+        if (this._el) {
+            var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
+            if (viewModeValue)
+                viewModeValue.innerHTML = (!isNaN(this.value) && this.value !== Infinity) ? this.value : "&nbsp;";   // render nbsp so to keep the height of the element
+        }
     }
 }
 
