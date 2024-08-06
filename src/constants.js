@@ -27,6 +27,7 @@ export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER = 'center';
 export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM = 'bottom';
 
 export const WIDGET_DEFAULT_HEIGHT = "80px";
+export const WIDGET_DEFAULT_PARAGRAPH_HEIGHT = "160px";
 
 export const WIDGET_LABEL_DEFAULT_VALUE = "(New label)";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE = "beforeLabel";
@@ -43,6 +44,7 @@ export const WIDGET_TYPE_CHECKBOX = 'checkbox';
 export const WIDGET_TYPE_IMAGE = 'image';
 export const WIDGET_TYPE_LABEL = 'label';
 export const WIDGET_TYPE_NUMBER = 'number';
+export const WIDGET_TYPE_PARAGRAPH = 'paragraph';
 export const WIDGET_TYPE_RADIO = 'radio';
 export const WIDGET_TYPE_SELECT = 'select';
 export const WIDGET_TYPE_SPACER = 'spacer';

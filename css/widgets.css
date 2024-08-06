@@ -215,6 +215,9 @@
   height: auto;
   display: block;
 }
+.widget[data-type=paragraph] textarea {
+  resize: none;
+}
 .widget[data-type=radio].flow-row [data-show-when] {
   flex-flow: row;
 }

@@ -328,6 +328,12 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
+    &[data-type="paragraph"] {
+        textarea {
+            resize: none;
+        }
+    }
+    
     &[data-type="radio"] {
         &.flow-row [data-show-when] {
             flex-flow: row;

@@ -30,6 +30,7 @@ export default class Designer {
             { action: 'add-input-radio', widgetType: constants.WIDGET_TYPE_RADIO },
             { action: 'add-input-select', widgetType: constants.WIDGET_TYPE_SELECT },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
+            { action: 'add-input-paragraph', widgetType: constants.WIDGET_TYPE_PARAGRAPH },
             { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
             { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE },
@@ -172,6 +173,7 @@ export default class Designer {
                     radio: "widget-radio",
                     radioLabel: "widget-radio-label",
                     select: "widget-select",
+                    textarea: "widget-textarea",
                     valueControl: "widget-value",
                     widget: "widget",
                 },
@@ -390,50 +392,55 @@ export default class Designer {
                         <div class="widget-toolbar-group-title">${Strings.Toolbar_Widgets_GroupTitle}</div>`;
                 if (options.toolbar.buttons.label)
                     html += `<button type="button" data-action="add-label" title="${Strings.Toolbar_AddLabelWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddLabelWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddLabelWidget_ButtonLabel}</span>
-                        </button>`;                        
+                                <i class="${Icons.Toolbar_AddLabelWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddLabelWidget_ButtonLabel}</span>
+                            </button>`;                        
                 if (options.toolbar.buttons.textField)
                     html += `<button type="button" data-action="add-input-text" title="${Strings.Toolbar_AddTextInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddTextInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddTextInputWidget_ButtonLabel}</span>
                             </button>`;
+                if (options.toolbar.buttons.paragraph)
+                    html += `<button type="button" data-action="add-input-paragraph" title="${Strings.Toolbar_AddParagraphInputWidget_ButtonTitle}">
+                                <i class="${Icons.Toolbar_AddParagraphInputWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddParagraphInputWidget_ButtonLabel}</span>
+                            </button>`;                               
                 if (options.toolbar.buttons.numberField)
                     html += `<button type="button" data-action="add-input-number" title="${Strings.Toolbar_AddNumberInputWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
-                            </button>`;                            
+                                <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
+                            </button>`;
                 if (options.toolbar.buttons.checkbox)
                     html += `<button type="button" data-action="add-input-checkbox" title="${Strings.Toolbar_AddCheckboxInputWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddCheckboxInputWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddCheckboxInputWidget_ButtonLabel}</span>
+                                <i class="${Icons.Toolbar_AddCheckboxInputWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddCheckboxInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.radio)
                     html += `<button type="button" data-action="add-input-radio" title="${Strings.Toolbar_AddRadioInputWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddRadioInputWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddRadioInputWidget_ButtonLabel}</span>
+                                <i class="${Icons.Toolbar_AddRadioInputWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddRadioInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.select)
                     html += `<button type="button" data-action="add-input-select" title="${Strings.Toolbar_AddSelectnputWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddSelectWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddSelectInputWidget_ButtonLabel}</span>
+                                <i class="${Icons.Toolbar_AddSelectWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddSelectInputWidget_ButtonLabel}</span>
                             </button>`;                            
                 if (options.toolbar.buttons.button)
                     html += `<button type="button" data-action="add-button" title="${Strings.Toolbar_AddButtonWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddButtonWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddButtonWidget_ButtonLabel}</span>
-                        </button>`;                            
+                                <i class="${Icons.Toolbar_AddButtonWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddButtonWidget_ButtonLabel}</span>
+                            </button>`;                            
                 if (options.toolbar.buttons.spacer)
                     html += `<button type="button" data-action="add-spacer" title="${Strings.Toolbar_AddSpacerWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddSpacerWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddSpacerWidget_ButtonLabel}</span>
-                        </button>`;
+                                <i class="${Icons.Toolbar_AddSpacerWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddSpacerWidget_ButtonLabel}</span>
+                            </button>`;
                 if (options.toolbar.buttons.image)
                     html += `<button type="button" data-action="add-image" title="${Strings.Toolbar_AddImageWidget_ButtonTitle}">
-                            <i class="${Icons.Toolbar_AddImageWidget_Icon}"></i>
-                            <span>${Strings.Toolbar_AddImageWidget_ButtonLabel}</span>
-                        </button>
-                        <input type="file" style="display: none;" accept="image/png,image/jpeg" />`; 
+                                <i class="${Icons.Toolbar_AddImageWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddImageWidget_ButtonLabel}</span>
+                            </button>
+                            <input type="file" style="display: none;" accept="image/png,image/jpeg" />`; 
                 html += `</div>`;
             }
 

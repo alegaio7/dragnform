@@ -36,6 +36,8 @@ class Strings {
     static get Toolbar_AddCheckboxInputWidget_ButtonTitle() { return 'Add checkbox'; }
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
+    static get Toolbar_AddParagraphInputWidget_ButtonLabel() { return 'Paragraph'; }
+    static get Toolbar_AddParagraphInputWidget_ButtonTitle() { return 'Add paragraph field'; }
     static get Toolbar_AddRadioInputWidget_ButtonLabel() { return 'Radio'; }
     static get Toolbar_AddRadioInputWidget_ButtonTitle() { return 'Add radio options'; }
     static get Toolbar_AddSpacerWidget_ButtonLabel() { return 'Spacer'; }

@@ -4,6 +4,7 @@ import WidgetCheckbox from './widget-checkbox.js';
 import WidgetImage from './widget-image.js';
 import WidgetLabel from './widget-label.js';
 import WidgetNumber from './widget-number.js';
+import WidgetParagraph from './widget-paragraph.js';
 import WidgetRadio from './widget-radio.js';
 import WidgetSpacer from './widget-spacer.js';
 import WidgetSelect from './widget-select.js';
@@ -48,42 +49,6 @@ export default class Canvas {
         // keeps some settings of the last edited widget, to copy it to new widgets
         // this is a map of maps, where the key is the widget type and the value is a map of properties
         this._rememberedProperties = new Map(); 
-        this._rememberedProperties.set(constants.WIDGET_TYPE_BUTTON, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_CHECKBOX, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_IMAGE, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_LABEL, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_NUMBER, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_RADIO, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_SPACER, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_SELECT, new Map());
-        this._rememberedProperties.set(constants.WIDGET_TYPE_TEXT, new Map());
-
-        var m = this._rememberedProperties.get(constants.WIDGET_TYPE_BUTTON);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_CHECKBOX);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_IMAGE);
-        this._setDefaultMapValues(m, ["horizontalAlignment", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_LABEL);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_NUMBER);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_RADIO);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_SPACER);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_SELECT);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
-
-        m = this._rememberedProperties.get(constants.WIDGET_TYPE_TEXT);
-        this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
 
         this._sourceJson = {
             name: Strings.Canvas_NewForm_Name,
@@ -99,27 +64,6 @@ export default class Canvas {
         // flyter inline editor setup END
     }
 
-    _setDefaultMapValues(m, additionalProps) {
-        m.set("autoHeight", false);
-        m.set("columns", 12);
-        m.set("height", constants.WIDGET_DEFAULT_HEIGHT);
-
-        if (additionalProps && additionalProps.indexOf("fontSize") >= 0)
-            m.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
-        if (additionalProps && additionalProps.indexOf("fontWeight") >= 0)
-            m.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
-        if (additionalProps && additionalProps.indexOf("fontUnderline") >= 0)
-            m.set("fontUnderline", false);
-        if (additionalProps && additionalProps.indexOf("horizontalAlignment") >= 0)
-            m.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
-        if (additionalProps && additionalProps.indexOf("required") >= 0)
-            m.set("required", false);
-        if (additionalProps && additionalProps.indexOf("valueRequiredValidationMessage") >= 0)
-            m.set("valueRequiredValidationMessage", "");
-        if (additionalProps && additionalProps.indexOf("verticalAlignment") >= 0)
-            m.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
-    }
-
     async addWidget(jsonObj) {
         if (!jsonObj)
             throw new Error('json object is required');
@@ -130,7 +74,8 @@ export default class Canvas {
             m.forEach((v, k) => {
                 jsonObj[k] = v;
             });
-        }
+        } else
+            this._setRememberedProperties(jsonObj.type);
 
         var w = this.createWidget(jsonObj);
         if (this.findWidget(w.id))
@@ -191,6 +136,9 @@ export default class Canvas {
                 break;
             case constants.WIDGET_TYPE_NUMBER:
                 w = new WidgetNumber(o);
+                break;
+            case constants.WIDGET_TYPE_PARAGRAPH:
+                w = new WidgetParagraph(o);
                 break;
             case constants.WIDGET_TYPE_RADIO:
                 w = new WidgetRadio(o);
@@ -434,6 +382,53 @@ export default class Canvas {
         for (const w of this._widgets) {
             await this._renderSingleWidget(w, this._domParser);
         }
+    }
+
+    _setDefaultMapValues(m, additionalProps) {
+        m.set("autoHeight", false);
+        m.set("columns", 12);
+        m.set("height", constants.WIDGET_DEFAULT_HEIGHT);
+
+        if (additionalProps && additionalProps.indexOf("fontSize") >= 0)
+            m.set("fontSize", constants.HTML_DEFAULT_FONT_SIZE);
+        if (additionalProps && additionalProps.indexOf("fontWeight") >= 0)
+            m.set("fontWeight", constants.HTML_DEFAULT_FONT_WEIGHT);
+        if (additionalProps && additionalProps.indexOf("fontUnderline") >= 0)
+            m.set("fontUnderline", false);
+        if (additionalProps && additionalProps.indexOf("horizontalAlignment") >= 0)
+            m.set("horizontalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT);
+        if (additionalProps && additionalProps.indexOf("required") >= 0)
+            m.set("required", false);
+        if (additionalProps && additionalProps.indexOf("valueRequiredValidationMessage") >= 0)
+            m.set("valueRequiredValidationMessage", "");
+        if (additionalProps && additionalProps.indexOf("verticalAlignment") >= 0)
+            m.set("verticalAlignment", constants.WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER);
+    }
+
+    _setRememberedProperties(type) {
+        this._rememberedProperties.set(type, new Map());
+
+        var m = this._rememberedProperties.get(type);
+        if (type === constants.WIDGET_TYPE_BUTTON)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_CHECKBOX)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_IMAGE)
+            this._setDefaultMapValues(m, ["horizontalAlignment", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_LABEL)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_NUMBER)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_PARAGRAPH)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_RADIO)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_SELECT)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_SPACER)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+        else if (type === constants.WIDGET_TYPE_TEXT)
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
     }
 
     _setupSortable() {

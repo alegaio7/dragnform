@@ -21,6 +21,7 @@ export default class Widget {
             constants.WIDGET_TYPE_IMAGE,
             constants.WIDGET_TYPE_LABEL,
             constants.WIDGET_TYPE_NUMBER,
+            constants.WIDGET_TYPE_PARAGRAPH,
             constants.WIDGET_TYPE_RADIO,
             constants.WIDGET_TYPE_SELECT,
             constants.WIDGET_TYPE_SPACER,
@@ -75,7 +76,7 @@ export default class Widget {
 
         // if no height came in the json fragment, set it to a default value but set autoHeight true
         this._autoHeight = fragment.autoHeight ?? false;
-        this._height = fragment.height ?? constants.WIDGET_DEFAULT_HEIGHT;
+        this._height = fragment.height ?? (type === constants.WIDGET_TYPE_PARAGRAPH ? constants.WIDGET_DEFAULT_PARAGRAPH_HEIGHT : constants.WIDGET_DEFAULT_HEIGHT);
         
         this.globalClasses = fragment.globalClasses ?? {};
         this.id = fragment.id;

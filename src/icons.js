@@ -5,6 +5,7 @@ export default class Icons {
     static get Toolbar_AddImageWidget_Icon() { return 'fa fa-regular fa-image'; }
     static get Toolbar_AddLabelWidget_Icon() { return 'fa fa-tag'; }
     static get Toolbar_AddNumberInputWidget_Icon() { return 'fa fa-hashtag'; }
+    static get Toolbar_AddParagraphInputWidget_Icon() { return 'fa fa-align-justify'; }
     static get Toolbar_AddRadioInputWidget_Icon() { return 'fa fa-circle-dot'; }
     static get Toolbar_AddSelectWidget_Icon() { return 'fa fa-rectangle-list'; }
     static get Toolbar_AddSpacerWidget_Icon() { return 'fa fa-arrows-left-right-to-line'; }

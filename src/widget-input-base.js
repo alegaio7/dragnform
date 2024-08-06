@@ -35,11 +35,12 @@ class WidgetInputBase extends Widget {
         var inputStyle = this._buildSectionsStyleAttribute({includeFontWeight: false, includeFontUnderline: false});
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
+            var sel = this.type === constants.WIDGET_TYPE_PARAGRAPH ? "textarea" : "input";
             sections.forEach(s => {
                 var label = s.querySelector("[data-part='label']");
                 if (label)
                     label.setAttribute("style", labelStyle);
-                var input = s.querySelector("input");
+                var input = s.querySelector(sel);
                 if (input)
                     input.setAttribute("style", inputStyle);
             });
@@ -68,7 +69,8 @@ class WidgetInputBase extends Widget {
         this._updateContols();
 
         var _t = this;
-        var inputs = this._el.querySelectorAll("input"); // input for design mode and run mode.
+        var sel = this.type === constants.WIDGET_TYPE_PARAGRAPH ? "textarea" : "input";
+        var inputs = this._el.querySelectorAll(sel); // input for design mode and run mode.
         if (inputs)
             inputs.forEach(input => {
                 input.addEventListener("blur", function(e) {
@@ -80,7 +82,8 @@ class WidgetInputBase extends Widget {
     _updateContols() {
         // _el can be null if element was not rendered yet
         if (this._el) {
-            var inputs = this._el.querySelectorAll("input");
+            var sel = this.type === constants.WIDGET_TYPE_PARAGRAPH ? "textarea" : "input";
+            var inputs = this._el.querySelectorAll(sel);
             if (inputs && inputs.length) {
                 inputs.forEach(input => {
                     input.value = this.value;
