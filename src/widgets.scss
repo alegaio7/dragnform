@@ -33,6 +33,7 @@ $widget-modal-backdrop-color: rgba(0, 0, 0, 0.2);
 $widget-modal-border-color: #888;
 $widget-modal-padding: 1rem;
 $widget-modal-title-padding: 0.5rem;
+$widget-paragraph-height: 6rem;
 $widget-properties-button-color: #333;
 $widget-properties-button-width: 1rem;
 $widger-radio-button-height: 2rem;
@@ -329,11 +330,16 @@ $widget-toolbar-padding: 0.5rem;
     }
 
     &[data-type="paragraph"] {
-        textarea {
+        [data-part="input"] {
             resize: none;
+            height: $widget-paragraph-height;
+        }
+
+        [data-part="value"] {
+            height: $widget-paragraph-height;
         }
     }
-    
+
     &[data-type="radio"] {
         &.flow-row [data-show-when] {
             flex-flow: row;
