@@ -145,6 +145,10 @@ $widget-toolbar-padding: 0.5rem;
         button:not(:last-child) {
             margin-right: 0.5rem;
         }
+
+        button {
+            margin-bottom: 0.25rem;
+        }
     }
 
     .widget-toolbar-group-title {
@@ -471,7 +475,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-h-align-start {
     align-items: start;
 
-    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"] {
+    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"], [data-part="button"] {
         text-align: left;
     }
 }
@@ -479,7 +483,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-h-align-center {
     align-items: center;
 
-    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"] {
+    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"], [data-part="button"] {
         text-align: center;
     }
 }
@@ -487,7 +491,7 @@ $widget-toolbar-padding: 0.5rem;
 .widget-h-align-end {
     align-items: end;
 
-    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"] {
+    [data-part="label-container"], [data-part="input"], [data-part="value"], [data-part="widget-tip"], [data-part="button"] {
         text-align: right;
     }
 }

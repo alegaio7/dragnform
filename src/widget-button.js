@@ -4,6 +4,10 @@ import * as constants from './constants.js';
 class WidgetButton extends Widget {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_BUTTON, fragment);
+
+        if (!fragment.horizontalAlignment)
+            this._horizontalAlignment = constants.WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER;
+        
         this.buttonClass = fragment.buttonClass;
         this._button = null;
     }

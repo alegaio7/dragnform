@@ -75,6 +75,9 @@
 .widget-toolbar .widget-toolbar-group button:not(:last-child) {
   margin-right: 0.5rem;
 }
+.widget-toolbar .widget-toolbar-group button {
+  margin-bottom: 0.25rem;
+}
 .widget-toolbar .widget-toolbar-group-title {
   font-size: 0.8rem;
   color: #555;
@@ -331,21 +334,21 @@
 .widget-h-align-start {
   align-items: start;
 }
-.widget-h-align-start [data-part=label-container], .widget-h-align-start [data-part=input], .widget-h-align-start [data-part=value], .widget-h-align-start [data-part=widget-tip] {
+.widget-h-align-start [data-part=label-container], .widget-h-align-start [data-part=input], .widget-h-align-start [data-part=value], .widget-h-align-start [data-part=widget-tip], .widget-h-align-start [data-part=button] {
   text-align: left;
 }
 
 .widget-h-align-center {
   align-items: center;
 }
-.widget-h-align-center [data-part=label-container], .widget-h-align-center [data-part=input], .widget-h-align-center [data-part=value], .widget-h-align-center [data-part=widget-tip] {
+.widget-h-align-center [data-part=label-container], .widget-h-align-center [data-part=input], .widget-h-align-center [data-part=value], .widget-h-align-center [data-part=widget-tip], .widget-h-align-center [data-part=button] {
   text-align: center;
 }
 
 .widget-h-align-end {
   align-items: end;
 }
-.widget-h-align-end [data-part=label-container], .widget-h-align-end [data-part=input], .widget-h-align-end [data-part=value], .widget-h-align-end [data-part=widget-tip] {
+.widget-h-align-end [data-part=label-container], .widget-h-align-end [data-part=input], .widget-h-align-end [data-part=value], .widget-h-align-end [data-part=widget-tip], .widget-h-align-end [data-part=button] {
   text-align: right;
 }
 
