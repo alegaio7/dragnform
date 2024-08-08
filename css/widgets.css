@@ -248,7 +248,7 @@
 .widget[data-type=spacer] {
   min-height: 3rem;
 }
-.widget[data-type=text] input, .widget[data-type=number] input {
+.widget[data-type=date] .widget[data-type=color] input, .widget[data-type=number] input, .widget[data-type=text] input {
   height: 2rem;
   font-size: inherit;
   font-weight: inherit;
@@ -482,7 +482,7 @@
 .label-input-container label + input {
   margin-left: 0.35rem;
 }
-.label-input-container:has(label + input[type=text]) label, .label-input-container:has(label + input[type=number]) label {
+.label-input-container:has(label + input[type=color]) label, .label-input-container:has(label + input[type=date]) label, .label-input-container:has(label + input[type=number]) label, .label-input-container:has(label + input[type=text]) label {
   width: 1%;
 }
 .label-input-container input {
@@ -634,7 +634,7 @@
 .widget-properties-editor input[type=checkbox], .widget-properties-editor input[type=radio] {
   width: 1.5rem;
 }
-.widget-properties-editor input[type=number] {
+.widget-properties-editor input[type=color], .widget-properties-editor input[type=date], .widget-properties-editor input[type=number] {
   width: 5rem;
 }
 .widget-properties-editor > * {

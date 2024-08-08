@@ -376,7 +376,10 @@ $widget-toolbar-padding: 0.5rem;
         min-height: 3rem;
     }
 
-    &[data-type="text"], &[data-type="number"] {
+    &[data-type="date"]
+    &[data-type="color"], 
+    &[data-type="number"], 
+    &[data-type="text"] {
         input {
             height: $widget-input-height;
             font-size: inherit;
@@ -642,7 +645,10 @@ $widget-toolbar-padding: 0.5rem;
         }
     }
 
-    &:has(label + input[type="text"]), &:has(label + input[type="number"]) {
+    &:has(label + input[type="color"]), 
+    &:has(label + input[type="date"]),
+    &:has(label + input[type="number"]), 
+    &:has(label + input[type="text"]) {
         label {
             width: 1%;
         }
@@ -813,8 +819,8 @@ $widget-toolbar-padding: 0.5rem;
     input[type="checkbox"], input[type="radio"] {
         width: 1.5rem;
     }
-    
-    input[type="number"] {
+
+    input[type="color"], input[type="date"], input[type="number"] {
         width: 5rem;
     }
 

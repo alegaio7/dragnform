@@ -252,6 +252,8 @@ class WidgetRadio extends Widget {
         var style = "";
         if (this.fontSize)
             style += `font-size: ${this.fontSize}px;`;
+        if (this.textColor)
+            style += `color: ${this.textColor};`;
         return style;
     }
 

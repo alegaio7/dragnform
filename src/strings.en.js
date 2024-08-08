@@ -34,6 +34,11 @@ class Strings {
     static get Toolbar_AddLabelWidget_ButtonTitle() { return 'Add label'; }    
     static get Toolbar_AddCheckboxInputWidget_ButtonLabel() { return 'Checkbox'; }
     static get Toolbar_AddCheckboxInputWidget_ButtonTitle() { return 'Add checkbox'; }
+
+    static get Toolbar_AddDateInputWidget_ButtonLabel() { return 'Date'; }
+    static get Toolbar_AddDateInputWidget_ButtonTitle() { return 'Add date field'; }
+
+
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
     static get Toolbar_AddParagraphInputWidget_ButtonLabel() { return 'Paragraph'; }
@@ -99,9 +104,11 @@ class Strings {
     static get WidgetEditor_Common_Height() { return 'Height'; }
     static get WidgetEditor_Common_HorizontalAlignment() { return 'Horizontal alignment';}
     static get WidgetEditor_Common_Label() { return 'Label'; }
+    static get WidgetEditor_Common_LabelColor() { return 'Label color'; }
     static get WidgetEditor_Common_MoveDownButtonTitle() { return 'Move down'; }
     static get WidgetEditor_Common_MoveUpButtonTitle() { return 'Move up'; }
     static get WidgetEditor_Common_Required() { return 'Required'; }
+    static get WidgetEditor_Common_TextColor() { return 'Text color'; }
     static get WidgetEditor_Common_Tip() { return 'Help text'; }
     static get WidgetEditor_Common_VerticalAlignment() { return 'Vertical alignment';}
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }

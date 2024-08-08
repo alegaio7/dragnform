@@ -27,6 +27,7 @@ export default class Designer {
             { action: 'save-pdf', widgetType: null},
             { action: 'add-label', widgetType: constants.WIDGET_TYPE_LABEL },
             { action: 'add-input-checkbox', widgetType: constants.WIDGET_TYPE_CHECKBOX },
+            { action: 'add-input-date', widgetType: constants.WIDGET_TYPE_DATE },
             { action: 'add-input-radio', widgetType: constants.WIDGET_TYPE_RADIO },
             { action: 'add-input-select', widgetType: constants.WIDGET_TYPE_SELECT },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
@@ -324,7 +325,8 @@ export default class Designer {
             var widgetsGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer || 
                 options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image || 
-                options.toolbar.button.checkbox || options.toolbar.buttons.radio || options.toolbar.buttons.select
+                options.toolbar.button.checkbox || options.toolbar.buttons.radio || options.toolbar.buttons.select ||
+                options.toolbar.buttons.paragraph || options.toolbar.buttons.dateField
             );
             var renderModeGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.renderCurrentMode && options.toolbar.buttons.renderValidateForm
@@ -410,6 +412,11 @@ export default class Designer {
                                 <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
                             </button>`;
+                if (options.toolbar.buttons.dateField)
+                    html += `<button type="button" data-action="add-input-date" title="${Strings.Toolbar_AddDateInputWidget_ButtonTitle}">
+                                <i class="${Icons.Toolbar_AddDateInputWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddDateInputWidget_ButtonLabel}</span>
+                            </button>`;                            
                 if (options.toolbar.buttons.checkbox)
                     html += `<button type="button" data-action="add-input-checkbox" title="${Strings.Toolbar_AddCheckboxInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddCheckboxInputWidget_Icon}"></i>

@@ -1,6 +1,7 @@
 import * as constants from './constants.js';
 import WidgetButton from './widget-button.js';
 import WidgetCheckbox from './widget-checkbox.js';
+import WidgetDate from './widget-date.js';
 import WidgetImage from './widget-image.js';
 import WidgetLabel from './widget-label.js';
 import WidgetNumber from './widget-number.js';
@@ -127,7 +128,10 @@ export default class Canvas {
                 break;
             case constants.WIDGET_TYPE_CHECKBOX:
                 w = new WidgetCheckbox(o);
-                break;                
+                break;
+            case constants.WIDGET_TYPE_DATE:
+                w = new WidgetDate(o);
+                break;
             case constants.WIDGET_TYPE_IMAGE:
                 w = new WidgetImage(o);
                 break;
@@ -410,25 +414,25 @@ export default class Canvas {
 
         var m = this._rememberedProperties.get(type);
         if (type === constants.WIDGET_TYPE_BUTTON)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment", "textColor"]);
         else if (type === constants.WIDGET_TYPE_CHECKBOX)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_IMAGE)
             this._setDefaultMapValues(m, ["horizontalAlignment", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_LABEL)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_NUMBER)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "required", "textColor", "valueRequiredValidationMessage", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_PARAGRAPH)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "required", "textColor", "valueRequiredValidationMessage", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_RADIO)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "required", "textColor", "valueRequiredValidationMessage", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_SELECT)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "required", "textColor", "valueRequiredValidationMessage", "verticalAlignment"]);
         else if (type === constants.WIDGET_TYPE_SPACER)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, []);
         else if (type === constants.WIDGET_TYPE_TEXT)
-            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "horizontalAlignment", "required", "valueRequiredValidationMessage", "verticalAlignment"]);
+            this._setDefaultMapValues(m, ["fontSize", "fontWeight", "fontUnderline", "labelColor", "horizontalAlignment", "required", "textColor", "valueRequiredValidationMessage", "verticalAlignment"]);
     }
 
     _setupSortable() {

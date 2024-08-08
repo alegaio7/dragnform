@@ -18,6 +18,7 @@ export default class Widget {
         var validTypes = [
             constants.WIDGET_TYPE_BUTTON,
             constants.WIDGET_TYPE_CHECKBOX,
+            constants.WIDGET_TYPE_DATE,
             constants.WIDGET_TYPE_IMAGE,
             constants.WIDGET_TYPE_LABEL,
             constants.WIDGET_TYPE_NUMBER,
@@ -51,6 +52,14 @@ export default class Widget {
 
         this.columns = fragment.columns ?? 12;
         this._el = null;
+
+        this._labelColor = constants.HTML_DEFAULT_LABEL_COLOR;
+        if (fragment.labelColor)
+            this._labelColor = fragment.labelColor;
+
+        this._textColor = constants.HTML_DEFAULT_TEXT_COLOR;
+        if (fragment.textColor)
+            this._textColor = fragment.textColor;
 
         this._fontSize = constants.HTML_DEFAULT_FONT_SIZE;
         if (fragment.fontSize && fragment.fontSize >= constants.HTML_MIN_FONT_SIZE && fragment.fontSize <= constants.HTML_MAX_FONT_SIZE) 
@@ -170,12 +179,24 @@ export default class Widget {
     
     get labelElement() { return this._labelEl; }
     
+    get labelColor() { return this._labelColor; }
+    set labelColor(value) { 
+        this._labelColor = value;
+        this.refresh();
+    }
+
     get renderMode() { return this._renderMode; }
     set renderMode(value) { 
         if (value === this._renderMode)
             return;
         this._renderMode = value;
         this.refresh();
+     }
+
+     get textColor() { return this._textColor; }
+     set textColor(value) { 
+         this._textColor = value;
+         this.refresh();
      }
 
      get tip() { return this._tip; }
@@ -258,6 +279,8 @@ export default class Widget {
             { name: "horizontalAlignment", type: "multiple", elementIds: ["optAlignHLeft", "optAlignHCenter", "optAlignHRight"], value: this.horizontalAlignment },
             { name: "id", type: "string", elementId: "lblWidgetId", value: Strings.WidgetEditor_Common_Widget_Properties.replace("{0}", this.id), readonly: true },
             { name: "label", type: "string", elementId: "txtWidgetPropLabel", value: this.label },
+            { name: "labelColor", type: "string", elementId: "txtWidgetPropLabelColor", value: this.labelColor },
+            { name: "textColor", type: "string", elementId: "txtWidgetPropTextColor", value: this.textColor },
             { name: "tip", type: "string", elementId: "txtWidgetPropTip", value: this.tip },
             { name: "verticalAlignment", type: "multiple", elementIds: ["optAlignVTop", "optAlignVCenter", "optAlignVBottom"], value: this.verticalAlignment },
         ];
@@ -514,13 +537,24 @@ export default class Widget {
 
     _buildSectionsStyleAttribute(options) {
         if (!options)
-            options = {includeFontSize: true, includeFontWeight: true, includeFontUnderline: true};
+            options = {
+                includeFontSize: true, 
+                includeFontWeight: true, 
+                includeFontUnderline: true,
+                includeLabelColor: true,
+                includeTextColor: false
+            };
         if (options.includeFontSize !== false)
             options.includeFontSize = true;
         if (options.includeFontWeight !== false)
             options.includeFontWeight = true;
         if (options.includeFontUnderline !== false)
             options.includeFontUnderline = true;
+        if (options.includeLabelColor !== false)
+            options.includeLabelColor = true;
+        if (options.includeTextColor !== false)
+            options.includeTextColor = true;
+
         var style = "";
         if (options.includeFontSize && this.fontSize)
             style += `font-size: ${this.fontSize}px;`;
@@ -528,6 +562,15 @@ export default class Widget {
             style += `font-weight: ${this.fontWeight};`;
         if (options.includeFontUnderline && this.fontUnderline)
             style += `text-decoration: underline;`;
+        
+        // labelColor and textColor are mutually exclusive
+        if (options.includeLabelColor) {
+            if (this.labelColor)
+                style += `color: ${this.labelColor};`;
+        } else if (options.includeTextColor) {
+            if (this.textColor)
+                style += `color: ${this.textColor};`;
+        }
         return style;
     }
 
@@ -564,6 +607,8 @@ export default class Widget {
             labelRequired: Strings.WidgetEditor_Common_Required,
             labelVerticalAlignment: Strings.WidgetEditor_Common_VerticalAlignment,
             labelWidgetLabel: Strings.WidgetEditor_Common_Label,
+            labelWidgetLabelColor: Strings.WidgetEditor_Common_LabelColor,
+            labelWidgetTextColor: Strings.WidgetEditor_Common_TextColor,
             labelWidgetTip: Strings.WidgetEditor_Common_Tip,
             windowHideIconClass: Icons.WidgetEditor_Common_Window_Hide_Icon,
             windowHideIconTitle: Strings.WidgetEditor_Common_Window_Hide_Icon_Title,

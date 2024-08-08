@@ -97,7 +97,11 @@ class WidgetSelect extends Widget {
             return;
         super.refresh();
         var style = this._buildSectionsStyleAttribute();
-        var selectStyle = this._buildSectionsStyleAttribute({includeFontWeight: false, includeFontUnderline: false});
+        var selectStyle = this._buildSectionsStyleAttribute({
+            includeFontWeight: false, 
+            includeFontUnderline: false, 
+            includeLabelColor: false, 
+            includeTextColor: true});
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             sections.forEach(s => {

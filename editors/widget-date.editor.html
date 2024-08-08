@@ -26,6 +26,12 @@
                 <input type="color" id="txtWidgetPropLabelColor" />
             </div>
         </div>
+        <div class="widget-dialog-subsection w-4">
+            <div class="label-input-container">
+                <label for="txtWidgetPropTextColor">{{labelWidgetTextColor}}</label>
+                <input type="color" id="txtWidgetPropTextColor" />
+            </div>
+        </div>    
     </div>     
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelFontProperties}}</h6>
@@ -48,7 +54,7 @@
                 <label for="optFontWeightBold">{{labelFontWeightBold}}</label>
             </div>
         </div>
-    </div>
+    </div>       
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection w-6">
             <input type="checkbox" id="chkWidgetPropAutoHeight" />
@@ -81,12 +87,24 @@
     </div>
     <div class="widget-dialog-section">
         <div class="widget-dialog-subsection">
+            <input type="checkbox" id="chkWidgetPropRequired" />
+            <label for="chkWidgetPropRequired">{{labelRequired}}</label>
+        </div>  
+        <div class="widget-dialog-subsection">
+            <div class="label-input-container">
+                <label for="txtWidgetPropRequiredValidationMessage">{{labelValueRequiredValidationMessage}}</label>
+                <input type="text" id="txtWidgetPropRequiredValidationMessage" />
+            </div>
+        </div>            
+    </div>
+    <div class="widget-dialog-section">
+        <div class="widget-dialog-subsection">
             <div class="label-input-container">
                 <label for="txtWidgetPropTip">{{labelWidgetTip}}</label>
                 <input type="text" id="txtWidgetPropTip" />
             </div>
-        </div>        
-    </div>
+        </div>
+    </div>   
     <div class="widget-properties-editor-footer">
         <button type="button" data-action="accept">
             {{labelAccept}}
@@ -94,6 +112,6 @@
         &nbsp;
         <button type="button" data-action="cancel">
             {{labelCancel}}
-        </button>        
+        </button>
     </div>    
 </dialog>

@@ -7,6 +7,8 @@ export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
 // html
 export const HTML_DEFAULT_FONT_SIZE = 16;
 export const HTML_DEFAULT_FONT_WEIGHT = 400;
+export const HTML_DEFAULT_LABEL_COLOR = "#000000";
+export const HTML_DEFAULT_TEXT_COLOR = "#000000";
 export const HTML_MIN_FONT_SIZE = 6;
 export const HTML_MAX_FONT_SIZE = 96;
 export const HTML_FONT_SIZE_NORMAL = "normal";
@@ -41,6 +43,7 @@ export const validModes = [WIDGET_MODE_DESIGN, WIDGET_MODE_RUN, WIDGET_MODE_VIEW
 
 export const WIDGET_TYPE_BUTTON = 'button';
 export const WIDGET_TYPE_CHECKBOX = 'checkbox';
+export const WIDGET_TYPE_DATE = 'date';
 export const WIDGET_TYPE_IMAGE = 'image';
 export const WIDGET_TYPE_LABEL = 'label';
 export const WIDGET_TYPE_NUMBER = 'number';

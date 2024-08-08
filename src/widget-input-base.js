@@ -32,7 +32,12 @@ class WidgetInputBase extends Widget {
             return;
         super.refresh();
         var labelStyle = this._buildSectionsStyleAttribute();
-        var inputStyle = this._buildSectionsStyleAttribute({includeFontWeight: false, includeFontUnderline: false});
+        var inputStyle = this._buildSectionsStyleAttribute({
+            includeFontWeight: false, 
+            includeFontUnderline: false, 
+            includeLabelColor: false,
+            includeTextColor: true
+         });
         var sections = this._el.querySelectorAll(`[data-show-when]`);
         if (sections && sections.length) {
             var sel = this.type === constants.WIDGET_TYPE_PARAGRAPH ? "textarea" : "input";
@@ -74,7 +79,10 @@ class WidgetInputBase extends Widget {
         if (inputs)
             inputs.forEach(input => {
                 input.addEventListener("blur", function(e) {
-                    _t.value = e.currentTarget.value;
+                    if (_t.type !== constants.WIDGET_TYPE_DATE)
+                        _t.value = e.currentTarget.value;
+                    else
+                        _t.value = e.currentTarget.valueAsDate;
                 });
             });
     }
