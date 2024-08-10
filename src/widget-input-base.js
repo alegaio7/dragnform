@@ -79,10 +79,7 @@ class WidgetInputBase extends Widget {
         if (inputs)
             inputs.forEach(input => {
                 input.addEventListener("blur", function(e) {
-                    if (_t.type !== constants.WIDGET_TYPE_DATE)
-                        _t.value = e.currentTarget.value;
-                    else
-                        _t.value = e.currentTarget.valueAsDate;
+                    _t.value = e.currentTarget.value;
                 });
             });
     }

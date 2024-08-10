@@ -5,6 +5,21 @@ import WidgetInputBase from "./widget-input-base.js";
 class WidgetDate extends WidgetInputBase {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_DATE, fragment);
+        this._dateFormat = fragment.dateFormat ?? "yyyy/MM/dd"; 
+    }
+
+    get dateFormat() { return this._dateFormat; }
+    set dateFormat(value) {
+        // just do basic checks. only accept placeholders yyyy, MM, dd and separator "-" or "/"
+        if (!value || !value.length === 10)
+            return;
+        if (!value.includes("yyyy") || !value.includes("MM") || !value.includes("dd") || 
+            value.indexOf("yyyy") === -1 || value.indexOf("MM") === -1 || value.indexOf("dd") === -1)
+            return;
+        if (value.indexOf("-") === -1 && value.indexOf("/") === -1)
+            return;
+        this._dateFormat = value;
+        this.refresh();
     }
 
     exportJson() {
@@ -15,6 +30,7 @@ class WidgetDate extends WidgetInputBase {
             ]
         };
 
+        localProps.dateFormat = this._dateFormat;
         localProps.value = this.value ?? null;
         Object.assign(json, localProps);
         return json;
@@ -43,6 +59,7 @@ class WidgetDate extends WidgetInputBase {
         if (!this._el || this._batchUpdating)
             return;
         super.refresh();
+        this._updateContols();
     }
 
     /// <summary>
@@ -101,14 +118,54 @@ class WidgetDate extends WidgetInputBase {
     // Private methods
     // *******************************************************************************
 
+    _formatAsDate(value) {
+        if (!value)
+            return null;
+        var y = value.substring(0, 4);
+        var m = value.substring(5, 7);
+        var d = value.substring(8, 10);
+
+        if (!this._dateFormat)
+            this._dateFormat = "yyyy-MM-dd";
+
+        var yyPlaceholder = this._dateFormat.indexOf("yyyy");
+        var mmPlaceholder = this._dateFormat.indexOf("MM");
+        var ddPlaceholder = this._dateFormat.indexOf("dd");
+        var separator = this._dateFormat.indexOf("-") > -1 ? "-" : (this._dateFormat.indexOf("/") > -1 ? "/" : "-");
+
+        // placeholder indexes are only used to determine order, not absolute positioning in formatted string
+        var formatted = "";
+        var minPlaceholder = Math.min(yyPlaceholder, mmPlaceholder, ddPlaceholder);
+        for (var i = 0; i < 3; i++) {
+            if (formatted.length > 0)
+                formatted += separator;
+
+            if (minPlaceholder === yyPlaceholder) {
+                formatted += y;
+                yyPlaceholder = Infinity;
+            }
+            else if (minPlaceholder === mmPlaceholder) {
+                formatted += m;
+                mmPlaceholder = Infinity;
+            }
+            else {
+                formatted += d
+                ddPlaceholder = Infinity
+            }
+
+            minPlaceholder = Math.min(yyPlaceholder, mmPlaceholder, ddPlaceholder);
+        }
+
+        return formatted;
+    }
+
     _updateContols() {
         super._updateContols();
         // _el can be null if element was not rendered yet
         if (this._el) {
             var viewModeValue = this._el.querySelector(`span[data-part="value"]`);
-            debugger;
             if (viewModeValue)
-                viewModeValue.innerHTML = this.value ? this.value.toLocaleString() : "&nbsp;";   // render nbsp so to keep the height of the element
+                viewModeValue.innerHTML = this.value ? this._formatAsDate(this.value) : "&nbsp;";   // render nbsp so to keep the height of the element
         }
     }
 }
