@@ -21,6 +21,11 @@ export const FORMS_DESIGNER_VERSION = "1.0.0";
 export const PAPER_SIZE_A4_WIDTH = 595.28;      // in pixels, at 72dpi
 export const PAPER_SIZE_A4_HEIGHT = 841.89;     // in pixels
 
+export const TEXT_TRANSFORM_NONE = "none";
+export const TEXT_TRANSFORM_UPPERCASE = "uppercase";
+export const TEXT_TRANSFORM_LOWERCASE = "lowercase";
+export const TEXT_TRANSFORM_TITLECASE = "titlecase";
+
 export const WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_LEFT = 'left';
 export const WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_CENTER = 'center';
 export const WIDGET_CONTENT_ALIGNMENT_HORIZONTAL_RIGHT = 'right';
@@ -39,6 +44,7 @@ export const WIDGET_MODE_DESIGN = 'design';     // mode for designing forms
 export const WIDGET_MODE_RUN = 'run';           // mode for rendering widgets and allow user input
 export const WIDGET_MODE_VIEW = 'view';         // mode for rendering widget inputs and show readonly controls (previous to a PDF export)
 
+export const textTransformations = [TEXT_TRANSFORM_NONE, TEXT_TRANSFORM_UPPERCASE, TEXT_TRANSFORM_LOWERCASE, TEXT_TRANSFORM_TITLECASE];
 export const validModes = [WIDGET_MODE_DESIGN, WIDGET_MODE_RUN, WIDGET_MODE_VIEW];
 
 export const WIDGET_TYPE_BUTTON = 'button';

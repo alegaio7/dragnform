@@ -470,6 +470,19 @@
   text-decoration: none;
 }
 
+[data-type=text].widget-text-transform-none [data-part=input] {
+  text-transform: none;
+}
+[data-type=text].widget-text-transform-uppercase [data-part=input] {
+  text-transform: uppercase;
+}
+[data-type=text].widget-text-transform-lowercase [data-part=input] {
+  text-transform: lowercase;
+}
+[data-type=text].widget-text-transform-titlecase [data-part=input] {
+  text-transform: capitalize;
+}
+
 .label-input-container {
   display: table;
 }
@@ -542,6 +555,11 @@
 .widget-dialog-section-title {
   font-weight: bold;
   margin: 1rem 0 0 0;
+}
+
+.widget-dialog-tip {
+  font-size: 0.8rem;
+  color: #888;
 }
 
 .widget-select-option, .widget-radio-option {

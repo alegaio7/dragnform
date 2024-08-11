@@ -37,7 +37,7 @@ export default class WidgetCommonPropertiesEditor {
                                 el.value = p.value;
                         }
                     }
-                } else if (p.elementIds) { // used for properties that are bound to multiple elements like radio buttons
+                } else if (p.elementIds && p.type === "multiple") { // used for properties that are bound to ks elements like radio buttons
                     p.elementIds.forEach(eId => {
                         let el = document.getElementById(eId);
                         if (el) {
@@ -224,7 +224,7 @@ export default class WidgetCommonPropertiesEditor {
                             changedProps.push(p.name);
                         }
                     }
-                } else if (p.elementIds) {
+                } else if (p.elementIds && p.type === "multiple") {
                     p.elementIds.forEach(eId => { 
                         var el = document.getElementById(eId);
                         if (el && el.checked) {

@@ -32,7 +32,20 @@
                 <input type="color" id="txtWidgetPropTextColor" />
             </div>
         </div>    
-    </div>    
+    </div>
+    <div class="widget-dialog-section">
+        <h6 class="widget-dialog-section-title">{{labelTextTransformations}}</h6>
+        <div class="widget-dialog-subsection">
+            <input type="radio" id="optTextTransformationNone" value="none" name="textTransformations" />
+            <label for="optTextTransformationNone">{{labelTextTransformationsNone}}</label>
+            <input type="radio" id="optTextTransformationUppercase" value="uppercase" name="textTransformations"/>
+            <label for="optTextTransformationUppercase">{{labelTextTransformationsUpper}}</label>
+            <input type="radio" id="optTextTransformationLowercase" value="lowercase" name="textTransformations"/>
+            <label for="optTextTransformationLowercase">{{labelTextTransformationsLower}}</label>
+            <input type="radio" id="optTextTransformationTitlecase" value="titlecase" name="textTransformations"/>
+            <label for="optTextTransformationTitlecase">{{labelTextTransformationsTitle}}</label>            
+        </div>
+    </div>      
     <div class="widget-dialog-section">
         <h6 class="widget-dialog-section-title">{{labelFontProperties}}</h6>
         <div class="widget-dialog-subsection w-6">

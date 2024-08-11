@@ -1,10 +1,15 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import WidgetInputBase from "./widget-input-base.js";
+import functions from './functions.js';
 
 class WidgetText extends WidgetInputBase {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_TEXT, fragment);
+
+        this._textTransform = constants.TEXT_TRANSFORM_NONE;
+        if (fragment.textTransform && constants.textTransformations.indexOf(fragment.textTransform) >= 0)
+            this._textTransform = fragment.textTransform;
 
         this._minLength = 0;
         this._maxLength = 0;
@@ -51,16 +56,34 @@ class WidgetText extends WidgetInputBase {
         this.refresh();
     }
 
+    get textTransform() { return this._textTransform; }
+    set textTransform(value) {
+        if (constants.textTransformations.indexOf(value) < 0)
+            return;
+        this._textTransform = value;
+        if (this.value) {
+            if (value === constants.TEXT_TRANSFORM_UPPERCASE)
+                this.value = this.value.toUpperCase();
+            else if (value === constants.TEXT_TRANSFORM_LOWERCASE)
+                this.value = this.value.toLowerCase();
+            else if (value === constants.TEXT_TRANSFORM_TITLECASE)
+                this.value = functions.titleCase(this.value);
+        }
+        this.refresh();
+        this._updateContols();
+    }
+
     exportJson() {
         var json = super.exportJson();
         var localProps = {
             validations: [
                 { type: "minLength", value: this.minLength, message: this.minLengthValidationMessage },
                 { type: "maxLength", value: this.maxLength, message: this.maxLengthValidationMessage },
-                { type: "required", value: this.required, message: this.valueRequiredValidationMessage },
+                { type: "required", value: this.required, message: this.valueRequiredValidationMessage }
             ]
         };
 
+        localProps.textTransform = this.textTransform;
         if (this.pattern)
             localProps.validations.push({ type: "pattern", value: this.pattern.name, message: this.pattern.message });
 
@@ -78,6 +101,7 @@ class WidgetText extends WidgetInputBase {
             { name: "maxLength", type: "number", elementId: "txtWidgetPropMaxLength", value: this.maxLength },
             { name: "maxLengthValidationMessage", type: "string", elementId: "txtWidgetPropMaxLengthValidationMessage", value: this.maxLengthValidationMessage },
             { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
+            { name: "textTransform", type: "multiple", elementIds: ["optTextTransformationNone", "optTextTransformationUppercase", "optTextTransformationLowercase", "optTextTransformationTitlecase"], value: this.textTransform },
             { name: "valueRequiredValidationMessage", type: "string", elementId: "txtWidgetPropRequiredValidationMessage", value: this.valueRequiredValidationMessage }
         );
         return props;
@@ -92,6 +116,12 @@ class WidgetText extends WidgetInputBase {
         replacements.labelMaxLength = Strings.WidgetEditor_Text_Widget_MaxLength;
         replacements.labelMaxLengthValidationMessage = Strings.WidgetEditor_Text_Widget_MaxLengthValidationMessage;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
+
+        replacements.labelTextTransformations = Strings.Widget_Text_Text_Transformations;
+        replacements.labelTextTransformationsNone = Strings.Widget_Text_Text_TransformationsNone;
+        replacements.labelTextTransformationsUpper = Strings.Widget_Text_Text_TransformationsUpper;
+        replacements.labelTextTransformationsLower = Strings.Widget_Text_Text_TransformationsLower;
+        replacements.labelTextTransformationsTitle = Strings.Widget_Text_Text_TransformationsTitle;
 
         return props;
     }
@@ -115,6 +145,17 @@ class WidgetText extends WidgetInputBase {
                     input.removeAttribute("maxlength");
             });
         }
+
+        this._el.classList.remove("widget-text-transform-none", "widget-text-transform-uppercase", "widget-text-transform-lowercase", "widget-text-transform-titlecase");
+        if (this.textTransform === constants.TEXT_TRANSFORM_UPPERCASE)
+            this._el.classList.add("widget-text-transform-uppercase");
+        else if (this.textTransform === constants.TEXT_TRANSFORM_LOWERCASE)
+            this._el.classList.add("widget-text-transform-lowercase");
+        else if (this.textTransform === constants.TEXT_TRANSFORM_TITLECASE)
+            this._el.classList.add("widget-text-transform-titlecase");
+        else
+            this._el.classList.add("widget-text-transform-none");
+
     }
 
     /// <summary>

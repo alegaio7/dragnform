@@ -72,6 +72,9 @@ class Strings {
     static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
     static get WidgetValidation_RequiredMessage() {return 'A value for this field is required'; }
 
+    static get Widget_Date_Default_Date_Format() { return 'yyyy/mm/dd'; }
+    static get Widget_Date_Invalid_Date_Format() { return 'The date format is invalid.'; }
+
     static get Widget_Radio_Default_Option1_Title() { return 'Option 1'; }
     static get Widget_Radio_Default_Option2_Title() { return 'Option 2'; }
     static get Widget_Radio_Options_Label_Title() { return 'Title'; }
@@ -84,6 +87,12 @@ class Strings {
     static get Widget_Select_Options_Label_Value() { return 'Value'; }
     static get Widget_Select_Options_Title() { return 'Select options'; }
 
+    static get Widget_Text_Text_Transformations() { return 'Text tansformations'; }
+    static get Widget_Text_Text_TransformationsNone() { return 'None'; }
+    static get Widget_Text_Text_TransformationsUpper() { return 'Upper case'; }
+    static get Widget_Text_Text_TransformationsLower() { return 'Lower case'; }
+    static get Widget_Text_Text_TransformationsTitle() { return 'Title case'; }
+    
     // widget editors
     static get WidgetEditor_Common_Accept() { return 'Accept'; }
     static get WidgetEditor_Common_Align_H_Left() { return 'Left'; }
@@ -114,6 +123,9 @@ class Strings {
     static get WidgetEditor_Common_Widget_Properties() { return 'Widget properties ({0})'; }
     static get WidgetEditor_Common_Widget_ValueRequiredMessage() { return 'Validation message'; }
     static get WidgetEditor_Common_Window_Hide_Icon_Title() { return 'Hide window on hover'; }
+
+    static get WidgetEditor_Date_Widget_DateFormat() { return 'Date format'; }
+    static get WidgetEditor_Date_Widget_DateFormatTip() { return 'Must be 10 characters in length. Only yyyy, mm, dd, [- or /] are allowed.'; }
 
     static get WidgetEditor_Number_Widget_MinValue() { return 'Min.'; }
     static get WidgetEditor_Number_Widget_MinValueValidationMessage() { return 'Validation message'; }

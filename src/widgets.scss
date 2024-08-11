@@ -56,12 +56,16 @@ $widget-toolbar-padding: 0.5rem;
     box-sizing: border-box;
 }
 
+// ***************
 // general use
+// ***************
 .widget-hide {
     display: none;
 }
 
+// ***************
 // designer - toolbar
+// ***************
 .widget-designer {
     button, input, select {
         font-family: inherit;
@@ -195,7 +199,9 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
+// ***************
 // widgets
+// ***************
 .widget {
     min-height: $widget-min-height;
     overflow: hidden;
@@ -474,7 +480,9 @@ $widget-toolbar-padding: 0.5rem;
     margin-bottom: 2px;
 }
 
+// ***************
 // alignments
+// ***************
 .widget-h-align-start {
     align-items: start;
 
@@ -549,7 +557,9 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
+// ***************
 // columns
+// ***************
 [class*="widget-col-"] {
     position: relative;
     width: 100%;
@@ -629,9 +639,24 @@ $widget-toolbar-padding: 0.5rem;
     }
 }
 
-// ******
+[data-type="text"] {
+    &.widget-text-transform-none [data-part="input"] {
+        text-transform: none;
+    }
+    &.widget-text-transform-uppercase [data-part="input"] {
+        text-transform: uppercase;
+    }
+    &.widget-text-transform-lowercase [data-part="input"] {
+        text-transform: lowercase;
+    }
+    &.widget-text-transform-titlecase [data-part="input"] {
+        text-transform: capitalize;
+    }
+}
+
+// ***************
 // dialog editors
-// ******
+// ***************
 .label-input-container {
     display: table;
     label, input {
@@ -715,6 +740,11 @@ $widget-toolbar-padding: 0.5rem;
 .widget-dialog-section-title {
     font-weight: bold;
     margin: 1rem 0 0 0;
+}
+
+.widget-dialog-tip {
+    font-size: 0.8rem;
+    color: $widget-tip-color;
 }
 
 .widget-select-option, .widget-radio-option {

@@ -1,23 +1,21 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import WidgetInputBase from "./widget-input-base.js";
+import functions from "./functions.js";
 
 class WidgetDate extends WidgetInputBase {
     constructor(fragment) {
         super(constants.WIDGET_TYPE_DATE, fragment);
-        this._dateFormat = fragment.dateFormat ?? "yyyy/MM/dd"; 
+        this._dateFormat = fragment.dateFormat ?? Strings.Widget_Date_Default_Date_Format; 
     }
 
     get dateFormat() { return this._dateFormat; }
     set dateFormat(value) {
         // just do basic checks. only accept placeholders yyyy, MM, dd and separator "-" or "/"
-        if (!value || !value.length === 10)
+        if (!functions.validateDateFormat(value)) {
+            alert(Strings.Widget_Date_Invalid_Date_Format);
             return;
-        if (!value.includes("yyyy") || !value.includes("MM") || !value.includes("dd") || 
-            value.indexOf("yyyy") === -1 || value.indexOf("MM") === -1 || value.indexOf("dd") === -1)
-            return;
-        if (value.indexOf("-") === -1 && value.indexOf("/") === -1)
-            return;
+        }
         this._dateFormat = value;
         this.refresh();
     }
@@ -40,6 +38,7 @@ class WidgetDate extends WidgetInputBase {
         var props = super.getEditorProperties();
 
         props.push(
+            { name: "dateFormat", type: "string", elementId: "txtWidgetPropDateFormat", value: this.dateFormat },
             { name: "required", type: "boolean", elementId: "chkWidgetPropRequired", value: this.required },
             { name: "valueRequiredValidationMessage", type: "string", elementId: "txtWidgetPropRequiredValidationMessage", value: this.valueRequiredValidationMessage }
         );
@@ -50,8 +49,9 @@ class WidgetDate extends WidgetInputBase {
         var props = await this._getPropertiesEditorTemplateCore("widget-date", "WidgetDatePropertiesEditor");
         var replacements = props.replacements;
 
+        replacements.labelWidgetDateFormat = Strings.WidgetEditor_Date_Widget_DateFormat;
+        replacements.labelWidgetDateFormatTip = Strings.WidgetEditor_Date_Widget_DateFormatTip;
         replacements.labelValueRequiredValidationMessage = Strings.WidgetEditor_Common_Widget_ValueRequiredMessage;
-
         return props;
     }
 
@@ -126,10 +126,10 @@ class WidgetDate extends WidgetInputBase {
         var d = value.substring(8, 10);
 
         if (!this._dateFormat)
-            this._dateFormat = "yyyy-MM-dd";
+            this._dateFormat = Strings.Widget_Date_Default_Date_Format;
 
         var yyPlaceholder = this._dateFormat.indexOf("yyyy");
-        var mmPlaceholder = this._dateFormat.indexOf("MM");
+        var mmPlaceholder = this._dateFormat.indexOf("mm");
         var ddPlaceholder = this._dateFormat.indexOf("dd");
         var separator = this._dateFormat.indexOf("-") > -1 ? "-" : (this._dateFormat.indexOf("/") > -1 ? "/" : "-");
 
@@ -155,7 +155,6 @@ class WidgetDate extends WidgetInputBase {
 
             minPlaceholder = Math.min(yyPlaceholder, mmPlaceholder, ddPlaceholder);
         }
-
         return formatted;
     }
 
