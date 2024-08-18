@@ -2,6 +2,7 @@ import * as constants from './constants.js';
 import WidgetButton from './widget-button.js';
 import WidgetCheckbox from './widget-checkbox.js';
 import WidgetDate from './widget-date.js';
+import WidgetEmail from './widget-email.js';
 import WidgetImage from './widget-image.js';
 import WidgetLabel from './widget-label.js';
 import WidgetNumber from './widget-number.js';
@@ -131,6 +132,9 @@ export default class Canvas {
                 break;
             case constants.WIDGET_TYPE_DATE:
                 w = new WidgetDate(o);
+                break;
+            case constants.WIDGET_TYPE_EMAIL:
+                w = new WidgetEmail(o);
                 break;
             case constants.WIDGET_TYPE_IMAGE:
                 w = new WidgetImage(o);

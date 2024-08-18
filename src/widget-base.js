@@ -19,6 +19,7 @@ export default class Widget {
             constants.WIDGET_TYPE_BUTTON,
             constants.WIDGET_TYPE_CHECKBOX,
             constants.WIDGET_TYPE_DATE,
+            constants.WIDGET_TYPE_EMAIL,
             constants.WIDGET_TYPE_IMAGE,
             constants.WIDGET_TYPE_LABEL,
             constants.WIDGET_TYPE_NUMBER,

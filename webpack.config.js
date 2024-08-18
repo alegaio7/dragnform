@@ -36,6 +36,7 @@ const config = {
         new TerserPlugin(),
         new CopyPlugin({
             patterns: [
+                { from: 'demo.html', to: "demo.html" },
                 { from: 'editors', to: "editors" },
                 { from: 'widgets', to: "widgets" },
                 { from: 'src/functions.js', to: "functions.js" },

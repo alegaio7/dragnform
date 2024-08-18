@@ -50,6 +50,7 @@ export const validModes = [WIDGET_MODE_DESIGN, WIDGET_MODE_RUN, WIDGET_MODE_VIEW
 export const WIDGET_TYPE_BUTTON = 'button';
 export const WIDGET_TYPE_CHECKBOX = 'checkbox';
 export const WIDGET_TYPE_DATE = 'date';
+export const WIDGET_TYPE_EMAIL = 'email';
 export const WIDGET_TYPE_IMAGE = 'image';
 export const WIDGET_TYPE_LABEL = 'label';
 export const WIDGET_TYPE_NUMBER = 'number';

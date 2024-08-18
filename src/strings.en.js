@@ -38,6 +38,8 @@ class Strings {
     static get Toolbar_AddDateInputWidget_ButtonLabel() { return 'Date'; }
     static get Toolbar_AddDateInputWidget_ButtonTitle() { return 'Add date field'; }
 
+    static get Toolbar_AddEmailInputWidget_ButtonLabel() { return 'Email'; }
+    static get Toolbar_AddEmailInputWidget_ButtonTitle() { return 'Add email field'; }
 
     static get Toolbar_AddNumberInputWidget_ButtonLabel() { return 'Number'; }
     static get Toolbar_AddNumberInputWidget_ButtonTitle() { return 'Add number field'; }
@@ -74,6 +76,8 @@ class Strings {
 
     static get Widget_Date_Default_Date_Format() { return 'yyyy/mm/dd'; }
     static get Widget_Date_Invalid_Date_Format() { return 'The date format is invalid.'; }
+
+    static get Widget_Email_Invalid_Email_Format() { return 'The email format is invalid.'; }
 
     static get Widget_Radio_Default_Option1_Title() { return 'Option 1'; }
     static get Widget_Radio_Default_Option2_Title() { return 'Option 2'; }

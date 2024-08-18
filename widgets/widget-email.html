@@ -1,0 +1,74 @@
+<div id="{{id}}" class="{{widgetClass}} {{colClass}}" data-type="{{type}}" data-mode="{{mode}}" style="{{style}}">
+	<div data-show-when="design" class="widget-h-align-start widget-v-align-center">
+		<div data-part="widget-properties" title="{{widgetPropertiesButtonTitle}}"></div>
+		{{#showRemove}}
+		<div data-part="widget-remove" title="{{widgetRemoveButtonTitle}}"></div>
+		{{/showRemove}}
+		<label class="{{labelClass}}" for="{{inputIdDesign}}" data-part="label-container">
+			<span data-part="required-mark" data-position="before" 
+			{{^showRequiredMarkBefore}}
+			style="display:none;"
+			{{/showRequiredMarkBefore}}
+			>{{mark}}</span>
+			<span data-part="label">{{label}}</span>
+			<span data-part="required-mark" data-position="after" 
+			{{^showRequiredMarkAfter}}
+			style="display:none;"
+			{{/showRequiredMarkAfter}}
+			>{{mark}}</span>
+		</label>
+		<input type="email" id="{{inputIdDesign}}" class="{{inputClass}}" data-part="input"
+			{{#required}}
+            required
+			{{/required}}
+			{{#hasValue}}
+            value="{{value}}"
+			{{/hasValue}}
+			{{#hasName}}
+            name="{{name}}"
+			{{/hasName}}
+            >
+		{{#showGrip}}
+		<div data-part="widget-grip"></div>
+		{{/showGrip}}
+		{{#hasTip}}
+		<div data-part="widget-tip"></div>
+		{{/hasTip}}
+	</div>
+	<div data-show-when="run" class="widget-h-align-start widget-v-align-center">
+		<label class="{{labelClass}}" for="{{inputIdRun}}" data-part="label-container">
+			<span data-part="required-mark" data-position="before" 
+			{{^showRequiredMarkBefore}}
+			style="display:none;"
+			{{/showRequiredMarkBefore}}
+			>{{mark}}</span>
+			<span data-part="label">{{label}}</span>
+			<span data-part="required-mark" data-position="after" 
+			{{^showRequiredMarkAfter}}
+			style="display:none;"
+			{{/showRequiredMarkAfter}}
+			>{{mark}}</span>
+		</label>
+		<input type="email" id="{{inputIdRun}}" class="{{inputClass}}" data-part="input"
+			{{#required}}
+            required
+			{{/required}}
+			{{#hasValue}}
+            value="{{value}}"
+			{{/hasValue}}
+			{{#hasName}}
+            name="{{name}}"
+			{{/hasName}}
+            >
+		{{#hasTip}}
+		<div data-part="widget-tip"></div>
+		{{/hasTip}}
+		<div data-part="widget-error"></div>
+	</div>
+	<div data-show-when="view" class="widget-h-align-start widget-v-align-center">
+		<label class="{{labelClass}}" data-part="label-container">
+			<span data-part="label">{{label}}</span>
+		</label>
+		<span data-part="value" class="{{valueControlClass}}">{{value}}</span>		
+	</div>
+</div>

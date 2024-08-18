@@ -28,10 +28,11 @@ export default class Designer {
             { action: 'add-label', widgetType: constants.WIDGET_TYPE_LABEL },
             { action: 'add-input-checkbox', widgetType: constants.WIDGET_TYPE_CHECKBOX },
             { action: 'add-input-date', widgetType: constants.WIDGET_TYPE_DATE },
-            { action: 'add-input-radio', widgetType: constants.WIDGET_TYPE_RADIO },
-            { action: 'add-input-select', widgetType: constants.WIDGET_TYPE_SELECT },
+            { action: 'add-input-email', widgetType: constants.WIDGET_TYPE_EMAIL },
             { action: 'add-input-number', widgetType: constants.WIDGET_TYPE_NUMBER },
             { action: 'add-input-paragraph', widgetType: constants.WIDGET_TYPE_PARAGRAPH },
+            { action: 'add-input-radio', widgetType: constants.WIDGET_TYPE_RADIO },
+            { action: 'add-input-select', widgetType: constants.WIDGET_TYPE_SELECT },
             { action: 'add-input-text', widgetType: constants.WIDGET_TYPE_TEXT },
             { action: 'add-button', widgetType: constants.WIDGET_TYPE_BUTTON },
             { action: 'add-image', widgetType: constants.WIDGET_TYPE_IMAGE },
@@ -326,7 +327,7 @@ export default class Designer {
                 options.toolbar.buttons.textField || options.toolbar.buttons.numberField || options.toolbar.buttons.spacer || 
                 options.toolbar.buttons.button || options.toolbar.buttons.label || options.toolbar.buttons.image || 
                 options.toolbar.button.checkbox || options.toolbar.buttons.radio || options.toolbar.buttons.select ||
-                options.toolbar.buttons.paragraph || options.toolbar.buttons.dateField
+                options.toolbar.buttons.paragraph || options.toolbar.buttons.dateField || options.toolbar.buttons.emailField
             );
             var renderModeGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.renderCurrentMode && options.toolbar.buttons.renderValidateForm
@@ -412,6 +413,11 @@ export default class Designer {
                                 <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
                             </button>`;
+                if (options.toolbar.buttons.emailField)
+                    html += `<button type="button" data-action="add-input-email" title="${Strings.Toolbar_AddEmailInputWidget_ButtonTitle}">
+                                <i class="${Icons.Toolbar_AddEmailInputWidget_Icon}"></i>
+                                <span>${Strings.Toolbar_AddEmailInputWidget_ButtonLabel}</span>
+                            </button>`;                            
                 if (options.toolbar.buttons.dateField)
                     html += `<button type="button" data-action="add-input-date" title="${Strings.Toolbar_AddDateInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddDateInputWidget_Icon}"></i>

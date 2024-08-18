@@ -148,6 +148,12 @@
 .widget[data-mode=run] [data-show-when=design], .widget[data-mode=run] [data-show-when=view] {
   display: none;
 }
+.widget[data-mode=run] input:invalid, .widget[data-mode=run] select:invalid, .widget[data-mode=run] textarea:invalid {
+  border-color: #f00;
+}
+.widget[data-mode=run] input:valid, .widget[data-mode=run] select:valid, .widget[data-mode=run] textarea:valid {
+  border-color: limegreen;
+}
 .widget[data-mode=view] [data-show-when=view] {
   display: flex;
 }
@@ -253,6 +259,8 @@
   font-size: inherit;
   font-weight: inherit;
   padding: 0;
+  border-width: 1px;
+  border-style: solid;
 }
 .widget [data-part=widget-error] {
   display: none;
