@@ -49,6 +49,13 @@ export default class Designer {
         this._options = this._getDefaultOptions();
         this._options.liveEditsPreview = options.liveEditsPreview !== true ? false : true;
 
+        if (options.widgetPaths) {
+            if (options.widgetPaths.widgetTemplates)
+                this._options.widgetPaths.widgetTemplates = options.widgetPaths.widgetTemplates;
+            if (options.widgetPaths.widgetFormEditors)
+                this._options.widgetPaths.widgetFormEditors = options.widgetPaths.widgetFormEditors;
+        }
+
         if (options.toolbar)
             this._options.toolbar = options.toolbar;
         this._options.toolbar.visible = options.toolbar.visible !== true ? false : true;
@@ -122,7 +129,7 @@ export default class Designer {
     /// Private methods
     /// ********************************************************************************************************************
 
-    _createCanvas(widgetRenderOptions, liveEditsPreview) {
+    _createCanvas(widgetRenderOptions, liveEditsPreview, widgetPaths) {
         var el = this._container.querySelector('.widget-container');
         var editorsEl = this._container.querySelector('.widget-editors-container');
         this._canvas = new Canvas({
@@ -131,8 +138,11 @@ export default class Designer {
             widgetsContainerEl: el, 
             widgetEditorsContainerEl: editorsEl, 
             widgetRenderOptions: widgetRenderOptions, 
+            widgetPaths: widgetPaths,
             onModified: (value) => {
                 this._updateUI();
+                if (this._callbacks.onDesignModified)
+                    this._callbacks.onDesignModified.call(this, value);
             }
         });
     }
@@ -157,9 +167,12 @@ export default class Designer {
     _getDefaultOptions() {
         return {
             liveEditsPreview: false,
-            nullValue: '(null)',
             toolbar: {
                 visible: true
+            },
+            widgetPaths: {
+                widgetTemplates: "./widgets",
+                widgetFormEditors: "./widgets/editors"
             },
             widgetRenderOptions: {
                 enableInPlaceEditor: true,
@@ -230,7 +243,7 @@ export default class Designer {
                         return;
                 this._options = this._getDefaultOptions();
                 this._canvas.clearCanvas();
-                this._createCanvas(this._options.widgetRenderOptions, this._options.liveEditsPreview);
+                this._createCanvas(this._options.widgetRenderOptions, this._options.liveEditsPreview, this._options.widgetPaths);
             } else if (am.action === "export-json") {
                 var json = this.exportJson();
                 if (this._callbacks.onExportToJson) {
@@ -471,7 +484,7 @@ export default class Designer {
             });
         });
 
-        this._createCanvas(options.widgetRenderOptions, options.liveEditsPreview);
+        this._createCanvas(options.widgetRenderOptions, options.liveEditsPreview, options.widgetPaths);
     }
 
     _updateUI() {
@@ -484,15 +497,5 @@ export default class Designer {
         widgetButtons.forEach(b => {
             b.disabled = this.renderMode === constants.WIDGET_MODE_DESIGN ? false : true;
         });
-
-        if (this._canvas.modified) {
-            if (document.title.endsWith('*'))
-                return;
-            document.title += ' *';
-        }
-        else {
-            if (document.title.endsWith(' *'))
-                document.title = document.title.substring(0, document.title.length - 2);
-        }
     }
 }

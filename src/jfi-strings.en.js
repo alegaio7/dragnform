@@ -26,7 +26,7 @@ class Strings {
     static get Toolbar_RenderModes_Design_ButtonLabel() { return 'Design mode'; }
     static get Toolbar_RenderModes_Run_ButtonLabel() { return 'Run mode'; }
     static get Toolbar_RenderModes_View_ButtonLabel() { return 'View mode'; }
-    static get Toolbar_RenderModes_ButtonTitle() { return 'Switch between design and run mode'; }
+    static get Toolbar_RenderModes_ButtonTitle() { return 'Switch mode'; }
     static get Toolbar_RenderModes_ValidateForm_ButtonTitle() { return 'Validate form in run mode'; }
     static get Toolbar_RenderModes_ValidateForm_ButtonLabel() { return 'Validate'; }
 
@@ -70,7 +70,7 @@ class Strings {
     // widgets
     static get WidgetPropertiesButtonTitle() { return 'Widget properties'; }
     static get WidgetRemoveButtonTitle() { return 'Remove widget'; }
-    static get WidgetRemoveConfirmationMessage() { return 'Remove widget "{0}"?'; }
+    static get WidgetRemoveConfirmationMessage() { return 'Do you want to remove the widget "{0}"?'; }
     static get WidgetValidation_PatternMessage() { return 'Value does not match the pattern'; }
     static get WidgetValidation_RequiredMessage() {return 'A value for this field is required'; }
 

@@ -2,7 +2,7 @@ import * as constants from './constants.js';
 import flyter from 'flyter';
 import { createPopper } from '@popperjs/core';
 import mustache from 'mustache';
-import functions from './functions.js';
+import functions from './jfi-functions.js';
 import Icons from './icons.js';
 
 export default class Widget {
@@ -11,6 +11,8 @@ export default class Widget {
     constructor(type, fragment) {
         if (!type)
             throw new Error('type is required');
+
+        this._widgetPaths = null;
 
         if (!fragment)
             fragment = {};
@@ -105,6 +107,10 @@ export default class Widget {
             this.widgetClass += ' ' + fragment.globalClasses.widget;
 
         this._batchUpdating = false;
+    }
+
+    setWidgetPaths(paths) {
+        this._widgetPaths = paths;
     }
 
     // Props begin
@@ -294,7 +300,8 @@ export default class Widget {
     }
 
     async _getPropertiesEditorTemplateCore(baseName, baseClass) {
-        var html = await (await fetch(`/editors/${baseName}.editor.html`)).text();
+        var url = (this._widgetPaths?.widgetFormEditors ?? "./editors") + `/${baseName}.editor.html`;
+        var html = await (await fetch(url)).text();
         return {
             baseName: baseName,
             handlingClassName: baseClass,
@@ -623,7 +630,8 @@ export default class Widget {
         if (Widget._cachedTemplates.has(name))
             template = Widget._cachedTemplates.get(name);
         else {
-            template = await (await fetch(`/widgets/${name}.html`)).text();
+            var url = (this._widgetPaths?.widgetTemplates ?? "./widgets") + `/${name}.html`;
+            template = await (await fetch(url)).text();
             Widget._cachedTemplates.set(name, template);
         }
         var html = mustache.render(template, replacements);

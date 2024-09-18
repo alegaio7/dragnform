@@ -1,6 +1,6 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
-import functions from './functions.js';
+import functions from './jfi-functions.js';
 
 class WidgetSpacer extends Widget {
     constructor(fragment) {

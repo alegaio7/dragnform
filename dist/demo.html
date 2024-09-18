@@ -15,7 +15,7 @@
         <div id="widgets"></div>
         <div id="json-arena"></div>
         <!-- <script type="text/javascript" src="https://unpkg.com/flyter/bundles/flyter.vanilla.min.js"></script> -->
-        <script src="/dist/strings.en.js"></script>
+        <script src="/dist/jfi-strings.en.js"></script>
         <script src="/dist/justformit.js"></script>
         <script type="module">
             var designer = new justformit.Designer({
@@ -27,6 +27,17 @@
                         // document.getElementById('json-arena').innerText = JSON.stringify(json, null, 2);
                     },
                     onLoadJson: function(e) {
+                        
+                    },
+                    onDesignModified: function(value) {
+                        if (value) {
+                            if (document.title.endsWith('*'))
+                                return;
+                            document.title += ' *';
+                        } else {
+                            if (document.title.endsWith(' *'))
+                                document.title = document.title.substring(0, document.title.length - 2);
+                        }
                         
                     },
                     onLoadJsonCompleted: function(json) {
@@ -75,7 +86,6 @@
                 },
                 containerId: "widgets",
                 liveEditsPreview: false,
-                nullValue: '(null)',
                 toolbar: {
                     visible: true,
                     buttons: {
@@ -98,6 +108,10 @@
                         spacer: true,
                         textField: true,
                     }
+                },
+                widgetPaths: {
+                    widgetTemplates: "/dist/widgets",
+                    widgetFormEditors: "/dist/editors",
                 },
                 widgetRenderOptions: {
                     renderGrip: true,

@@ -1,7 +1,7 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import Icons from './icons.js';
-import functions from './functions.js';
+import functions from './jfi-functions.js';
 
 class WidgetSelect extends Widget {
     constructor(fragment) {

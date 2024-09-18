@@ -47,6 +47,7 @@ export default class Canvas {
         this._modified = false;
         this._onModifiedCallback = options.onModified ?? null;
         this._widgetRenderOptions = options.widgetRenderOptions ?? {};
+        this._widgetPaths = options.widgetPaths ?? {};
 
         // keeps some settings of the last edited widget, to copy it to new widgets
         // this is a map of maps, where the key is the widget type and the value is a map of properties
@@ -82,6 +83,7 @@ export default class Canvas {
         var w = this.createWidget(jsonObj);
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
+        w.setWidgetPaths(this._widgetPaths);
 
         this._widgets.push(w);
         this.modified = true;
@@ -488,7 +490,7 @@ export default class Canvas {
         if (propEditorWithScript) {
             var scriptName = propEditorWithScript.getAttribute("has-script");
             if (!scriptName)
-                scriptName = "./editors/" + editorData.baseName + ".editor.js";
+                scriptName = (this._widgetPaths.widgetFormEditors ?? "./editors") + "/" + editorData.baseName + ".editor.js";
 
             import(/* webpackIgnore: true */ scriptName).then(module => {
                 if (module && module.default) {

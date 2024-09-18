@@ -170,7 +170,7 @@ $widget-toolbar-padding: 0.5rem;
     font-size: $default-font-size;
     margin-right: auto;
     margin-left: auto;
-    width: $widget-container-width;
+    max-width: $widget-container-width;
 }
 
 .widget-container {

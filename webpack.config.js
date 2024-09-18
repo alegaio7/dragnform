@@ -39,8 +39,9 @@ const config = {
                 { from: 'demo.html', to: "demo.html" },
                 { from: 'editors', to: "editors" },
                 { from: 'widgets', to: "widgets" },
-                { from: 'src/functions.js', to: "functions.js" },
-                { from: 'src/strings.en.js', to: "strings.en.js" },
+                { from: 'src/jfi-functions.js', to: "jfi-functions.js" },
+                { from: 'src/jfi-strings.en.js', to: "jfi-strings.en.js" },
+                { from: 'src/jfi-strings.es.js', to: "jfi-strings.es.js" }
             ]
         })
     ],
