@@ -56,17 +56,24 @@ export default class Designer {
                 this._options.widgetPaths.widgetFormEditors = options.widgetPaths.widgetFormEditors;
         }
 
-        if (options.toolbar)
+        if (options.toolbar) {
             this._options.toolbar = options.toolbar;
+            if (options.toolbar.buttonClass)
+                this._options.toolbar.buttonClass = options.toolbar.buttonClass;
+        }
         this._options.toolbar.visible = options.toolbar.visible !== true ? false : true;
 
         if (options.widgetRenderOptions) {
+            if (options.widgetRenderOptions.globalClasses)
+                this._options.widgetRenderOptions.globalClasses = options.widgetRenderOptions.globalClasses;
+            
             if (options.widgetRenderOptions.requiredAttributeSettings)
                 this._options.widgetRenderOptions.requiredAttributeSettings = options.widgetRenderOptions.requiredAttributeSettings;
 
             this._options.widgetRenderOptions.renderGrip = options.widgetRenderOptions.renderGrip !== true ? false : true;
             this._options.widgetRenderOptions.renderRemove = options.widgetRenderOptions.renderRemove !== true ? false : true;
             this._options.widgetRenderOptions.renderTips = options.widgetRenderOptions.renderTips !== false ? true : false;
+            this._options.widgetRenderOptions.disableInlineEditor = options.widgetRenderOptions.disableInlineEditor === true ? true : false;
         }
 
         this._setupDesigner(this._options);
@@ -133,8 +140,8 @@ export default class Designer {
         var el = this._container.querySelector('.widget-container');
         var editorsEl = this._container.querySelector('.widget-editors-container');
         this._canvas = new Canvas({
-            renderMode: constants.WIDGET_MODE_DESIGN,
             liveEditsPreview: liveEditsPreview,
+            renderMode: constants.WIDGET_MODE_DESIGN,
             widgetsContainerEl: el, 
             widgetEditorsContainerEl: editorsEl, 
             widgetRenderOptions: widgetRenderOptions, 
@@ -175,7 +182,7 @@ export default class Designer {
                 widgetFormEditors: "./widgets/editors"
             },
             widgetRenderOptions: {
-                enableInPlaceEditor: true,
+                disableInlineEditor: false,
                 renderGrip: true,
                 renderRemove: true,
                 renderTips: true,
@@ -241,7 +248,6 @@ export default class Designer {
                 if (this.canvas.modified)
                     if (!confirm(Strings.Designer_NewForm_Confirm))
                         return;
-                this._options = this._getDefaultOptions();
                 this._canvas.clearCanvas();
                 this._createCanvas(this._options.widgetRenderOptions, this._options.liveEditsPreview, this._options.widgetPaths);
             } else if (am.action === "export-json") {
@@ -349,27 +355,28 @@ export default class Designer {
             //     options.toolbar.buttons.spacer
             // );
             html += `<div class="widget-toolbar">`;
+            var btnClass = this._options.toolbar.buttonClass ?? "widget-toolbar-button";
             if (fileGroup) {
                 html += `<div class="widget-toolbar-group">
                     <div class="widget-toolbar-group-title">${Strings.Toolbar_File_GroupTitle}</div>`;
                 if (options.toolbar.buttons.new)
-                    html +=`<button type="button" data-action="new-form" title="${Strings.Toolbar_NewForm_ButtonTitle}">
+                    html +=`<button type="button" class="${btnClass}" data-action="new-form" title="${Strings.Toolbar_NewForm_ButtonTitle}">
                             <i class="${Icons.Toolbar_NewForm_Icon}"></i>
                             <span>${Strings.Toolbar_NewForm_ButtonLabel}</span>
                         </button>`;
                 if (options.toolbar.buttons.load)
-                    html +=`<button type="button" data-action="load-json" title="${Strings.Toolbar_ImportJson_ButtonTitle}">
+                    html +=`<button type="button" class="${btnClass}" data-action="load-json" title="${Strings.Toolbar_ImportJson_ButtonTitle}">
                             <i class="${Icons.Toolbar_LoadJson_Icon}"></i>
                             <span>${Strings.Toolbar_ImportJson_ButtonLabel}</span>
                         </button>
                         <input type="file" style="display: none;" accept="application/json" />`;
                 if (options.toolbar.buttons.export)
-                    html +=`<button type="button" data-action="export-json" title="${Strings.Toolbar_ExportJson_ButtonTitle}">
+                    html +=`<button type="button" class="${btnClass}" data-action="export-json" title="${Strings.Toolbar_ExportJson_ButtonTitle}">
                             <i class="${Icons.Toolbar_ExportJson_Icon}"></i>
                             <span>${Strings.Toolbar_ExportJson_ButtonLabel}</span>
                         </button>`;
                 if (options.toolbar.buttons.savepdf)
-                    html +=`<button type="button" data-action="save-pdf" title="${Strings.Toolbar_SavePdf_ButtonTitle}">
+                    html +=`<button type="button" class="${btnClass}" data-action="save-pdf" title="${Strings.Toolbar_SavePdf_ButtonTitle}">
                             <i class="${Icons.Toolbar_SavePdf_Icon}"></i>
                             <span>${Strings.Toolbar_SavePdf_ButtonLabel}</span>
                         </button>`;                        
@@ -380,7 +387,7 @@ export default class Designer {
                 html += `<div class="widget-toolbar-group">
                     <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
                 if (options.toolbar.buttons.renderCurrentMode)
-                    html += `<button type="button" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
                             <span data-render-mode="design">
                                 <i class="${Icons.Toolbar_DesignMode_Icon}"></i>
                                 <span>${Strings.Toolbar_RenderModes_Design_ButtonLabel}</span>                            
@@ -396,7 +403,7 @@ export default class Designer {
                         </button>`;
 
                 if (options.toolbar.buttons.renderValidateForm)
-                    html += `<button type="button" disabled data-action="validate-form" title="${Strings.Toolbar_RenderModes_ValidateForm_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" disabled data-action="validate-form" title="${Strings.Toolbar_RenderModes_ValidateForm_ButtonTitle}">
                                 <i class="${Icons.Toolbar_ValidateForm_Icon}"></i>
                                 <span>${Strings.Toolbar_RenderModes_ValidateForm_ButtonLabel}</span>
                             </button>`;                        
@@ -407,62 +414,62 @@ export default class Designer {
                 html += `<div class="widget-toolbar-group">
                         <div class="widget-toolbar-group-title">${Strings.Toolbar_Widgets_GroupTitle}</div>`;
                 if (options.toolbar.buttons.label)
-                    html += `<button type="button" data-action="add-label" title="${Strings.Toolbar_AddLabelWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-label" title="${Strings.Toolbar_AddLabelWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddLabelWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddLabelWidget_ButtonLabel}</span>
                             </button>`;                        
                 if (options.toolbar.buttons.textField)
-                    html += `<button type="button" data-action="add-input-text" title="${Strings.Toolbar_AddTextInputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-text" title="${Strings.Toolbar_AddTextInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddTextInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddTextInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.paragraph)
-                    html += `<button type="button" data-action="add-input-paragraph" title="${Strings.Toolbar_AddParagraphInputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-paragraph" title="${Strings.Toolbar_AddParagraphInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddParagraphInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddParagraphInputWidget_ButtonLabel}</span>
                             </button>`;                               
                 if (options.toolbar.buttons.numberField)
-                    html += `<button type="button" data-action="add-input-number" title="${Strings.Toolbar_AddNumberInputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-number" title="${Strings.Toolbar_AddNumberInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddNumberInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddNumberInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.emailField)
-                    html += `<button type="button" data-action="add-input-email" title="${Strings.Toolbar_AddEmailInputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-email" title="${Strings.Toolbar_AddEmailInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddEmailInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddEmailInputWidget_ButtonLabel}</span>
                             </button>`;                            
                 if (options.toolbar.buttons.dateField)
-                    html += `<button type="button" data-action="add-input-date" title="${Strings.Toolbar_AddDateInputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-date" title="${Strings.Toolbar_AddDateInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddDateInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddDateInputWidget_ButtonLabel}</span>
                             </button>`;                            
                 if (options.toolbar.buttons.checkbox)
-                    html += `<button type="button" data-action="add-input-checkbox" title="${Strings.Toolbar_AddCheckboxInputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-checkbox" title="${Strings.Toolbar_AddCheckboxInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddCheckboxInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddCheckboxInputWidget_ButtonLabel}</span>
                             </button>`;
-                if (options.toolbar.buttons.radio)
-                    html += `<button type="button" data-action="add-input-radio" title="${Strings.Toolbar_AddRadioInputWidget_ButtonTitle}">
+                if (options.toolbar.buttons.radio) 
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-radio" title="${Strings.Toolbar_AddRadioInputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddRadioInputWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddRadioInputWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.select)
-                    html += `<button type="button" data-action="add-input-select" title="${Strings.Toolbar_AddSelectnputWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-input-select" title="${Strings.Toolbar_AddSelectnputWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddSelectWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddSelectInputWidget_ButtonLabel}</span>
                             </button>`;                            
                 if (options.toolbar.buttons.button)
-                    html += `<button type="button" data-action="add-button" title="${Strings.Toolbar_AddButtonWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-button" title="${Strings.Toolbar_AddButtonWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddButtonWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddButtonWidget_ButtonLabel}</span>
                             </button>`;                            
                 if (options.toolbar.buttons.spacer)
-                    html += `<button type="button" data-action="add-spacer" title="${Strings.Toolbar_AddSpacerWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-spacer" title="${Strings.Toolbar_AddSpacerWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddSpacerWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddSpacerWidget_ButtonLabel}</span>
                             </button>`;
                 if (options.toolbar.buttons.image)
-                    html += `<button type="button" data-action="add-image" title="${Strings.Toolbar_AddImageWidget_ButtonTitle}">
+                    html += `<button type="button" class="${btnClass}" data-action="add-image" title="${Strings.Toolbar_AddImageWidget_ButtonTitle}">
                                 <i class="${Icons.Toolbar_AddImageWidget_Icon}"></i>
                                 <span>${Strings.Toolbar_AddImageWidget_ButtonLabel}</span>
                             </button>

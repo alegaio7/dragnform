@@ -1,21 +1,10 @@
 // sass variables
-$default-accent-color: #007bff;
-$default-background-color: #f4f4f4;
-$default-color: #222;
-$default-font-size: 16px;
-$default-opposite-color: #fff;
-
-$flyter-popup-background-color: $default-background-color;
-$flyter-input-focus-boder-color: $default-accent-color;
-
 $font-family: "Poppins";
 
 $widget-checkbox-width: 1.5rem;
 $widget-controls-min-height: 1.5rem;
 $widget-default-padding: 15px;
-$widget-error: #f00;
-$widget-border-design-color: #ccc;
-$widget-border-view-color: #ddd;
+
 $widget-container-width: 1000px;
 $widget-container-bp-1: 1366px;
 $widget-container-width-bp-1: 1200px;
@@ -25,37 +14,32 @@ $widget-container-height: calc(100vh - $widget-toolbar-estimate-height);    // t
 $widget-container-max-height: 1400px;
 $widget-container-width-bp-2: 1600px;
 $widget-designer-radius: 0.25rem;
-$widget-grip-color: #888;
+
 $widget-grip-width: 0.8rem;
 $widget-input-height: 2rem;
 $widget-min-height: 15px;
-$widget-modal-backdrop-color: rgba(0, 0, 0, 0.2);
-$widget-modal-border-color: #888;
+
 $widget-modal-padding: 1rem;
 $widget-modal-title-padding: 0.5rem;
 $widget-paragraph-height: 6rem;
-$widget-properties-button-color: #333;
+
 $widget-properties-button-width: 1rem;
 $widger-radio-button-height: 2rem;
-$widget-remove-button-color: #f00;
+
 $widget-remove-button-width: 1rem;
 $widget-section-padding: 0.25rem;
-$widget-state-outline-valid: limegreen;
-$widget-state-outline-invalid: #f00;
-$widget-tip-color: #888;
-$widget-toolbar-border-color: #ccc;
-$widget-toolbar-button-bg-color: #eee;
-$widget-toolbar-button-bg-hover-color: #ddd;
-$widget-toolbar-button-color: #222;
-$widget-toolbar-button-disabled-bg-color: #ccc;
-$widget-toolbar-button-disabled-color: #888;
+
 $widget-toolbar-button-height: 2rem;
-$widget-toolbar-group-border-color: #eee;
-$widget-toolbar-group-title-color: #555;
+
 $widget-toolbar-padding: 0.5rem;
 
 *, *::before, *::after {
     box-sizing: border-box;
+}
+
+html {
+    color: $default-color;
+    background-color: $default-background-color;
 }
 
 // ***************
@@ -69,28 +53,12 @@ $widget-toolbar-padding: 0.5rem;
 // designer - toolbar
 // ***************
 .widget-designer {
+    background-color: $default-background-color;
+    padding: 0.5rem;
+
     button, input, select {
         font-family: inherit;
         font-size: $default-font-size;
-    }
-
-    button {
-        background-color: $widget-toolbar-button-bg-color;
-        border: 1px solid $widget-toolbar-border-color;
-        border-radius: $widget-designer-radius;
-        color: $widget-toolbar-button-color;
-        cursor: pointer;
-        font-family: inherit;
-        height: $widget-toolbar-button-height;
-
-        &:hover {
-            background-color: $widget-toolbar-button-bg-hover-color;
-        }
-
-        &:disabled {
-            background-color: $widget-toolbar-button-disabled-bg-color;
-            color: $widget-toolbar-button-disabled-color;
-        }
     }
 
     .widget-toolbar [data-render-mode] {
@@ -141,6 +109,25 @@ $widget-toolbar-padding: 0.5rem;
     margin-bottom: 1rem;
     font-weight: 300;
 
+    .widget-toolbar-button { // default class if none is specified in config
+        background-color: $widget-toolbar-button-bg-color;
+        border: 1px solid $widget-toolbar-border-color;
+        border-radius: $widget-designer-radius;
+        color: $widget-toolbar-button-color;
+        cursor: pointer;
+        font-family: inherit;
+        height: $widget-toolbar-button-height;
+
+        &:hover {
+            background-color: $widget-toolbar-button-bg-hover-color;
+        }
+
+        &:disabled {
+            background-color: $widget-toolbar-button-disabled-bg-color;
+            color: $widget-toolbar-button-disabled-color;
+        }
+    }
+
     .widget-toolbar-group {
         border: 1px solid $widget-toolbar-group-border-color;
         padding: $widget-toolbar-padding;
@@ -153,7 +140,7 @@ $widget-toolbar-padding: 0.5rem;
         }
 
         button {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
     }
 
@@ -769,13 +756,6 @@ $widget-toolbar-padding: 0.5rem;
     margin-top: 0.35rem;
 }
 
-.widget-properties-editor {
-    transition: opacity 0.5s ease-out;
-}
-
-.widget-properties-editor:has(.widget-dialog-hide-window:hover) {
-    opacity: 0.15;
-}
 
 // ******
 // flyter
@@ -810,7 +790,7 @@ $widget-toolbar-padding: 0.5rem;
     border-radius: $widget-designer-radius;
     padding: $widget-default-padding;
     background-color: $flyter-popup-background-color; 
-    z-index: 100;
+    z-index: 10000;
 }
 
 .flyter-buttons-container {
@@ -840,9 +820,12 @@ $widget-toolbar-padding: 0.5rem;
     > *, *::before, *::after {
         box-sizing: inherit;
     }
+
+    background-color: $widget-properties-editor-background-color;
     border: 1px solid $widget-modal-border-color;
     border-radius: $widget-designer-radius;
     box-shadow: 0 0 1rem rgb(0, 0, 0, .5);
+    color: $widget-properties-editor-color;
     font-family: $font-family;
     max-height: calc(100vh - 10rem);
     padding: $widget-modal-padding;
@@ -879,7 +862,7 @@ $widget-toolbar-padding: 0.5rem;
     .widget-properties-editor-header {
         height: 2rem;
         background-color: $default-accent-color;
-        color: $default-opposite-color;
+        color: $default-color;
         line-height: 2;
         padding: 0 $widget-toolbar-padding;
         border-radius: $widget-designer-radius;
@@ -896,4 +879,8 @@ $widget-toolbar-padding: 0.5rem;
         justify-content: end;
         border-top: 1px solid $widget-modal-border-color;
     }
+}
+
+.widget-properties-editor:has(.widget-dialog-hide-window:hover) {
+    opacity: 0.15;
 }

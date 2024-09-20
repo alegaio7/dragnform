@@ -54,13 +54,13 @@ export default class Widget {
                 this._verticalAlignment = fragment.verticalAlignment;
 
         this.columns = fragment.columns ?? 12;
+        this.disableInlineEditor = fragment.disableInlineEditor ?? false;
+
         this._el = null;
 
-        this._labelColor = constants.HTML_DEFAULT_LABEL_COLOR;
         if (fragment.labelColor)
             this._labelColor = fragment.labelColor;
 
-        this._textColor = constants.HTML_DEFAULT_TEXT_COLOR;
         if (fragment.textColor)
             this._textColor = fragment.textColor;
 
@@ -88,7 +88,7 @@ export default class Widget {
 
         // if no height came in the json fragment, set it to a default value but set autoHeight true
         this._autoHeight = fragment.autoHeight ?? false;
-        this._height = fragment.height ?? (type === constants.WIDGET_TYPE_PARAGRAPH ? constants.WIDGET_DEFAULT_PARAGRAPH_HEIGHT : constants.WIDGET_DEFAULT_HEIGHT);
+        this.height = fragment.height ?? (type === constants.WIDGET_TYPE_PARAGRAPH ? constants.WIDGET_DEFAULT_PARAGRAPH_HEIGHT : constants.WIDGET_DEFAULT_HEIGHT);
         
         this.globalClasses = fragment.globalClasses ?? {};
         this.id = fragment.id;
@@ -162,7 +162,11 @@ export default class Widget {
 
     get height() { return this._height; }
     set height(value) { 
-        this._height = value;
+        if (typeof(value) === "number")  {
+            if (value !== isNaN)
+                this._height = value;
+        } else
+            this._height = functions.convertToPixels(value);
         this.refresh();
     }
 
@@ -398,6 +402,7 @@ export default class Widget {
             this._el.addEventListener('dblclick', async (e) => {
                 if (e.target.classList.contains("widget") || 
                     e.target.classList.contains("widget-label") ||
+                    (e.target.hasAttribute("data-part") && e.target.attributes["data-part"].value === "label" && this.disableInlineEditor) ||
                     e.target.hasAttribute("data-show-when")
                 )
                     await handler(this, e);
@@ -498,6 +503,8 @@ export default class Widget {
     /// Attaches an inline editor (flyter) to the widget's label, so it can be editted in place.
     /// </summary>
     _attachInlineEditor() {
+        if (this.disableInlineEditor)
+            return;
         var _t = this;
         if (this.labelElement) {
             this._flyter = flyter.attach(this.labelElement, { 
@@ -587,7 +594,7 @@ export default class Widget {
     _buildOuterStyleAttribute() {
         var style = "";
         if (this.height && !this.autoHeight)
-            style += `height: ${this.height};`;
+            style += `height: ${this.height}px;`;
 
        return style;
     }

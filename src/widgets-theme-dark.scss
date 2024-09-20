@@ -1,0 +1,37 @@
+$default-accent-color: #cb38c8;
+$default-background-color: #1c2134;
+$default-color: #f4f4f4;
+$default-font-size: 16px;
+$default-opposite-color: #222;
+
+$flyter-popup-background-color: lighten($default-background-color, 10%);
+$flyter-input-focus-boder-color: $default-accent-color;
+
+$widget-error: #f00;
+$widget-border-design-color: #3b3e5c;
+$widget-border-view-color: #3b3e5c;
+
+$widget-grip-color: #aaa;
+
+$widget-modal-backdrop-color: rgba(0, 0, 0, 0.2);
+$widget-modal-border-color: #888;
+
+$widget-properties-button-color: #aaa;
+$widget-remove-button-color: #f00;
+$widget-state-outline-invalid: #f00;
+$widget-state-outline-valid: limegreen;
+$widget-tip-color: #888;
+
+$widget-properties-editor-background-color: lighten($default-background-color, 5%);
+$widget-properties-editor-color: $default-color;
+
+$widget-toolbar-border-color: #3b3e5c;
+$widget-toolbar-button-bg-color: lighten($default-background-color, 5%);
+$widget-toolbar-button-bg-hover-color: lighten($default-background-color, 15%);
+$widget-toolbar-button-color: $default-color;
+$widget-toolbar-button-disabled-bg-color: #ccc;
+$widget-toolbar-button-disabled-color: #888;
+$widget-toolbar-group-border-color: #3b3e5c;
+$widget-toolbar-group-title-color: $default-color;
+
+@import "widgets.scss";

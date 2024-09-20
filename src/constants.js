@@ -7,8 +7,6 @@ export const DEFAULT_SCREEN_DPI = 96;           // default screen DPI
 // html
 export const HTML_DEFAULT_FONT_SIZE = 16;
 export const HTML_DEFAULT_FONT_WEIGHT = 400;
-export const HTML_DEFAULT_LABEL_COLOR = "#000000";
-export const HTML_DEFAULT_TEXT_COLOR = "#000000";
 export const HTML_MIN_FONT_SIZE = 6;
 export const HTML_MAX_FONT_SIZE = 96;
 export const HTML_FONT_SIZE_NORMAL = "normal";
@@ -33,8 +31,8 @@ export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_TOP = 'top';
 export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_CENTER = 'center';
 export const WIDGET_CONTENT_ALIGNMENT_VERTICAL_BOTTOM = 'bottom';
 
-export const WIDGET_DEFAULT_HEIGHT = "80px";
-export const WIDGET_DEFAULT_PARAGRAPH_HEIGHT = "160px";
+export const WIDGET_DEFAULT_HEIGHT = 80;
+export const WIDGET_DEFAULT_PARAGRAPH_HEIGHT = 160;
 
 export const WIDGET_LABEL_DEFAULT_VALUE = "(New label)";
 export const WIDGET_LABEL_REQUIRED_MARK_POSITION_BEFORE = "beforeLabel";

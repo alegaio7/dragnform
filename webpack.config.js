@@ -5,9 +5,7 @@ const { library, experiments } = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-const isProduction = process.env.NODE_ENV == 'production';
-
-const stylesHandler = 'style-loader';
+// const stylesHandler = 'style-loader';
 
 const config = {
     entry: './src/index.js',
@@ -16,11 +14,12 @@ const config = {
         filename: 'justformit.js',
         library: {
             name: 'justformit',
-            type: 'var'
+            //type: 'var'
+            type: 'window'
         }
     },
     optimization: {
-        minimize: isProduction,
+        minimize: true,
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
@@ -45,7 +44,7 @@ const config = {
             ]
         })
     ],
-    module: {
+    /*module: {
         rules: [
             {
                 test: /\.css$/i,
@@ -63,17 +62,14 @@ const config = {
             // Add your rules for custom modules here
             // Learn more about loaders from https://webpack.js.org/loaders/
         ],
-    },
+    },*/
     experiments: {
         outputModule: true,
     },
 };
 
 module.exports = () => {
-    if (isProduction) {
-        config.mode = 'production';
-    } else {
-        config.mode = 'development';
-    }
+    config.mode = 'production';
+    config.devtool = 'source-map';
     return config;
 };

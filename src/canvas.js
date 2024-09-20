@@ -101,6 +101,7 @@ export default class Canvas {
             this._widgets.forEach(w => w.removeFromDom());
         this._widgets = [];
         this._container.innerHTML = '';
+        this._editorTemplates.clear();
         this.modified = false;
     }
 
@@ -166,6 +167,7 @@ export default class Canvas {
                 throw new Error(`widget type ${o.type} not found.`);
         }
 
+        w.disableInlineEditor = this._widgetRenderOptions.disableInlineEditor;
         w.globalClasses = this._widgetRenderOptions.globalClasses;
 
         // idem with the required attribute settings
@@ -379,7 +381,7 @@ export default class Canvas {
         w.registerPropertiesButtonHandler(this._showWidgetProperties.bind(this), false);
         w.registerDoubleClickHandler(this._showWidgetProperties.bind(this), false);
 
-        if (this._widgetRenderOptions.enableInPlaceEditor)
+        if (!this._widgetRenderOptions.disableInlineEditor)
             w.enableInPlaceEditor();
 
         w.refresh();
