@@ -58,8 +58,8 @@ export default class Widget {
 
         this._el = null;
 
-        if (fragment.labelColor)
-            this._labelColor = fragment.labelColor;
+        this._labelColor = fragment.labelColor ?? functions.getThemeColor('label-color');
+        this._textColor = fragment.textColor ?? functions.getThemeColor('text-color');
 
         if (fragment.textColor)
             this._textColor = fragment.textColor;

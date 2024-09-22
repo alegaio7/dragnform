@@ -8,6 +8,11 @@ export default class functions {
         return n;
     }
 
+    static getThemeColor(name) {
+        var e = document.querySelector(":root");
+        return getComputedStyle(e).getPropertyValue("--widget-" + name);
+    }
+
     static titleCase(str) {
         var splitStr = str.toLowerCase().split(' ');
         for (var i = 0; i < splitStr.length; i++) {

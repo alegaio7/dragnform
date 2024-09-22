@@ -1,4 +1,9 @@
 @charset "UTF-8";
+:root {
+  --widget-label-color: #f4f4f4;
+  --widget-text-color: #222;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -99,6 +104,10 @@ html {
   margin-right: auto;
   margin-left: auto;
   max-width: 1000px;
+}
+
+.widget-container-bg {
+  background-color: #1c2134;
 }
 
 .widget-container {
@@ -646,7 +655,6 @@ html {
   font-family: "Poppins";
   max-height: calc(100vh - 10rem);
   padding: 1rem;
-  transition: opacity 0.5s ease-out;
   width: clamp(10rem, 100%, 35rem);
   transition: opacity 0.3s ease-in-out;
 }

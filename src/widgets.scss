@@ -33,6 +33,11 @@ $widget-toolbar-button-height: 2rem;
 
 $widget-toolbar-padding: 0.5rem;
 
+:root {
+    --widget-label-color: #{$default-color};
+    --widget-text-color: #{$default-text-color};
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -158,6 +163,10 @@ html {
     margin-right: auto;
     margin-left: auto;
     max-width: $widget-container-width;
+}
+
+.widget-container-bg {
+    background-color: $widget-container-bg-color;
 }
 
 .widget-container {

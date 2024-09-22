@@ -3,6 +3,7 @@ $default-background-color: #1c2134;
 $default-color: #f4f4f4;
 $default-font-size: 16px;
 $default-opposite-color: #222;
+$default-text-color: #222;
 
 $flyter-popup-background-color: lighten($default-background-color, 10%);
 $flyter-input-focus-boder-color: $default-accent-color;
@@ -10,6 +11,7 @@ $flyter-input-focus-boder-color: $default-accent-color;
 $widget-error: #f00;
 $widget-border-design-color: #3b3e5c;
 $widget-border-view-color: #3b3e5c;
+$widget-container-bg-color: $default-background-color;
 
 $widget-grip-color: #aaa;
 

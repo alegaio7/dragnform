@@ -40,7 +40,8 @@ const config = {
                 { from: 'widgets', to: "widgets" },
                 { from: 'src/jfi-functions.js', to: "jfi-functions.js" },
                 { from: 'src/jfi-strings.en.js', to: "jfi-strings.en.js" },
-                { from: 'src/jfi-strings.es.js', to: "jfi-strings.es.js" }
+                { from: 'src/jfi-strings.es.js', to: "jfi-strings.es.js" },
+                { from: 'src/icons.js', to: "icons.js" }
             ]
         })
     ],

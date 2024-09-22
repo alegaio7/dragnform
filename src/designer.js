@@ -479,7 +479,7 @@ export default class Designer {
 
             html += `</div>`;
         }
-        html += `<div class="widget-container"></div>`;
+        html += `<div class="widget-container-bg"><div class="widget-container"></div></div>`;
         html += "</div>";
         html += `<div class="widget-editors-container"></div>`;
         html += "</div>";

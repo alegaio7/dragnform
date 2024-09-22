@@ -252,8 +252,8 @@ class WidgetRadio extends Widget {
         var style = "";
         if (this.fontSize)
             style += `font-size: ${this.fontSize}px;`;
-        if (this.textColor)
-            style += `color: ${this.textColor};`;
+        if (this.labelColor)
+            style += `color: ${this.labelColor};`;
         return style;
     }
 
@@ -319,6 +319,8 @@ class WidgetRadio extends Widget {
         input.addEventListener("click", function(e) {
             _t.value = e.currentTarget.value;
         });
+        let label = cloneEl.querySelector(`label`);
+        label.setAttribute("for", input.id);
         this._lastIndex++;
         return cloneEl;
     }
