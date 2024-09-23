@@ -187,6 +187,8 @@ export default class WidgetCommonPropertiesEditor {
         // restore widget props as they were before editing
         if (this._editorProps) {
             this._editorProps.forEach(p => {
+                if (p.readonly)
+                    return;
                 this.widget[p.name] = p.value;
             });
         }

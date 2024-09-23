@@ -3,7 +3,6 @@ import flyter from 'flyter';
 import { createPopper } from '@popperjs/core';
 import mustache from 'mustache';
 import functions from './jfi-functions.js';
-import Icons from './icons.js';
 
 export default class Widget {
     static _cachedTemplates = new Map();

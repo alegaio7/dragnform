@@ -1,5 +1,5 @@
 import WidgetCommonPropertiesEditor from "./widget-common.editor.js";
-import functions from "../functions.js";
+import functions from "../jfi-functions.js";
 
 export default class WidgetTextPropertiesEditor extends WidgetCommonPropertiesEditor {
     constructor(options) {

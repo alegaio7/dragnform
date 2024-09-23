@@ -1,6 +1,5 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
-import Icons from './icons.js';
 import functions from './jfi-functions.js';
 
 class WidgetRadio extends Widget {
@@ -270,7 +269,7 @@ class WidgetRadio extends Widget {
             }
             throw new Error(`radioOptions[${i}] must have 'title' and 'value' properties.`);
         });
-        this._lastIndex = value.length;
+        this._lastIndex += value.length;
     }
 
     _renderDOM(container, parser, html) {
@@ -307,6 +306,7 @@ class WidgetRadio extends Widget {
 
     _createNewRadioOptionEl(modelNode, radioOptionItem) {
         var _t = this;
+        debugger;
         var cloneEl = modelNode.cloneNode(true);
         cloneEl.setAttribute('data-id', radioOptionItem.id);
         cloneEl.removeAttribute("data-initial");

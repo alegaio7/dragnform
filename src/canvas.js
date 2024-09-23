@@ -83,7 +83,6 @@ export default class Canvas {
         var w = this.createWidget(jsonObj);
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
-        w.setWidgetPaths(this._widgetPaths);
 
         this._widgets.push(w);
         this.modified = true;
@@ -173,6 +172,9 @@ export default class Canvas {
         // idem with the required attribute settings
         var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._widgetRenderOptions.requiredAttributeSettings;
         w.requiredAttributeSettings = requiredAttributeSettings;
+
+        if (this._widgetPaths)
+            w.setWidgetPaths(this._widgetPaths);
 
         // idem with the widget rendering options
         var widgetRenderOptions = o.widgetRenderOptions ? o.widgetRenderOptions : this._widgetRenderOptions;

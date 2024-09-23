@@ -1,7 +1,6 @@
 import * as constants from './constants.js';
 import Canvas from './canvas.js';
 import jsPDFExporter from './jspdf-exporter.js';
-import Icons from './icons.js';
 
 export default class Designer {
     constructor(options) {

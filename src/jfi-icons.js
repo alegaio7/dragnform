@@ -1,5 +1,5 @@
 // Font awesome icons for the toolbar buttons
-export default class Icons {
+class Icons {
     static get Toolbar_AddButtonWidget_Icon() { return 'fa fa-square'; }
     static get Toolbar_AddCheckboxInputWidget_Icon() { return 'fa fa-regular fa-square-check'; }
     static get Toolbar_AddDateInputWidget_Icon() { return 'fa fa-calendar-days'; }
