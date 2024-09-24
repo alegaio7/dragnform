@@ -108,6 +108,7 @@ class Strings {
     static get WidgetEditor_Common_AutoHeight() { return 'Altura automática'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancelar'; }
     static get WidgetEditor_Common_Columns() { return 'Ancho'; }
+    static get WidgetEditor_Common_Default_New_Label() { return '(Nuevo control)'; }
     static get WidgetEditor_Common_FontProperties() { return 'Propiedades de fuente'; }
     static get WidgetEditor_Common_FontSize() { return 'Tamaño de fuente'; }
     static get WidgetEditor_Common_FontUnderline() { return 'Subrayado'; }
@@ -129,7 +130,7 @@ class Strings {
     static get WidgetEditor_Common_Window_Hide_Icon_Title() { return 'Ocultar ventana al pasar el ratón'; }
 
     static get WidgetEditor_Date_Widget_DateFormat() { return 'Formato de fecha'; }
-    static get WidgetEditor_Date_Widget_DateFormatTip() { return 'Debe tener 10 caracteres de longitud. Sólo se permiten yyyy, mm, dd, [- o /].'; }
+    static get WidgetEditor_Date_Widget_DateFormatTip() { return 'Debe tener 10 caracteres de longitud. Sólo se permiten yyyy, mm, dd, [- o /]. El formato se respeta sólo en el modo de visualización; en los otros modos el control de fecha utiliza los controles provistos del navegador y la configuración del sistema.'; }
  
     static get WidgetEditor_Number_Widget_MinValue() { return 'Mín.'; }
     static get WidgetEditor_Number_Widget_MinValueValidationMessage() { return 'Mensaje de validación'; }

@@ -92,7 +92,7 @@ export default class Widget {
         this.globalClasses = fragment.globalClasses ?? {};
         this.id = fragment.id;
         this._inPlaceEditor = false;
-        this._label = fragment.label ?? constants.WIDGET_LABEL_DEFAULT_VALUE;
+        this._label = fragment.label ?? (Strings.WidgetEditor_Common_Default_New_Label ?? constants.WIDGET_LABEL_DEFAULT_VALUE);
         this._labelEl = null; // filled when rendered
         this.name = fragment.name ?? this.id; // the "name" attribute for input elements
         this.type = type;

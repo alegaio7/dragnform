@@ -306,7 +306,6 @@ class WidgetRadio extends Widget {
 
     _createNewRadioOptionEl(modelNode, radioOptionItem) {
         var _t = this;
-        debugger;
         var cloneEl = modelNode.cloneNode(true);
         cloneEl.setAttribute('data-id', radioOptionItem.id);
         cloneEl.removeAttribute("data-initial");

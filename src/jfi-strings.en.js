@@ -108,6 +108,7 @@ class Strings {
     static get WidgetEditor_Common_AutoHeight() { return 'Auto height'; }
     static get WidgetEditor_Common_Cancel() { return 'Cancel'; }
     static get WidgetEditor_Common_Columns() { return 'Width'; }
+    static get WidgetEditor_Common_Default_New_Label() { return '(New control)'; }
     static get WidgetEditor_Common_FontProperties() { return 'Font properties'; }
     static get WidgetEditor_Common_FontSize() { return 'Font size'; }
     static get WidgetEditor_Common_FontUnderline() { return 'Underline'; }
@@ -129,7 +130,7 @@ class Strings {
     static get WidgetEditor_Common_Window_Hide_Icon_Title() { return 'Hide window on hover'; }
 
     static get WidgetEditor_Date_Widget_DateFormat() { return 'Date format'; }
-    static get WidgetEditor_Date_Widget_DateFormatTip() { return 'Must be 10 characters in length. Only yyyy, mm, dd, [- or /] are allowed.'; }
+    static get WidgetEditor_Date_Widget_DateFormatTip() { return 'Must be 10 characters in length. Only yyyy, mm, dd, [- or /] are allowed. The format is honored only in view mode, in other modes the date control uses the browser provided controls and the system configuration.'; }
 
     static get WidgetEditor_Number_Widget_MinValue() { return 'Min.'; }
     static get WidgetEditor_Number_Widget_MinValueValidationMessage() { return 'Validation message'; }

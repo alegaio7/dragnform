@@ -97,6 +97,9 @@ html {
   color: #f4f4f4;
   width: 100%;
 }
+.widget-toolbar.compact .widget-toolbar-button-label {
+  display: none;
+}
 
 .widget-container, .widget-toolbar {
   font-family: "Poppins";
@@ -126,12 +129,12 @@ html {
 
 @media (min-width: 1366px) {
   .widget-container, .widget-toolbar {
-    width: 1200px;
+    max-width: 1200px;
   }
 }
 @media (min-width: 1800px) {
   .widget-container, .widget-toolbar {
-    width: 1600px;
+    max-width: 1600px;
   }
 }
 .widget {
@@ -586,6 +589,7 @@ html {
 .widget-dialog-tip {
   font-size: 0.8rem;
   color: #888;
+  white-space: normal;
 }
 
 .widget-select-option, .widget-radio-option {

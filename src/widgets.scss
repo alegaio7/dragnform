@@ -133,6 +133,10 @@ html {
         }
     }
 
+    .widget-toolbar-button-label { // default class if none is specified in config
+
+    }
+
     .widget-toolbar-group {
         border: 1px solid $widget-toolbar-group-border-color;
         padding: $widget-toolbar-padding;
@@ -153,6 +157,12 @@ html {
         font-size: 0.8rem;
         color: $widget-toolbar-group-title-color;
         width: 100%;
+    }
+
+    &.compact {
+        .widget-toolbar-button-label {
+            display: none;
+        }
     }
 }
 
@@ -187,13 +197,13 @@ html {
 // responsive breakpoints
 @media(min-width: $widget-container-bp-1) {
     .widget-container, .widget-toolbar {
-        width: $widget-container-width-bp-1;
+        max-width: $widget-container-width-bp-1;
     }
 }
 
 @media(min-width: $widget-container-bp-2) {
     .widget-container, .widget-toolbar {
-        width: $widget-container-width-bp-2;
+        max-width: $widget-container-width-bp-2;
     }
 }
 
@@ -754,6 +764,7 @@ html {
 .widget-dialog-tip {
     font-size: 0.8rem;
     color: $widget-tip-color;
+    white-space: normal;
 }
 
 .widget-select-option, .widget-radio-option {

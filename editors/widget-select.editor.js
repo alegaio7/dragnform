@@ -164,9 +164,9 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
             btnDown.removeAttribute("disabled");
             let removeBtn = optionEl.querySelector('[data-action="remove"]');
             removeBtn.classList.remove("widget-hide");
-            if (i == 0) 
+            if (i === 0) 
                 btnUp.setAttribute("disabled", "disabled");
-            if (i == selectOptions.length - 1)
+            if (i === selectOptions.length - 1)
                 btnDown.setAttribute("disabled", "disabled");
             if (i < 2)
                 removeBtn.classList.add("widget-hide");
@@ -189,7 +189,7 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
                 txtValue.value = this._selectOptions[i].value;
 
                 let removeBtn = optionEl.querySelector('[data-action="remove"]');
-                removeBtn.setAttribute("style", "display: none");
+                removeBtn.classList.add("widget-hide");
                 this._attachHandlers(optionEl);
             }
             else
