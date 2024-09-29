@@ -646,6 +646,16 @@ html {
     max-width: 100%;
 }
 
+// on design mode we cannot use columns because they interfere with the creation of a PDF form
+@media (max-width: 992px) {
+    .widget-designer:not([data-current-mode="view"]) {
+        .widget-col-1, .widget-col-2, .widget-col-3, .widget-col-4, .widget-col-5, .widget-col-6, .widget-col-7, .widget-col-8, .widget-col-9, .widget-col-10, .widget-col-11, .widget-col-12 {
+            flex: 0 1 100%;
+            max-width: 100%;
+        }
+    }
+}
+
 // component styles
 [data-part="required-mark"] {
     font-weight: bold;

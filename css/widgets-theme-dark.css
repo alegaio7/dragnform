@@ -488,6 +488,12 @@ html {
   max-width: 100%;
 }
 
+@media (max-width: 992px) {
+  .widget-designer:not([data-current-mode=view]) .widget-col-1, .widget-designer:not([data-current-mode=view]) .widget-col-2, .widget-designer:not([data-current-mode=view]) .widget-col-3, .widget-designer:not([data-current-mode=view]) .widget-col-4, .widget-designer:not([data-current-mode=view]) .widget-col-5, .widget-designer:not([data-current-mode=view]) .widget-col-6, .widget-designer:not([data-current-mode=view]) .widget-col-7, .widget-designer:not([data-current-mode=view]) .widget-col-8, .widget-designer:not([data-current-mode=view]) .widget-col-9, .widget-designer:not([data-current-mode=view]) .widget-col-10, .widget-designer:not([data-current-mode=view]) .widget-col-11, .widget-designer:not([data-current-mode=view]) .widget-col-12 {
+    flex: 0 1 100%;
+    max-width: 100%;
+  }
+}
 [data-part=required-mark] {
   font-weight: bold;
   text-decoration: none;
