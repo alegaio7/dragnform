@@ -86,6 +86,7 @@ class WidgetDate extends WidgetInputBase {
             labelClass: this.globalClasses.inputLabel ?? "",
             mark: this.requiredAttributeSettings.mark,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             required: this.required,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,

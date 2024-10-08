@@ -121,6 +121,7 @@ class WidgetNumber extends WidgetInputBase {
             min: this.min,
             minValueValidationMessage: this.minValueValidationMessage,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             required: this.required,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,

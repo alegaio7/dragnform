@@ -188,6 +188,7 @@ class WidgetText extends WidgetInputBase {
             minLength: this.minLength,
             minLengthValidationMessage: this.minLengthValidationMessage,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             required: this.required,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,

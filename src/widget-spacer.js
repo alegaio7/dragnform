@@ -30,6 +30,7 @@ class WidgetSpacer extends Widget {
             colClass: "widget-col-" + this.columns,
             id: this.id,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
             type: this.type,

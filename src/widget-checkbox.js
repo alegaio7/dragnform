@@ -26,6 +26,7 @@ class WidgetCheckbox extends Widget {
             label: this.label,
             labelClass: this.globalClasses.checkboxLabel ?? "",
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
             style: this._buildOuterStyleAttribute(),

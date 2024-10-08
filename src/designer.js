@@ -110,8 +110,10 @@ export default class Designer {
     }
 
     async renderForm(json) {
+        var m = this.renderMode;
         this.renderMode = constants.WIDGET_MODE_DESIGN;
         await this._canvas.renderForm(json);
+        this.renderMode = m;
     }
 
     get renderMode() {
@@ -123,6 +125,20 @@ export default class Designer {
     set renderMode(value) {
         this._canvas.renderMode = value;
         this._updateUI();
+    }
+
+    exportPdf(saveTofile) {
+        saveTofile = !!saveTofile;
+        var prevRenderMode = this.renderMode; 
+        this.renderMode = constants.WIDGET_MODE_VIEW;
+        var features = this.extractFeatures();
+        this.renderMode = prevRenderMode;
+        var exp = new jsPDFExporter();
+        var pdfdata = exp.exportPDF(features, { 
+            saveToFile: saveTofile,
+            renderContainerBox: false
+        });
+        return pdfdata;
     }
 
     validate(validationOptions) {
@@ -264,25 +280,16 @@ export default class Designer {
                 this._downloadBlob(blob, 'form.json');
                 this._canvas.modified = false;
             } else if (am.action === "save-pdf") {
-                this.renderMode = constants.WIDGET_MODE_VIEW;
-                var features = this.extractFeatures();
-                var exp = new jsPDFExporter();
                 if (this._callbacks.onSavePdf) {
-                    var pdfdata = exp.exportPDF(features, { 
-                        saveToFile: false,
-                        renderContainerBox: false
-                    }); // save to blob
+                    var pdfdata = this.exportPdf(false);
                     this._callbacks.onSavePdf.call(this, {
                         features: features, 
                         pdfdata: pdfdata
                         }, e);
                     if (e.defaultPrevented)
                         return;
-                } 
-                exp.exportPDF(features, { 
-                    saveToFile: true,
-                    renderContainerBox: false
-                 }); // save to file
+                }
+                this.exportPdf(true);
             } else if (am.action === "load-json") {
                 var json;
                 if (this._callbacks.onLoadJson) {

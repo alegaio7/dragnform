@@ -190,6 +190,7 @@ class WidgetRadio extends Widget {
             labelClass: this.globalClasses.inputLabel ?? "",
             mark: this.requiredAttributeSettings.mark,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             radioClass: this.globalClasses.radio ?? "",
             radioIdDesign: radioIdDesign,
             radioIdRun: radioIdRun,

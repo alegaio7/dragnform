@@ -145,6 +145,7 @@ class WidgetSelect extends Widget {
             labelClass: this.globalClasses.inputLabel ?? "",
             mark: this.requiredAttributeSettings.mark,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             selectClass: this.globalClasses.select ?? "",
             selectIdDesign: selectIdDesign,
             selectIdRun: selectIdRun,

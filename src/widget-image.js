@@ -59,6 +59,7 @@ class WidgetImage extends Widget {
             imageStyle: imageStyle,
             label: this.label,
             mode: constants.WIDGET_MODE_DESIGN,
+            name: this.name,
             showGrip: this.widgetRenderOptions.renderGrip,
             showRemove: this.widgetRenderOptions.renderRemove,
             style: this._buildOuterStyleAttribute(),
