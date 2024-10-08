@@ -194,7 +194,7 @@ export default class Designer {
         return {
             liveEditsPreview: false,
             toolbar: {
-                visible: true
+                visible: true,
             },
             widgetPaths: {
                 widgetTemplates: "./widgets",
@@ -366,7 +366,7 @@ export default class Designer {
             var btnClass = this._options.toolbar.buttonClass ?? "widget-toolbar-button";
             var btnLabelClass = this._options.toolbar.buttonLabelClass ?? "widget-toolbar-button-label";
             if (fileGroup) {
-                html += `<div class="widget-toolbar-group">
+                html += `<div class="widget-toolbar-group" data-section="file">
                     <div class="widget-toolbar-group-title">${Strings.Toolbar_File_GroupTitle}</div>`;
                 if (options.toolbar.buttons.new)
                     html +=`<button type="button" class="${btnClass}" data-action="new-form" title="${Strings.Toolbar_NewForm_ButtonTitle}">
@@ -393,7 +393,7 @@ export default class Designer {
             }
 
             if (renderModeGroup) {
-                html += `<div class="widget-toolbar-group">
+                html += `<div class="widget-toolbar-group" data-section="mode">
                     <div class="widget-toolbar-group-title">${Strings.Toolbar_RenderMode_GroupTitle}</div>`;
                 if (options.toolbar.buttons.renderCurrentMode)
                     html += `<button type="button" class="${btnClass}" data-action="change-render-mode" title="${Strings.Toolbar_RenderModes_ButtonTitle}">
@@ -420,7 +420,7 @@ export default class Designer {
             }
 
             if (widgetsGroup) {
-                html += `<div class="widget-toolbar-group">
+                html += `<div class="widget-toolbar-group" data-section="widgets">
                         <div class="widget-toolbar-group-title">${Strings.Toolbar_Widgets_GroupTitle}</div>`;
                 if (options.toolbar.buttons.label)
                     html += `<button type="button" class="${btnClass}" data-action="add-label" title="${Strings.Toolbar_AddLabelWidget_ButtonTitle}">
