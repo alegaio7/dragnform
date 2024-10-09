@@ -90,7 +90,7 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
                 inpValue.value = e.target.value;
         });
 
-        var evts = ['change', 'input'];
+        var evts = ['change', 'input', 'blur'];
         for (var i = 0; i < evts.length; i++) {
             optionEl.querySelector(`[data-part="option-title"]`).addEventListener(evts[i], e => {
                 let id = optionEl.getAttribute('data-id');
@@ -177,16 +177,16 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
         var selectCont = this._dialogContainer.querySelector('[data-part="select-options-container"]');
         for (var i = 0; i < this._selectOptions.length; i++) {
             var index = i + 1;
+            var ro = this._selectOptions[i];
             if (index <= 2) { // use existing DOM elements
-                var ro = this._selectOptions[i];
                 let optionEl = selectCont.querySelector(`.widget-select-option[data-index="${index}"]`);
                 optionEl.setAttribute('data-id', ro.id);
 
                 let txtTitle = optionEl.querySelector(`[data-part="option-title"]`);
-                txtTitle.value = this._selectOptions[i].title;
+                txtTitle.value = ro.title;
 
                 let txtValue = optionEl.querySelector(`[data-part="option-value"]`);
-                txtValue.value = this._selectOptions[i].value;
+                txtValue.value = ro.value;
 
                 let removeBtn = optionEl.querySelector('[data-action="remove"]');
                 removeBtn.classList.add("widget-hide");
@@ -194,7 +194,7 @@ export default class WidgetSelectPropertiesEditor extends WidgetCommonProperties
             }
             else
             {
-                this._addSelectOption(index, this._selectOptions[i]);
+                this._addSelectOption(index, ro);
             }
         }
     }

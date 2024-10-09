@@ -243,6 +243,7 @@ class WidgetSelect extends Widget {
                 this._selectOptions.forEach(option => {
                     var optionEl = document.createElement("option");
                     optionEl.setAttribute("data-id", option.id);
+                    optionEl.setAttribute("value", option.value);
                     optionEl.innerHTML = option.title;
                     optionEl.value = option.value;
                     s.appendChild(optionEl);
