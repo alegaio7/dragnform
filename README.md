@@ -1,5 +1,5 @@
 # DragNForm
-Yet another form designer, not framework-biased, that can export the rendered form to json and PDF, everything from the frontend, just with javascript.
+Yet another form designer, not framework-biased, that can export the rendered form to json and PDF, everything from the frontend and just with javascript.
 
 ## Introduction
 Tired of not finding the form designer that I needed, or even worse, finding it and seeing it costs a lot, I decided to create my own form designer with these goals in mind: open source, only vanilla javascript, possibility to create a final (rendeded PDF), export to / import from json, and easily customizable.
@@ -42,17 +42,18 @@ Maybe this is not the best form designer ever, but I believe it accomplishes tho
 1. Copy dragnform.min.js, dnf-icons.min.js, dnf-strings.en.js | dnf-strings.es.js and dnf-functions.js to your JS folder.
 2. Copy widgets-theme-dark.min.css | widgets-theme-light.min.css to your CSS folder.
 2. Add the following tags to the page where you want to use the form editor:
-´´´
+
+```
 <link href="[css folder]/widgets-theme-[light|dark].min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="[js folder]/dnf-strings.[language].min.js"></script>
 <script src="[js folder]/dnf-icons.min.js"></script>
 <script src="[js folder]/dragnform.js"></script>
-´´´
+```
 
 Then, create an instance of DragNForm inside a script tag:
 
-´´´
+```
 var designer = new dragnform.Designer({
     containerId: "formDesignerDiv",
     toolbar: {
@@ -82,7 +83,7 @@ var designer = new dragnform.Designer({
     },
     renderMode: dragnform.constants.WIDGET_MODE_RUN
 });
-´´´
+```
 
 Note: Please replace paths and words inside braces according to your own environment!
 
