@@ -2,12 +2,9 @@
     <head>
         <title>Demo</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> -->
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-        <!-- <link href="bootstrap.css" rel="stylesheet"> -->
         <link href="/dist/css/widgets-theme-dark.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
@@ -15,11 +12,11 @@
         <div id="widgets"></div>
         <div id="json-arena"></div>
         <!-- <script type="text/javascript" src="https://unpkg.com/flyter/bundles/flyter.vanilla.min.js"></script> -->
-        <script src="/dist/jfi-strings.en.js"></script>
-        <script src="/dist/jfi-icons.js"></script>
-        <script src="/dist/justformit.js"></script>
+        <script src="/dist/dnf-strings.en.js"></script>
+        <script src="/dist/dnf-icons.js"></script>
+        <script src="/dist/dragnform.js"></script>
         <script type="module">
-            var designer = new justformit.Designer({
+            var designer = new dragnform.Designer({
                 callbacks: {
                     onNewForm: function(e) {
                         document.getElementById('json-arena').innerText = "";
@@ -48,37 +45,12 @@
                                 var r = window.designer.validate({showErrors: true});
                                 if (r.result) {
                                     console.log('Form is valid!'); 
-                                    /*
-                                    json = canvas.exportJson(); // get current form state
-
-                                    // options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
-                                    // render again, to reflect widget that could have changed position via drag, or values 
-                                    canvas.renderForm(c, json, options);
-
-                                    var features = canvas.extractFeatures();
-                                    if (features) {
-                                        document.getElementById('json-arena').innerText = JSON.stringify(features, null, 2);
-
-                                        // Create PDF here
-                                        var e = new jsPDFExporter();
-                                        e.exportPDF(features);
-                                    }
-                                    */
                                 }                                
                             });
                         }
                     },
-                    /*onSavePdf: function(data, e) {
-                        e.preventDefault();
-                        document.getElementById('json-arena').innerText = JSON.stringify(data.features, null, 2);
-                        var exp = new justformit.jsPDFExporter();
-                        exp.exportPDF(data.features, { 
-                            saveToFile: true,
-                            renderContainerBox: true
-                         }); // save to file
-                    },*/
                     onRenderModeChanged: function(modeInfo, e) {
-                        if (modeInfo.intendedMode === justformit.constants.WIDGET_MODE_VIEW) {
+                        if (modeInfo.intendedMode === dragnform.constants.WIDGET_MODE_VIEW) {
                             var f = window.designer.extractFeatures();
                             document.getElementById('json-arena').innerText = JSON.stringify(f, null, 2);
                         } else
@@ -90,7 +62,6 @@
                 toolbar: {
                     visible: true,
                     compact: false,
-                    //buttonClass: "btn",
                     buttons: {
                         button: true,
                         checkbox: true,
@@ -134,49 +105,9 @@
                         valueControl: "widget-value",
                     },
                 },
-                renderMode: justformit.constants.WIDGET_MODE_DESIGN
+                renderMode: dragnform.constants.WIDGET_MODE_DESIGN
             });
-
             window.designer = designer;
-            /*
-            fetch('./demo.json')
-                .then((response) => response.json())
-                .then((json) => {
-                    designer.renderForm(json);
-
-                    var widgets = designer.widgets;
-                    var submit = designer.findWidget('submit');
-                    if (submit)
-                        submit.registerClickHandler(e => { 
-                            var newSpacer = { type: constants.WIDGET_TYPE_SPACER };
-                            //canvas.addWidget(newSpacer);
-                            designer.addWidget(newSpacer);
-
-                            //var r = canvas.validate({showErrors: true});
-                            var r = designer.validate({showErrors: true});
-                            if (r.result) {
-                                console.log('Form is valid!'); 
-                                
-                                /*
-                                json = canvas.exportJson(); // get current form state
-
-                                // options.renderMode = options.renderMode === constants.WIDGET_MODE_DESIGN ? constants.WIDGET_MODE_VIEW : constants.WIDGET_MODE_DESIGN;
-                                // render again, to reflect widget that could have changed position via drag, or values 
-                                canvas.renderForm(c, json, options);
-
-                                var features = canvas.extractFeatures();
-                                if (features) {
-                                    document.getElementById('json-arena').innerText = JSON.stringify(features, null, 2);
-
-                                    // Create PDF here
-                                    var e = new jsPDFExporter();
-                                    e.exportPDF(features);
-                                }
-                                * /
-                            }
-                        });
-                });
-            */
         </script>
     </body>
 </html>

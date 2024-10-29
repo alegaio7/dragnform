@@ -1,7 +1,7 @@
 import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import WidgetInputBase from "./widget-input-base.js";
-import functions from './jfi-functions.js';
+import functions from './dnf-functions.js';
 
 class WidgetText extends WidgetInputBase {
     constructor(fragment) {

@@ -1,7 +1,5 @@
-import Widget from "./widget-base.js";
 import * as constants from './constants.js';
 import WidgetInputBase from "./widget-input-base.js";
-import functions from './jfi-functions.js';
 
 class WidgetEmail extends WidgetInputBase {
     constructor(fragment) {

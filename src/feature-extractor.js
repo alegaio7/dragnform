@@ -1,5 +1,5 @@
 import * as constants from './constants.js';
-import functions from './jfi-functions.js';
+import functions from './dnf-functions.js';
 
 export const NODE_TYPE_ELEMENT = 1;
 export const NODE_TYPE_ATTRIBUTE = 2;

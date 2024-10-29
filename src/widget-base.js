@@ -2,7 +2,7 @@ import * as constants from './constants.js';
 import flyter from 'flyter';
 import { createPopper } from '@popperjs/core';
 import mustache from 'mustache';
-import functions from './jfi-functions.js';
+import functions from './dnf-functions.js';
 
 export default class Widget {
     static _cachedTemplates = new Map();

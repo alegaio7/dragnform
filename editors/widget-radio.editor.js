@@ -1,4 +1,4 @@
-import functions from "../jfi-functions.js";
+import functions from "../dnf-functions.js";
 import WidgetCommonPropertiesEditor from "./widget-common.editor.js";
 export default class WidgetRadioPropertiesEditor extends WidgetCommonPropertiesEditor {
     constructor(options) {
