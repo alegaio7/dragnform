@@ -459,6 +459,7 @@ export default class Canvas {
                     var w = this._widgets[evt.oldIndex];
                     this._widgets.splice(evt.oldIndex, 1);
                     this._widgets.splice(evt.newIndex, 0, w);
+                    this.modified = true;
                 }.bind(this)
             });
     }
