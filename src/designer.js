@@ -18,6 +18,7 @@ export default class Designer {
             onLoadJsonCompleted
             onRenderModeChanged
             onDesignModified    <== // TODO implement
+            onWidgetDelete
         */
         this._actionMappings = [
             { action: 'new-form', widgetType: null},
@@ -114,6 +115,8 @@ export default class Designer {
         this.renderMode = constants.WIDGET_MODE_DESIGN;
         await this._canvas.renderForm(json);
         this.renderMode = m;
+        if (this._callbacks.onLoadJsonCompleted)
+            this._callbacks.onLoadJsonCompleted.call(this, json);
     }
 
     get renderMode() {
@@ -169,6 +172,14 @@ export default class Designer {
                 this._updateUI();
                 if (this._callbacks.onDesignModified)
                     this._callbacks.onDesignModified.call(this, value);
+            },
+            onWidgetAdd: (widget) => {
+                if (this._callbacks.onWidgetAdd)
+                    this._callbacks.onWidgetAdd.call(this, widget);
+            },
+            onWidgetDelete: (widget, e) => {
+                if (this._callbacks.onWidgetDelete)
+                    this._callbacks.onWidgetDelete.call(this, widget, e);
             }
         });
     }

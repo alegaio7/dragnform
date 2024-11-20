@@ -46,6 +46,9 @@ html {
 .widget-designer[data-current-mode=run] .widget-toolbar [data-render-mode=view] {
   display: none;
 }
+.widget-designer[data-current-mode=view] .widget-container {
+  width: 1000px;
+}
 .widget-designer[data-current-mode=view] .widget-toolbar [data-render-mode=design] {
   display: none;
 }

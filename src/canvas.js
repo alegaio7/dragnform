@@ -46,6 +46,8 @@ export default class Canvas {
         this.liveEditsPreview = options.liveEditsPreview ?? false;
         this._modified = false;
         this._onModifiedCallback = options.onModified ?? null;
+        this._onWidgetAddCallback = options.onWidgetAdd ?? null;
+        this._onWidgetDeleteCallback = options.onWidgetDelete ?? null;
         this._widgetRenderOptions = options.widgetRenderOptions ?? {};
         this._widgetPaths = options.widgetPaths ?? {};
 
@@ -88,6 +90,8 @@ export default class Canvas {
         this.modified = true;
         await this._renderSingleWidget(w, this._domParser);
         this._setupSortable();
+        if (this._onWidgetAddCallback)
+            this._onWidgetAddCallback(w);
         return w;
     }
 
@@ -259,7 +263,11 @@ export default class Canvas {
     removeWidget(id) {
         var w = this.findWidget(id);
         if (w) {
-            this._removeWidgetInternal(w);
+            debugger
+            var e = new Event("widgetDelete", {bubbles: true});
+            this._removeWidgetInternal(w, e);
+            if (e.defaultPrevented)
+                return;
             this._setupSortable();
             this.modified = true;
         }
@@ -325,11 +333,11 @@ export default class Canvas {
         if (!json)
             throw new Error('json is required');
 
-        var o;
+        var o = {};
         if (typeof json === 'string')
             o = JSON.parse(json);
         else
-            o = json;
+            o = Object.assign(o, json);
 
         if (!o.name)
             throw new Error('name is required in json object');
@@ -365,6 +373,11 @@ export default class Canvas {
 
     _removeWidgetInternal(sender, e) {
         var s = sender.label ? sender.label : sender.id;
+        if (this._onWidgetDeleteCallback) {
+            this._onWidgetDeleteCallback(sender, e);
+            if (e.defaultPrevented)
+                return;
+        }
         var n = confirm(Strings.WidgetRemoveConfirmationMessage.replace("{0}", s));
         if (!n)
             return;

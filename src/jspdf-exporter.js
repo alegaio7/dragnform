@@ -214,7 +214,6 @@ export default class jsPDFExporter {
         var fn = parseInt(wf.fontSize, 10);
         if (!fn)
             fn = constants.DEFAULT_PDF_FONT_SIZE;
-        //fn *= this._hRatio * this.options.cssToPdfScaling;
         fn *= this.options.cssToPdfScaling;
         return {name: ff, style: fs, size: fn, weight: fw, color: wf.color, underline: wf.fontUnderline };
     }

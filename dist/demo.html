@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,6 +56,12 @@
                             document.getElementById('json-arena').innerText = JSON.stringify(f, null, 2);
                         } else
                             document.getElementById('json-arena').innerHTML = "";
+                    },
+                    onWidgetAdd: function(widget, e) {
+                        console.log('Widget added: ' + widget.id);
+                    },
+                    onWidgetDelete: function(widget, e) {
+                        console.log('Widget to be deleted: ' + widget.id);
                     }
                 },
                 containerId: "widgets",
