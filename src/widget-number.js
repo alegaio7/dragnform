@@ -153,6 +153,7 @@ class WidgetNumber extends WidgetInputBase {
     }
 
     validate(validateOptions) {
+        super._beforeValidation();
         this.clearError();
         var input = this._el.querySelector(`[data-show-when="run"] input`);
         var r = super._validateInputCtl(input);
@@ -170,6 +171,7 @@ class WidgetNumber extends WidgetInputBase {
 
         if (validateOptions && validateOptions.showErrors && !r.result)
             this.setError(r);
+        super._afterValidation(r);
         return r;
     }
 

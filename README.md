@@ -226,6 +226,15 @@ Allows configuring the designer's toolbar.
 
 
 ### Callbacks
+The designer supports a few callbacks that allow the caller to handle these events:
+- onNewForm: called when the 'New form' toolbar button is clicked. Use the preventDefault() method from the event to avoid creating a new form.
+- onExportToJson: called when the 'Export form to json' button is clicked. If the event is not prevented, a dialog will be shown to select the destination of the exported file. The event also contains a parameter with the json exported contents.
+- onLoadJson: called when the 'Import form from json' button is clicked. This event gives the caller an oportunity to grab json contents from an external source and return it to the designer using the e.json event property.
+- onDesignModified: this event occurrs whenever a change is made to a widget inside the designer. The 'value' property of the event contains a bool value indicating whether the designer was modified (true) or when the canvas is cleared (false).
+- onLoadJsonCompleted: called when the designer completed rendering the form. The json contents used for rendering are sent as an event parameter.
+- onRenderModeChanged: called when the change design mode button is clicked. The event sends a parameter with a property named 'intendedMode' that tells which mode the designer will change to if the event is not prevented.
+- onWidgetAdd: this event occurrs whenever a new widget is added to the canvas. It contains the new widget as a parameter.
+- onWidgetDelete: this event occurrs whenever a widget is about to be deleted from the canvas. The event contains a reference the widget and an event parameter that, when preventDefault() is called, cancels the delete widget operation.
 
 ### Designer properties
 #### canvas get

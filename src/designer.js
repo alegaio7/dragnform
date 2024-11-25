@@ -17,7 +17,7 @@ export default class Designer {
             onLoadJson
             onLoadJsonCompleted
             onRenderModeChanged
-            onDesignModified    <== // TODO implement
+            onDesignModified
             onWidgetDelete
         */
         this._actionMappings = [
@@ -227,6 +227,7 @@ export default class Designer {
                     select: "widget-select",
                     textarea: "widget-textarea",
                     valueControl: "widget-value",
+                    validationError: "widget-error",
                     widget: "widget",
                 },
                 requiredAttributeSettings: {
@@ -304,9 +305,11 @@ export default class Designer {
             } else if (am.action === "load-json") {
                 var json;
                 if (this._callbacks.onLoadJson) {
-                    json = this._callbacks.onLoadJson.call(this, e);
+                    e.json = null;
+                    this._callbacks.onLoadJson.call(this, e);
                     if (e.defaultPrevented)
                         return;
+                    json = e.json;
                 }
 
                 // if callback returns json, render it
@@ -353,13 +356,18 @@ export default class Designer {
                 var r = this.validate({showErrors: true});
                 if (r.result)
                     alert(Strings.Designer_Validation_Form_Valid);
+                else {
+                    if (r.validations && r.validations.length) {
+
+                    }
+                }
             }
         }
     }
 
     _setupDesigner(options) {
         var html = `<div class="widget-designer" data-current-mode="${this.renderMode}">`;
-        if (options.toolbar.visible) {          // TODO Parse buttons
+        if (options.toolbar.visible) {
             var fileGroup = options.toolbar.buttons && (
                 options.toolbar.buttons.new || options.toolbar.buttons.load || options.toolbar.buttons.export || options.toolbar.buttons.savepdf
             );

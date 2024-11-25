@@ -55,6 +55,11 @@ html {
     display: none;
 }
 
+.widget-error {
+    border: 1px solid transparent;
+    background-color: rgba($widget-error, 0.15);
+}
+
 // ***************
 // designer - toolbar
 // ***************

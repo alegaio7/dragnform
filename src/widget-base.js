@@ -477,8 +477,19 @@ export default class Widget {
         throw new Error("Child class must implement render method");
     }
 
+    _beforeValidation() {
+        if (this._el && this.globalClasses && this.globalClasses.validationError)
+            this._el.classList.remove(this.globalClasses.validationError);
+    }
+
     validate(validationOptions) {
         return { result: true };
+    }
+
+    _afterValidation(r) {
+        if (this._el && r && !r.result && this.globalClasses && this.globalClasses.validationError)
+            this._el.classList.add(this.globalClasses.validationError);
+    
     }
 
     static getRegexPattern(name) {

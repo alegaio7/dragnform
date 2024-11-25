@@ -213,6 +213,7 @@ class WidgetText extends WidgetInputBase {
     }
 
     validate(validationOptions) {
+        super._beforeValidation();
         this.clearError();
         var input = this._el.querySelector(`[data-show-when="run"] input`);
         var r = super._validateInputCtl(input);
@@ -231,6 +232,7 @@ class WidgetText extends WidgetInputBase {
 
         if (validationOptions && validationOptions.showErrors && !r.result)
             this.setError(r);
+        super._afterValidation(r);
         return r;
     }
 

@@ -185,6 +185,7 @@ class WidgetSelect extends Widget {
     }
 
     validate(validationOptions) {
+        super._beforeValidation();
         this.clearError();
         var select = this._el.querySelector(`[data-show-when="run"] select`);
 
@@ -201,7 +202,7 @@ class WidgetSelect extends Widget {
 
         if (validationOptions && validationOptions.showErrors && !r.result)
             this.setError(r);
-
+        super._afterValidation(r);
         return r;
     }
 

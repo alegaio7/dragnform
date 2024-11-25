@@ -56,7 +56,7 @@ class Strings {
     static get Toolbar_ExportJson_ButtonLabel() { return 'Export'; }
     static get Toolbar_ExportJson_ButtonTitle() { return 'Export form to json'; }
     static get Toolbar_ImportJson_ButtonLabel() { return 'Import'; }
-    static get Toolbar_ImportJson_ButtonTitle() { return 'Import form from json file'; }
+    static get Toolbar_ImportJson_ButtonTitle() { return 'Import form from json'; }
     static get Toolbar_NewForm_ButtonLabel() { return 'New'; }
     static get Toolbar_NewForm_ButtonTitle() { return 'Start a new form'; }
     static get Toolbar_SavePdf_ButtonLabel() { return 'Save to PDF'; }

@@ -263,7 +263,6 @@ export default class Canvas {
     removeWidget(id) {
         var w = this.findWidget(id);
         if (w) {
-            debugger
             var e = new Event("widgetDelete", {bubbles: true});
             this._removeWidgetInternal(w, e);
             if (e.defaultPrevented)
@@ -316,7 +315,7 @@ export default class Canvas {
         this._widgets.forEach(w => {
             let r = w.validate(validationOptions);
             if (!r.result) {
-                validations.push(r);
+                validations.push({validationError: r.message, widget: w});
             }
         });
         return {result: validations.length === 0 ? true : false, validations: validations};

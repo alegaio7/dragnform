@@ -231,6 +231,7 @@ class WidgetRadio extends Widget {
     }
 
     validate(validationOptions) {
+        super._beforeValidation();
         this.clearError();
         var input = this._el.querySelector(`[data-show-when="run"] input:checked`);
 
@@ -244,7 +245,8 @@ class WidgetRadio extends Widget {
 
         if (!r)
             r = { result: true };
-
+        
+        super._afterValidation(r);
         return r;
     }
 

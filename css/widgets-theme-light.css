@@ -1,6 +1,7 @@
 @charset "UTF-8";
 :root {
   --widget-label-color: #222;
+  --widget-label-color-viewmode: #222;
   --widget-text-color: #222;
 }
 
@@ -15,6 +16,11 @@ html {
 
 .widget-hide {
   display: none;
+}
+
+.widget-error {
+  border: 1px solid transparent;
+  background-color: rgba(255, 0, 0, 0.15);
 }
 
 .widget-designer {

@@ -57,7 +57,7 @@
                         } else
                             document.getElementById('json-arena').innerHTML = "";
                     },
-                    onWidgetAdd: function(widget, e) {
+                    onWidgetAdd: function(widget) {
                         console.log('Widget added: ' + widget.id);
                     },
                     onWidgetDelete: function(widget, e) {
@@ -101,7 +101,7 @@
                     renderTips: true,
                     globalClasses: {
                         button: "widget-button",
-                        checkbox: "widget-checkbox BLABLA",
+                        checkbox: "widget-checkbox",
                         checkboxLabel: "widget-checkbox-label",
                         input: "widget-input",
                         inputLabel: "widget-label",
@@ -109,6 +109,7 @@
                         radioLabel: "widget-radio-label",
                         select: "widget-select",
                         textarea: "widget-textarea",
+                        validationError: "widget-error",
                         valueControl: "widget-value",
                     },
                 },
