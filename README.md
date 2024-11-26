@@ -241,15 +241,13 @@ The designer supports a few callbacks that allow the caller to handle these even
 #### canvas get
 Returns a reference to the underlying canvas used by the designer to render widgets. The designer is just a wrapper with added functionality over the canvas (i.e. the designer provides the toolbar, but the rendering happens in the canvas).
 
-####
-renderMode get/set
+#### renderMode get/set
 This property allows setting or reading the current rendering mode. As stated before, the designer supports 3 modes:
 - Design: used by the person who wants to **create or edit** new forms. It allows adding, removing or updating widgets.
 - Run: used by the persons that will **fill** a form.
 - View: used by the designer when a form is complete and it has to be **rendered into a PDF file**. The designer converts all editable widgets to their read-only version and starts the feature extraction and json export procedure that will be sent to jsPDF for PDF creation.
 
-####
-widgets get
+#### widgets get
 Returns a reference to the widgets collection. It's recommended that you don't modify this collection directly, but instead use the canvas-provided methods like addWidget, clearCanvas, removeWidget, etc.
 
 ### Designer methods
