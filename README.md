@@ -222,6 +222,7 @@ Allows configuring the designer's toolbar.
     - radioLabel
     - select
     - textarea
+    - validationError: used to style a widget when it doesn't pass a validation check.
     - valueControl: used when rendering the value of input controls (i.e. textbox, dates, numbers) in VIEW mode, usually as SPANs.
 
 
@@ -238,14 +239,44 @@ The designer supports a few callbacks that allow the caller to handle these even
 
 ### Designer properties
 #### canvas get
+Returns a reference to the underlying canvas used by the designer to render widgets. The designer is just a wrapper with added functionality over the canvas (i.e. the designer provides the toolbar, but the rendering happens in the canvas).
+
+####
 renderMode get/set
+This property allows setting or reading the current rendering mode. As stated before, the designer supports 3 modes:
+- Design: used by the person who wants to **create or edit** new forms. It allows adding, removing or updating widgets.
+- Run: used by the persons that will **fill** a form.
+- View: used by the designer when a form is complete and it has to be **rendered into a PDF file**. The designer converts all editable widgets to their read-only version and starts the feature extraction and json export procedure that will be sent to jsPDF for PDF creation.
+
+####
 widgets get
+Returns a reference to the widgets collection. It's recommended that you don't modify this collection directly, but instead use the canvas-provided methods like addWidget, clearCanvas, removeWidget, etc.
 
 ### Designer methods
 #### clearCanvas
+This method removes all widgets from the canvas and resets the _modified_ property to false.
+
 #### exportJson
-extractFeatures
-exportPdf
-findWidget
-renderForm
-validate
+This methods turns the designer to _design_ mode temporarily in order to allow extracting widget properties, then returns the designer back to whatever mode it was before.
+
+The result is a json object that can be used to realod a form from it in a later time.
+
+#### extractFeatures
+You can use this method to inspect the json structure (this is different from what _exportJson_ returns) that contains a representation of the widgets suitable for rendering a PDF.
+
+#### exportPdf(saveTofile)
+This method creates a PDF from the form. The _saveToFile_ parameter will tell the designer whether to just return the PDF blob (false) or to trigger a save file dialog (true).
+
+#### findWidget(id)
+Returns a widget by passing its Id.
+
+#### loadForm(json)
+This method will load a form from a previously exported json object.
+
+#### validate
+Validates the widgets in a form.
+This method requires that the designer is in _run_ mode in order to be able to validate the widgets.
+
+Validation will loop though all widgets, and for those that have configured validations (like min/max for number field, or required, or min length for text fields), the proper validation will be checked.
+
+If a widget property fails the validation, the result of this call will be an object with a _result_ property set to false, and a _validations_ array filled with the failed validations.

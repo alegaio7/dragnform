@@ -99,6 +99,20 @@ export default class Designer {
         return data;
     }
 
+    exportPdf(saveTofile) {
+        saveTofile = !!saveTofile;
+        var prevRenderMode = this.renderMode; 
+        this.renderMode = constants.WIDGET_MODE_VIEW;
+        var features = this.extractFeatures();
+        this.renderMode = prevRenderMode;
+        var exp = new jsPDFExporter();
+        var pdfdata = exp.exportPDF(features, { 
+            saveToFile: saveTofile,
+            renderContainerBox: false
+        });
+        return pdfdata;
+    }
+
     extractFeatures() {
         this.renderMode = constants.WIDGET_MODE_VIEW;
         return this._canvas.extractFeatures();
@@ -110,7 +124,7 @@ export default class Designer {
         return this._canvas.findWidget(id);
     }
 
-    async renderForm(json) {
+    async loadForm(json) {
         var m = this.renderMode;
         this.renderMode = constants.WIDGET_MODE_DESIGN;
         await this._canvas.renderForm(json);
@@ -130,20 +144,6 @@ export default class Designer {
         this._updateUI();
     }
 
-    exportPdf(saveTofile) {
-        saveTofile = !!saveTofile;
-        var prevRenderMode = this.renderMode; 
-        this.renderMode = constants.WIDGET_MODE_VIEW;
-        var features = this.extractFeatures();
-        this.renderMode = prevRenderMode;
-        var exp = new jsPDFExporter();
-        var pdfdata = exp.exportPDF(features, { 
-            saveToFile: saveTofile,
-            renderContainerBox: false
-        });
-        return pdfdata;
-    }
-
     validate(validationOptions) {
         if (this.renderMode !== constants.WIDGET_MODE_RUN)
             throw new Error('validate can only be called in run mode');
@@ -151,7 +151,7 @@ export default class Designer {
     }
 
     get widgets() { 
-        return this._canvas._widgets;
+        return this._canvas.widgets;
     }
 
     /// ********************************************************************************************************************
@@ -314,7 +314,7 @@ export default class Designer {
 
                 // if callback returns json, render it
                 if (json) {
-                    _t.renderForm(json).then(() => {
+                    _t.loadForm(json).then(() => {
                         if (this._callbacks.onLoadJsonCompleted)
                             this._callbacks.onLoadJsonCompleted.call(this, json);
                         });
@@ -331,7 +331,7 @@ export default class Designer {
                             var reader = new FileReader();
                             reader.onload = async function(e3) {
                                 var j2 = JSON.parse(e3.target.result);
-                                await _t.renderForm(j2);
+                                await _t.loadForm(j2);
                                 if (_t._callbacks.onLoadJsonCompleted)
                                     _t._callbacks.onLoadJsonCompleted.call(_t, j2);
                             };

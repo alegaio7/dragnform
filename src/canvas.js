@@ -82,7 +82,7 @@ export default class Canvas {
         } else
             this._setRememberedProperties(jsonObj.type);
 
-        var w = this.createWidget(jsonObj);
+        var w = this._createWidget(jsonObj);
         if (this.findWidget(w.id))
             throw new Error(`widget with id ${w.id} already exists.`);
 
@@ -99,91 +99,13 @@ export default class Canvas {
     /// Clears the container, the widgets array and the sortable object
     /// </summary>
     clearCanvas() {
-        this._setupSortable();
         if (this._widgets && this._widgets.length)
             this._widgets.forEach(w => w.removeFromDom());
+        this._setupSortable();
         this._widgets = [];
         this._container.innerHTML = '';
         this._editorTemplates.clear();
         this.modified = false;
-    }
-
-    /// <summary>
-    /// Creates a widget from a JSON object
-    /// </summary>
-    createWidget(o) {
-        if (!o)
-            throw new Error('json object is required');
-        if (!o.type)
-            throw new Error("widget found with no type property.");
-
-        if (!o.id) {
-            var tmpId;
-            while (true) {
-                tmpId = "Widget" + Math.floor(Math.random() * 1000);
-                if (!this.findWidget(tmpId)) {
-                    o.id = tmpId;
-                    break;
-                }
-            }
-        }
-
-        var w;
-        switch(o.type) {
-            case constants.WIDGET_TYPE_BUTTON:
-                w = new WidgetButton(o);
-                break;
-            case constants.WIDGET_TYPE_CHECKBOX:
-                w = new WidgetCheckbox(o);
-                break;
-            case constants.WIDGET_TYPE_DATE:
-                w = new WidgetDate(o);
-                break;
-            case constants.WIDGET_TYPE_EMAIL:
-                w = new WidgetEmail(o);
-                break;
-            case constants.WIDGET_TYPE_IMAGE:
-                w = new WidgetImage(o);
-                break;
-            case constants.WIDGET_TYPE_LABEL:
-                w = new WidgetLabel(o);
-                break;
-            case constants.WIDGET_TYPE_NUMBER:
-                w = new WidgetNumber(o);
-                break;
-            case constants.WIDGET_TYPE_PARAGRAPH:
-                w = new WidgetParagraph(o);
-                break;
-            case constants.WIDGET_TYPE_RADIO:
-                w = new WidgetRadio(o);
-                break                
-            case constants.WIDGET_TYPE_SPACER:
-                w = new WidgetSpacer(o);
-                break
-            case constants.WIDGET_TYPE_SELECT:
-                w = new WidgetSelect(o);
-                break
-            case constants.WIDGET_TYPE_TEXT:
-                w = new WidgetText(o);
-                break;
-            default:
-                throw new Error(`widget type ${o.type} not found.`);
-        }
-
-        w.disableInlineEditor = this._widgetRenderOptions.disableInlineEditor;
-        w.globalClasses = this._widgetRenderOptions.globalClasses;
-
-        // idem with the required attribute settings
-        var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._widgetRenderOptions.requiredAttributeSettings;
-        w.requiredAttributeSettings = requiredAttributeSettings;
-
-        if (this._widgetPaths)
-            w.setWidgetPaths(this._widgetPaths);
-
-        // idem with the widget rendering options
-        var widgetRenderOptions = o.widgetRenderOptions ? o.widgetRenderOptions : this._widgetRenderOptions;
-        w.widgetRenderOptions = widgetRenderOptions;
-        return w;
     }
 
     get widgets() { 
@@ -326,6 +248,84 @@ export default class Canvas {
     /// ********************************************************************************************************************
 
     /// <summary>
+    /// Creates a widget from a JSON object
+    /// </summary>
+    _createWidget(o) {
+        if (!o)
+            throw new Error('json object is required');
+        if (!o.type)
+            throw new Error("widget found with no type property.");
+
+        if (!o.id) {
+            var tmpId;
+            while (true) {
+                tmpId = "Widget" + Math.floor(Math.random() * 1000);
+                if (!this.findWidget(tmpId)) {
+                    o.id = tmpId;
+                    break;
+                }
+            }
+        }
+
+        var w;
+        switch(o.type) {
+            case constants.WIDGET_TYPE_BUTTON:
+                w = new WidgetButton(o);
+                break;
+            case constants.WIDGET_TYPE_CHECKBOX:
+                w = new WidgetCheckbox(o);
+                break;
+            case constants.WIDGET_TYPE_DATE:
+                w = new WidgetDate(o);
+                break;
+            case constants.WIDGET_TYPE_EMAIL:
+                w = new WidgetEmail(o);
+                break;
+            case constants.WIDGET_TYPE_IMAGE:
+                w = new WidgetImage(o);
+                break;
+            case constants.WIDGET_TYPE_LABEL:
+                w = new WidgetLabel(o);
+                break;
+            case constants.WIDGET_TYPE_NUMBER:
+                w = new WidgetNumber(o);
+                break;
+            case constants.WIDGET_TYPE_PARAGRAPH:
+                w = new WidgetParagraph(o);
+                break;
+            case constants.WIDGET_TYPE_RADIO:
+                w = new WidgetRadio(o);
+                break                
+            case constants.WIDGET_TYPE_SPACER:
+                w = new WidgetSpacer(o);
+                break
+            case constants.WIDGET_TYPE_SELECT:
+                w = new WidgetSelect(o);
+                break
+            case constants.WIDGET_TYPE_TEXT:
+                w = new WidgetText(o);
+                break;
+            default:
+                throw new Error(`widget type ${o.type} not found.`);
+        }
+
+        w.disableInlineEditor = this._widgetRenderOptions.disableInlineEditor;
+        w.globalClasses = this._widgetRenderOptions.globalClasses;
+
+        // idem with the required attribute settings
+        var requiredAttributeSettings = o.requiredAttributeSettings ? o.requiredAttributeSettings : this._widgetRenderOptions.requiredAttributeSettings;
+        w.requiredAttributeSettings = requiredAttributeSettings;
+
+        if (this._widgetPaths)
+            w.setWidgetPaths(this._widgetPaths);
+
+        // idem with the widget rendering options
+        var widgetRenderOptions = o.widgetRenderOptions ? o.widgetRenderOptions : this._widgetRenderOptions;
+        w.widgetRenderOptions = widgetRenderOptions;
+        return w;
+    }
+
+    /// <summary>
     /// Parses a JSON object and creates widgets. Widgets are stored in the _widgets array.
     /// </summary>
     _parseJson(json) {
@@ -357,7 +357,7 @@ export default class Canvas {
         }
 
         o.widgets.forEach(fragment => {
-            var e = this.createWidget(fragment);
+            var e = this._createWidget(fragment);
             if (this.findWidget(e.id))
                 throw new Error(`widgets collection contains duplicate ids in json object: ${e.id}`);
             e.value = fragment.value;
