@@ -72,7 +72,7 @@ var designer = new dragnform.Designer({
         widgetFormEditors: "/lib/dragnform/editors"
     },
     widgetRenderOptions: {
-        disableInlineEditor: true,
+        enableInlineEditor: false,
         renderGrip: false,
         renderRemove: false,
         renderTips: true,
@@ -208,7 +208,8 @@ Allows configuring the designer's toolbar.
 - widgetFormEditors: the folder where the widget dialog editors are stored.
 
 #### widgetRenderOptions
-- disableInlineEditor: true if the flyter inline editor has to be disabled. Flyter is used to allow for widget label editing without opening the widget editor dialog.
+- enableInlineEditor (*): true if the flyter inline editor is enabled. Flyter is used to allow for widget label editing without opening the widget editor dialog. For more info on flyter, check https://github.com/ovesco/flyter. 
+(*) This feature is experimental.
 - renderGrip: true if the 'grip' element is rendered in widgets. The grip element allows the dran-and-drop functionality to rearrange widgets in the canvas.
 - renderRemove: true if the 'X' button is rendered in widgers. The 'X' button allows elements to be removed from the canvas.
 - renderTips: true if the widget tips are rendered. Tips are help texts that some widgets accept in order to give clues to the users.

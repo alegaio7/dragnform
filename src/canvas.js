@@ -309,7 +309,7 @@ export default class Canvas {
                 throw new Error(`widget type ${o.type} not found.`);
         }
 
-        w.disableInlineEditor = this._widgetRenderOptions.disableInlineEditor;
+        w.enableInlineEditor = !!this._widgetRenderOptions.enableInlineEditor;
         w.globalClasses = this._widgetRenderOptions.globalClasses;
 
         // idem with the required attribute settings
@@ -395,7 +395,7 @@ export default class Canvas {
         w.registerPropertiesButtonHandler(this._showWidgetProperties.bind(this), false);
         w.registerDoubleClickHandler(this._showWidgetProperties.bind(this), false);
 
-        if (!this._widgetRenderOptions.disableInlineEditor)
+        if (this._widgetRenderOptions.enableInlineEditor)
             w.enableInPlaceEditor();
 
         w.refresh();

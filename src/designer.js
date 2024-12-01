@@ -74,7 +74,7 @@ export default class Designer {
             this._options.widgetRenderOptions.renderGrip = options.widgetRenderOptions.renderGrip !== true ? false : true;
             this._options.widgetRenderOptions.renderRemove = options.widgetRenderOptions.renderRemove !== true ? false : true;
             this._options.widgetRenderOptions.renderTips = options.widgetRenderOptions.renderTips !== false ? true : false;
-            this._options.widgetRenderOptions.disableInlineEditor = options.widgetRenderOptions.disableInlineEditor === true ? true : false;
+            this._options.widgetRenderOptions.enableInlineEditor = options.widgetRenderOptions.enableInlineEditor === true ? true : false;
         }
 
         this._setupDesigner(this._options);
@@ -212,7 +212,7 @@ export default class Designer {
                 widgetFormEditors: "./widgets/editors"
             },
             widgetRenderOptions: {
-                disableInlineEditor: false,
+                enableInlineEditor: false,
                 renderGrip: true,
                 renderRemove: true,
                 renderTips: true,

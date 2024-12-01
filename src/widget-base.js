@@ -53,7 +53,7 @@ export default class Widget {
                 this._verticalAlignment = fragment.verticalAlignment;
 
         this.columns = fragment.columns ?? 12;
-        this.disableInlineEditor = fragment.disableInlineEditor ?? false;
+        this.enableInlineEditor = fragment.enableInlineEditor ?? false;
 
         this._el = null;
 
@@ -401,7 +401,7 @@ export default class Widget {
             this._el.addEventListener('dblclick', async (e) => {
                 if (e.target.classList.contains("widget") || 
                     e.target.classList.contains("widget-label") ||
-                    (e.target.hasAttribute("data-part") && e.target.attributes["data-part"].value === "label" && this.disableInlineEditor) ||
+                    (e.target.hasAttribute("data-part") && e.target.attributes["data-part"].value === "label" && !this.enableInlineEditor) ||
                     e.target.hasAttribute("data-show-when")
                 )
                     await handler(this, e);
@@ -513,7 +513,7 @@ export default class Widget {
     /// Attaches an inline editor (flyter) to the widget's label, so it can be editted in place.
     /// </summary>
     _attachInlineEditor() {
-        if (this.disableInlineEditor)
+        if (!this.enableInlineEditor)
             return;
         var _t = this;
         if (this.labelElement) {

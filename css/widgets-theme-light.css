@@ -703,7 +703,7 @@ html {
 .widget-properties-editor .widget-properties-editor-header {
   height: 2rem;
   background-color: #cb38c8;
-  color: #222;
+  color: white;
   line-height: 2;
   padding: 0 0.5rem;
   border-radius: 0.25rem;
