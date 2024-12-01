@@ -691,7 +691,10 @@ html {
 .widget-properties-editor input[type=checkbox], .widget-properties-editor input[type=radio] {
   width: 1.5rem;
 }
-.widget-properties-editor input[type=color], .widget-properties-editor input[type=date], .widget-properties-editor input[type=number] {
+.widget-properties-editor input[type=color], .widget-properties-editor input[type=number] {
+  width: 4rem;
+}
+.widget-properties-editor input[type=date] {
   width: 5rem;
 }
 .widget-properties-editor > * {

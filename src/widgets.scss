@@ -885,7 +885,11 @@ html {
         width: 1.5rem;
     }
 
-    input[type="color"], input[type="date"], input[type="number"] {
+    input[type="color"], input[type="number"] {
+        width: 4rem;
+    }
+
+    input[type="date"] {
         width: 5rem;
     }
 
