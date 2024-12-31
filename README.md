@@ -1,16 +1,24 @@
 # DragNForm
 Of course, yet another form designer! But this is not framework-biased, it can export the rendered form to json and PDF, and everything is done in the frontend, just with love and javascript.
 
-## Introduction
-Tired of not finding the form designer that fit my needs (or even worse, finding something just to realize it costs a lot, or it relies in some backend libraries), I decided to create my own form designer with these goals in mind: 
+There's a blob post about this component that you can find [here](https://www.alexgaio.com/post/drag-n-form-a-pure-javascript-forms-designer-with-direct-pdf-export)
+
+## Background
+I was tired of searching and not finding the forms designer that fit my needs. Everyone I've found had one or more of this dissapointing issues:
+* it's expensive
+* has some unwanted dependencies (like jQuery)
+* needed a backend 
+* didn't have the right type of controls (like email, dates, etc.)
+
+So I decided to create my own forms designer from scratch with these goals in mind:
 * open source
 * only vanilla javascript
-* allow export to PDF (rendeded form)
+* allow exporting a rendeded form to PDF
 * export to / import from json
 * easily customizable
-* validation of input data
+* input data validation
 
-Maybe this is not the best form designer ever, but I believe it accomplishes those goals.
+Maybe this is not the best form designer out there, but I believe it achieves those goals.
 
 
 ## Features
@@ -31,7 +39,6 @@ Maybe this is not the best form designer ever, but I believe it accomplishes tho
     - View: allows a user to see a readonly, rendered version of the form (used when exporting to PDF).
 * Export / import form definition to/from json
 * Export as PDF (2)
-* Input validation
 * Customizable toolbar (text and icons)
 * Localized to english and spanish. Extensible to other languages.
 * Callbacks for several functions, like new form, save form, export to pdf, widgets modified, etc.
@@ -53,7 +60,7 @@ I wanted to add some pattern validation to the text widget, but because I had to
 ### How to use it in other projects
 1. Copy dragnform.min.js, dnf-icons.min.js, [dnf-strings.en.js | dnf-strings.es.js] and dnf-functions.js to your JS folder.
 2. Copy widgets-theme-dark.min.css | widgets-theme-light.min.css to your CSS folder.
-2. Add the following tags to the page where you want to use the form editor:
+3. Add the following tags to the page where you want to use the form editor:
 
 ```
 <link href="[css folder]/widgets-theme-[light|dark].min.css" rel="stylesheet">
@@ -130,10 +137,10 @@ If you want to customize colors, then modify either widgets-theme-light.scss or 
 
 **Advise!**: I've provided the dark-theme version just for fun. But considering this is a form designer, and most likely the final result of a form would be a rendered PDF, I strongly recommend using the light theme. It's ackward to see a textbox (or any other control) with dark background and light text in a PDF file.
 
-### Font used in generated PDFs
+### Font used in exported PDFs
 The pdf file created by calling **exportPdf** uses the _Poppins_ font. PDF files must include all non-standard fonts inside the file, otherwise they won't show properly.
 
-If you want to use other fonts, you'll have to get the resource (font file) and convert it to a base64 string (check poppins.normal.js for example). See the section [Convert a font for jsPDF](#convert-a-font-for-jspdf) below.
+If you want to use other fonts, you'll have to get the resources (font files) and convert them to a base64 string (check poppins.normal.js for example). See the section [Convert a font for jsPDF](#convert-a-font-for-jspdf) below.
 
 Once you get the js files with the encoded fonts, update **jspdf-exporter.js** to reference them:
 * Update the *imports* at the top of the file
@@ -162,7 +169,7 @@ https://peckconsulting.s3.amazonaws.com/fontconverter/fontconverter.html
 ## How PDF rendering works
 ### Feature extraction
 Rendering PDFs from HTML pages is a very tricky task.
-To start with, HTML is naturally a flow layout, where you barely use absolute coordinates to position content.
+To start with, HTML is naturally a flow layout, where you'd barely use absolute coordinates to position content.
 On the other hand, not only does PDF use an absolute coordinate system but also has the content's origin at the bottom of the page, instead of being at the top.
 
 Making a HTML layout look the same -or at least, similar- in PDF comes with other difficulties, like:
@@ -187,9 +194,9 @@ All of those features are obtained with native web apis like element.getBounding
 ### JsPDF
 Once a json representation of the form is built, a pdf exporter component is used, which internally relies on the jsPDF library.
 
-The pdf exporter component is also responsible of detecting whether contents exceed the page size and adds a new page to the PDF document accordingly.
+The pdf exporter component is also responsible of detecting whether contents exceed the default page size (which is set to 8.5" x 11") and adds a new page to the PDF document when needed.
 
-For every rendered component, the positioning and styling is considered as described in the json definition.
+For every rendered widget, the positioning and styling is considered as described in the json definition.
 
 ## Integration in other projects
 ### Designer constructor parameters
@@ -239,7 +246,7 @@ Allows configuring the designer's toolbar.
 #### widgetRenderOptions
 - enableInlineEditor (\*): true if the flyter inline editor is enabled. Flyter is used to allow for widget label editing without opening the widget editor dialog. For more info on flyter, check https://github.com/ovesco/flyter. 
 (\*) This feature is experimental.
-- renderGrip: true if the 'grip' element is rendered on widgets. The grip element allows the dran-and-drop functionality to rearrange widgets in the canvas.
+- renderGrip: true if the 'grip' element is rendered on widgets. The grip element allows the user to drag-and-drop widgets in the canvas.
 - renderRemove: true if the 'X' button is rendered on widgets. The 'X' button allows elements to be removed from the canvas.
 - renderTips: true if widget tips are rendered. Tips are help texts that some widgets accept in order to give clues to the user.
 - globalClasses: an object that defines custom CSS class names that widgets will use when rendered. If no custom class names are specified, the original styles defined in the DragNFrom stylesheets will be used. Classes can be defined for:
