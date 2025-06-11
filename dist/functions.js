@@ -1,0 +1,1 @@
+export default class functions{static convertToPixels(t){if("number"==typeof t)return t;var e=parseFloat(t.replace("px",""));return e||(e=0),e}static uuidv4(){return"10000000-1000-4000-8000-100000000000".replace(/[018]/g,(t=>(+t^crypto.getRandomValues(new Uint8Array(1))[0]&15>>+t/4).toString(16)))}}

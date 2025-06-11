@@ -1,48 +1,52 @@
 # DragNForm
-Of course, yet another form designer! But this is not framework-biased, it can export the rendered form to json and PDF, and everything is done in the frontend, just with love and javascript.
+Yes, it's yet another HTML forms designer—but with some key advantages!
+It’s completely framework-independent (no Bootstrap, jQuery, or Tailwind), allows exporting forms to JSON and PDF, and runs entirely on the frontend—built with pure JavaScript and a touch of love.
 
-There's a blob post about this component that you can find [here](https://www.alexgaio.com/post/drag-n-form-a-pure-javascript-forms-designer-with-direct-pdf-export)
+There's a blog post about this component that you can find [here](https://www.alexgaio.com/post/drag-n-form-a-pure-javascript-forms-designer-with-direct-pdf-export)
 
 ## Background
-I was tired of searching and not finding the forms designer that fit my needs. Everyone I've found had one or more of this dissapointing issues:
-* it's expensive
-* has some unwanted dependencies (like jQuery)
-* needed a backend 
-* didn't have the right type of controls (like email, dates, etc.)
+I got tired of searching for a forms designer that met my needs. Every option I found had one or more of these disappointing issues:
 
-So I decided to create my own forms designer from scratch with these goals in mind:
-* open source
-* only vanilla javascript
-* allow exporting a rendeded form to PDF
-* export to / import from json
-* easily customizable
-* input data validation
+* Too expensive
+* Unwanted dependencies (like jQuery)
+* Required a backend
+* Lacked essential form controls (such as email, date fields, etc.)
 
-Maybe this is not the best form designer out there, but I believe it achieves those goals.
+So I decided to build my own from scratch with these key goals in mind:
+* Open source
+* Pure vanilla JavaScript (no frameworks or libraries)
+* Export rendered forms to PDF
+* eImport/export forms as JSON
+* Easily customizable
+* Built-in input validation
+
+It may not be the best form designer out there, but I believe it successfully delivers on these goals.
 
 
 ## Features
-* Add form elements like
+* Form elements:
     - Labels
     - Inputs: text, number, date, email, paragraph.
     - Images
     - Radio buttons
     - Checkboxes
     - Buttons (1)
-    - Invisible spacers to align content
-* Drag and drop elements to reorder them
-* 12-column layout for better control alignment
-* Input validations: min, max, min length, max length, etc.
-* 3 working modes:
-    - Design: allows creating/editiing forms
-    - Run: allows a user to interact with a form by filling the fields and trigger validations (vía code)
-    - View: allows a user to see a readonly, rendered version of the form (used when exporting to PDF).
-* Export / import form definition to/from json
-* Export as PDF (2)
-* Customizable toolbar (text and icons)
-* Localized to english and spanish. Extensible to other languages.
-* Callbacks for several functions, like new form, save form, export to pdf, widgets modified, etc.
-* Easy widget customization via CSS (Sass)
+    - Invisible spacers for precise content alignment
+* Drag-and-Drop: Easily reorder elements
+* 12-Column Layout: For better form alignment and responsiveness
+* Input Validation: Supports min/max values, min/max length, and more
+* Three Working Modes:
+    - Design: Create and edit forms
+    - Run: Fill out forms and trigger validations via code
+    - View: Read-only mode for rendering and PDF export
+* Export & Import:
+    - Save/load form definitions as JSON
+    - Export forms as PDF (2)
+* Customization & Extensibility:
+    - Customizable toolbar (text & icons)
+    - Supports English and Spanish, with easy localization for other languages
+    - Callback functions for key events (e.g., new form, save form, export to PDF, widget modifications, etc.)
+    - Easy styling via CSS (Sass)
 
 (1) Buttons are used/displayed only in Run mode (i.e. to allow some custom user interaction with the form), but are not rendered in View mode.
 (2) PDF Manipulation is done using jsPDF. More info at https://github.com/parallax/jsPDF
